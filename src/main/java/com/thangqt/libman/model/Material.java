@@ -6,13 +6,13 @@ enum MaterialType {
 }
 
 public abstract class Material {
-    private int id;
-    private String title;
-    private String author;
-    private String description;
-    private String publisher;
-    private MaterialType type;
-    private boolean isAvailable;
+    protected int id;
+    protected String title;
+    protected String author;
+    protected String description;
+    protected String publisher;
+    protected MaterialType type;
+    protected boolean isAvailable;
 
     public void setTitle(String title) {
         this.title = title;
@@ -32,5 +32,25 @@ public abstract class Material {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
 }

@@ -5,9 +5,9 @@ import com.thangqt.libman.model.Magazine;
 import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLMaterialDAO implements MaterialDAO {
@@ -19,47 +19,189 @@ public class MySQLMaterialDAO implements MaterialDAO {
 
     @Override
     public void add(Material material) throws SQLException {
+        String query = "INSERT INTO materials (title, author, type, is_available) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stm.setString(1, material.getTitle());
+            stm.setString(2, material.getAuthor());
+            stm.setString(3, material instanceof Book ? "Book" : "Magazine");
+            stm.setBoolean(4, material.isAvailable());
+            stm.executeUpdate();
 
+            try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    material.setId(generatedKeys.getInt(1));
+                }
+            }
+
+            if (material instanceof Book) {
+                addBook((Book) material);
+            } else if (material instanceof Magazine) {
+                addMagazine((Magazine) material);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error adding material: " + e.getMessage());
+        }
     }
 
     private void addBook(Book book) throws SQLException {
-
+        String query = "INSERT INTO books (id, page_count, isbn) VALUES (?, ?, ?)";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, book.getId());
+            stm.setInt(2, book.getPageCount());
+            stm.setString(3, book.getIsbn());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error adding book: " + e.getMessage());
+        }
     }
 
     private void addMagazine(Magazine magazine) throws SQLException {
-
+        String query = "INSERT INTO magazines (id, issueNumber, currentIssue, issn) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, magazine.getId());
+            stm.setInt(2, magazine.getIssueNumber());
+            stm.setInt(3, magazine.getCurrentIssue());
+            stm.setString(4, magazine.getIssn());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error adding magazine: " + e.getMessage());
+        }
     }
 
     @Override
     public void update(Material material) throws SQLException {
+        String query = "UPDATE materials SET title = ?, author = ?, type = ?, is_available = ? WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setString(1, material.getTitle());
+            stm.setString(2, material.getAuthor());
+            stm.setString(3, material instanceof Book ? "Book" : "Magazine");
+            stm.setBoolean(4, material.isAvailable());
+            stm.setInt(5, material.getId());
+            stm.executeUpdate();
 
+            if (material instanceof Book) {
+                updateBook((Book) material);
+            } else if (material instanceof Magazine) {
+                updateMagazine((Magazine) material);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error updating material: " + e.getMessage());
+        }
     }
 
     private void updateBook(Book book) throws SQLException {
-
+        String query = "UPDATE books SET page_count = ?, isbn = ? WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, book.getPageCount());
+            stm.setString(2, book.getIsbn());
+            stm.setInt(3, book.getId());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error updating book: " + e.getMessage());
+        }
     }
 
     private void updateMagazine(Magazine magazine) throws SQLException {
-
+        String query = "UPDATE magazines SET issueNumber = ?, currentIssue = ?, issn = ? WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, magazine.getIssueNumber());
+            stm.setInt(2, magazine.getCurrentIssue());
+            stm.setString(3, magazine.getIssn());
+            stm.setInt(4, magazine.getId());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error updating magazine: " + e.getMessage());
+        }
     }
 
     @Override
     public void delete(int id) throws SQLException {
+        String query = "DELETE FROM materials WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error deleting material: " + e.getMessage());
+        }
+    }
 
+    private Material createMaterialFromResult(ResultSet rs) throws SQLException {
+        String title = rs.getString("title");
+        String author = rs.getString("author");
+        String description = rs.getString("description");
+        String publisher = rs.getString("publisher");
+        if (rs.getString("type").equals("Book")) {
+            String isbn = rs.getString("isbn");
+            int pageCount = rs.getInt("page_count");
+            Book book = new Book(title, author, description, publisher, isbn, pageCount);
+            return book;
+        } else if (rs.getString("type").equals("Magazine")) {
+            String issn = rs.getString("issn");
+            int issueNumber = rs.getInt("issueNumber");
+            int currentIssue = rs.getInt("currentIssue");
+            Magazine magazine = new Magazine(title, author, description, publisher, issn, issueNumber, currentIssue);
+            return magazine;
+        }
+        return null;
     }
 
     @Override
     public Material getById(int id) throws SQLException {
-        return null;
+        String query = "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue " +
+                "FROM materials " +
+                "LEFT JOIN books ON materials.id = books.id " +
+                "LEFT JOIN magazines ON materials.id = magazines.id " +
+                "WHERE materials.id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return createMaterialFromResult(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error getting material by id: " + e.getMessage());
+        }
     }
 
     @Override
     public List<Material> getAll() throws SQLException {
-        return null;
+        String query = "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue " +
+                "FROM materials " +
+                "LEFT JOIN books ON materials.id = books.id " +
+                "LEFT JOIN magazines ON materials.id = magazines.id ";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            ResultSet rs = stm.executeQuery();
+            List<Material> allMaterials = new ArrayList<>();
+            while (rs.next()) {
+                Material material = createMaterialFromResult(rs);
+                allMaterials.add(material);
+            }
+            return allMaterials;
+        } catch (SQLException e) {
+            throw new SQLException("Error getting all materials: " + e.getMessage());
+        }
     }
 
     @Override
     public List<Material> searchByTitle(String title) throws SQLException {
-        return null;
+        String query = "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue " +
+                "FROM materials " +
+                "LEFT JOIN books ON materials.id = books.id " +
+                "LEFT JOIN magazines ON materials.id = magazines.id " +
+                "WHERE title LIKE ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setString(1, "%" + title + "%");
+            ResultSet rs = stm.executeQuery();
+            List<Material> allMaterials = new ArrayList<>();
+            while (rs.next()) {
+                Material material = createMaterialFromResult(rs);
+                allMaterials.add(material);
+            }
+            return allMaterials;
+        } catch (SQLException e) {
+            throw new SQLException("Error searching materials by title: " + e.getMessage());
+        }
     }
 }
