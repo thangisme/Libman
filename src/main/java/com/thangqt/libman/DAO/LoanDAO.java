@@ -9,6 +9,7 @@ public interface LoanDAO {
     void add(Loan loan) throws SQLException;
     void update(Loan loan) throws SQLException;
     void delete(int id) throws SQLException;
+    void returnLoan(int id) throws SQLException;
     Loan getById(int id) throws SQLException;
     List<Loan> getAll() throws SQLException;
     List<Loan> getOverdueLoans() throws SQLException;

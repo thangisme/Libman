@@ -31,4 +31,20 @@ public class Loan {
     public LocalDate getDueDate() {
         return dueDate;
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

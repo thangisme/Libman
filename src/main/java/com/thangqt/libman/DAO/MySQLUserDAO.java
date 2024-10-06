@@ -62,7 +62,7 @@ public class MySQLUserDAO implements UserDAO {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                return new User(rs.getString("name"), rs.getString("email"));
+                return new User(id, rs.getString("name"), rs.getString("email"));
             } else {
                 return null;
             }

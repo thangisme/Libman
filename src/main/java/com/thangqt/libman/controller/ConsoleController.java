@@ -50,7 +50,7 @@ public class ConsoleController {
                     addUser();
                     break;
                 case 7:
-                    borrowDocument();
+                    issueDocument();
                     break;
                 case 8:
                     returnDocument();
@@ -74,7 +74,7 @@ public class ConsoleController {
         System.out.println("[4] Find Document");
         System.out.println("[5] Display Documents");
         System.out.println("[6] Add User");
-        System.out.println("[7] Borrow Document");
+        System.out.println("[7] Issue Document");
         System.out.println("[8] Return Document");
         System.out.println("[9] Display User Info");
     }
@@ -175,17 +175,18 @@ public class ConsoleController {
         System.out.println("User added successfully.");
     }
 
-    private void borrowDocument() {
+    private void issueDocument() throws SQLException {
         int userId = getIntInput("Enter user ID: ");
         int materialId = getIntInput("Enter document ID: ");
+        int loanPeriod = getIntInput("Enter loan period (days): ");
         LocalDate borrowDate = LocalDate.now();
-        LocalDate dueDate = borrowDate.plusDays(14); // 2 weeks loan period
+        LocalDate dueDate = borrowDate.plusDays(loanPeriod); // 2 weeks loan period
         Loan loan = new Loan(userId, materialId, borrowDate, dueDate);
         loanManager.addLoan(loan);
-        System.out.println("Document borrowed successfully.");
+        System.out.println("Document issued successfully.");
     }
 
-    private void returnDocument() {
+    private void returnDocument() throws SQLException {
         int loanId = getIntInput("Enter loan ID: ");
         loanManager.returnLoan(loanId);
         System.out.println("Document returned successfully.");
@@ -195,7 +196,7 @@ public class ConsoleController {
         int userId = getIntInput("Enter user ID: ");
         User user = userManager.getUserById(userId);
         if (user != null) {
-            System.out.println(user);
+            System.out.println("Name: " + user.getName() + " - ID: " + user.getId());
             List<Loan> loans = loanManager.getLoansByUser(userId);
             System.out.println("Current loans:");
             for (Loan loan : loans) {
