@@ -148,7 +148,7 @@ public class ConsoleController {
 
         int quantity = getIntInput("Enter new quantity (press enter to keep current): ");
         if (quantity < 0) {
-            System.out.println("Quantity must be greater than 0.");
+            System.out.println("Quantity must not be negative.");
             return;
         }
         if (quantity != 0) {
@@ -214,7 +214,7 @@ public class ConsoleController {
             return;
         }
 
-        if (userManager.isUserExist(email)){
+        if (userManager.isUserExist(email)) {
             System.out.println("User already exists.");
             return;
         }
@@ -303,7 +303,11 @@ public class ConsoleController {
         while (true) {
             try {
                 System.out.print(prompt);
-                return Integer.parseInt(scanner.nextLine());
+                String input = scanner.nextLine();
+                if (input.isEmpty()) {
+                    return 0;
+                }
+                return Integer.parseInt(input);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a number.");
             }
