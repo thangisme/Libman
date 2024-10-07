@@ -50,12 +50,15 @@ public class ConsoleController {
                     addUser();
                     break;
                 case 7:
-                    issueDocument();
+                    deleteUser();
                     break;
                 case 8:
-                    returnDocument();
+                    issueDocument();
                     break;
                 case 9:
+                    returnDocument();
+                    break;
+                case 10:
                     displayUserInfo();
                     break;
                 default:
@@ -74,9 +77,10 @@ public class ConsoleController {
         System.out.println("[4] Find Document");
         System.out.println("[5] Display Documents");
         System.out.println("[6] Add User");
-        System.out.println("[7] Issue Document");
-        System.out.println("[8] Return Document");
-        System.out.println("[9] Display User Info");
+        System.out.println("[7] Delete user");
+        System.out.println("[8] Issue Document");
+        System.out.println("[9] Return Document");
+        System.out.println("[10] Display User Info");
     }
 
     private void addDocument() throws SQLException {
@@ -217,6 +221,16 @@ public class ConsoleController {
         User user = new User(name, email);
         userManager.addUser(user);
         System.out.println("User added successfully.");
+    }
+
+    private void deleteUser() throws SQLException {
+        int userId = getIntInput("Enter user ID to delete: ");
+        if (!userManager.isUserExist(userId)) {
+            System.out.println("User not found.");
+            return;
+        }
+        userManager.deleteUser(userId);
+        System.out.println("User deleted successfully.");
     }
 
     private void issueDocument() throws SQLException {
