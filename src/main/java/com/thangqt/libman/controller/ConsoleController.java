@@ -86,17 +86,31 @@ public class ConsoleController {
         int choice = getIntInput("Enter your choice: ");
 
         String title = getStringInput("Enter title: ");
+        String description = getStringInput("Enter description: ");
+        int quantity = getIntInput("Enter quantity: ");
+        if (quantity <= 0) {
+            System.out.println("Quantity must be greater than 0.");
+            return;
+        }
 
         if (choice == 1) {
             String author = getStringInput("Enter author: ");
+            String publisher = getStringInput("Enter publisher: ");
             String isbn = getStringInput("Enter ISBN: ");
             Book book = new Book(title, author, isbn);
+            book.setDescription(description);
+            book.setPublisher(publisher);
+            book.setQuantity(quantity);
+            book.setAvailableQuantity(quantity);
             materialManager.addMaterial(book);
             System.out.println("Book added successfully.");
         } else if (choice == 2) {
             String publisher = getStringInput("Enter publisher: ");
             String issn = getStringInput("Enter ISSN: ");
             Magazine magazine = new Magazine(title, publisher, issn);
+            magazine.setQuantity(quantity);
+            magazine.setAvailableQuantity(quantity);
+            magazine.setDescription(description);
             materialManager.addMaterial(magazine);
             System.out.println("Magazine added successfully.");
         } else {
@@ -123,11 +137,31 @@ public class ConsoleController {
             material.setTitle(title);
         }
 
+        String description = getStringInput("Enter new description (press enter to keep current): ");
+        if (!description.isEmpty()) {
+            material.setDescription(description);
+        }
+
+        int quantity = getIntInput("Enter new quantity (press enter to keep current): ");
+        if (quantity < 0) {
+            System.out.println("Quantity must be greater than 0.");
+            return;
+        }
+        if (quantity != 0) {
+            int currentQuantity = material.getQuantity();
+            material.setQuantity(quantity);
+            material.setAvailableQuantity(material.getAvailableQuantity() + quantity - currentQuantity);
+        }
+
         if (material instanceof Book) {
             Book book = (Book) material;
             String author = getStringInput("Enter new author (press enter to keep current): ");
             if (!author.isEmpty()) {
                 book.setAuthor(author);
+            }
+            String publisher = getStringInput("Enter new publisher (press enter to keep current): ");
+            if (!publisher.isEmpty()) {
+                book.setPublisher(publisher);
             }
             String isbn = getStringInput("Enter new ISBN (press enter to keep current): ");
             if (!isbn.isEmpty()) {
@@ -170,6 +204,16 @@ public class ConsoleController {
     private void addUser() throws SQLException {
         String name = getStringInput("Enter user name: ");
         String email = getStringInput("Enter user email: ");
+
+        if (!isValidEmail(email)) {
+            System.out.println("Invalid email.");
+            return;
+        }
+
+        if (userManager.isUserExist(email)){
+            System.out.println("User already exists.");
+            return;
+        }
         User user = new User(name, email);
         userManager.addUser(user);
         System.out.println("User added successfully.");
@@ -178,7 +222,29 @@ public class ConsoleController {
     private void issueDocument() throws SQLException {
         int userId = getIntInput("Enter user ID: ");
         int materialId = getIntInput("Enter document ID: ");
+
+        if (!userManager.isUserExist(userId)) {
+            System.out.println("User not found.");
+            return;
+        }
+        if (!materialManager.isMaterialExist(materialId)) {
+            System.out.println("Document not found.");
+            return;
+        }
+        if (loanManager.isDocumentIssued(userId, materialId)) {
+            System.out.println("Document already issued to this user.");
+            return;
+        }
+        if (!materialManager.isMaterialAvailable(materialId)) {
+            System.out.println("No copies available.");
+            return;
+        }
+
         int loanPeriod = getIntInput("Enter loan period (days): ");
+        if (loanPeriod <= 0) {
+            System.out.println("Loan period must be greater than 0.");
+            return;
+        }
         LocalDate borrowDate = LocalDate.now();
         LocalDate dueDate = borrowDate.plusDays(loanPeriod); // 2 weeks loan period
         Loan loan = new Loan(userId, materialId, borrowDate, dueDate);
@@ -188,6 +254,10 @@ public class ConsoleController {
 
     private void returnDocument() throws SQLException {
         int loanId = getIntInput("Enter loan ID: ");
+        if (loanManager.isLoanExist(loanId)) {
+            System.out.println("Loan not found.");
+            return;
+        }
         loanManager.returnLoan(loanId);
         System.out.println("Document returned successfully.");
     }
@@ -224,5 +294,10 @@ public class ConsoleController {
                 System.out.println("Invalid input. Please enter a number.");
             }
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
     }
 }

@@ -35,4 +35,22 @@ public class MaterialManager {
     public List<Material> getAllMaterialsByType(String type) throws SQLException {
         return materialDAO.getAll();
     }
+
+    public boolean isMaterialAvailable(int id) throws SQLException {
+        return materialDAO.getAvailableQuantity(id) > 0;
+    }
+
+    public void decreaseAvailableQuantity(int id) throws SQLException {
+        int availableQuantity = materialDAO.getAvailableQuantity(id);
+        materialDAO.setAvailableQuantity(id, availableQuantity - 1);
+    }
+
+    public void increaseAvailableQuantity(int id) throws SQLException {
+        int availableQuantity = materialDAO.getAvailableQuantity(id);
+        materialDAO.setAvailableQuantity(id, availableQuantity + 1);
+    }
+
+    public boolean isMaterialExist(int id) throws SQLException {
+        return materialDAO.isExist(id);
+    }
 }

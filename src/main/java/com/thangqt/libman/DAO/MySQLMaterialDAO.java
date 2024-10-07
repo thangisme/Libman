@@ -130,6 +130,8 @@ public class MySQLMaterialDAO implements MaterialDAO {
         String author = rs.getString("author");
         String description = rs.getString("description");
         String publisher = rs.getString("publisher");
+        int quantity = rs.getInt("quantity");
+        int availableQuantity = rs.getInt("available_quantity");
         if (rs.getString("type").equals("Book")) {
             String isbn = rs.getString("isbn");
             int pageCount = rs.getInt("page_count");
@@ -202,6 +204,74 @@ public class MySQLMaterialDAO implements MaterialDAO {
             return allMaterials;
         } catch (SQLException e) {
             throw new SQLException("Error searching materials by title: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public int getAvailableQuantity(int id) throws SQLException {
+        String query = "SELECT available_quantity FROM materials WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("available_quantity");
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error getting available quantity: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public int getQuantity(int id) throws SQLException {
+        String query = "SELECT quantity FROM materials WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("quantity");
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error getting quantity: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setAvailableQuantity(int id, int quantity) throws SQLException {
+        String query = "UPDATE materials SET available_quantity = ? WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, quantity);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error setting available quantity: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setQuantity(int id, int quantity) throws SQLException {
+        String query = "UPDATE materials SET quantity = ? WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, quantity);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error setting quantity: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean isExist(int id) throws SQLException {
+        String query = "SELECT * FROM materials WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new SQLException("Error checking if material exists: " + e.getMessage());
         }
     }
 }

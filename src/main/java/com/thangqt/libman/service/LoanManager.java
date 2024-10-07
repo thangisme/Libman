@@ -20,6 +20,7 @@ public class LoanManager {
 
     public void addLoan(Loan loan) throws SQLException {
         loanDAO.add(loan);
+        materialManager.decreaseAvailableQuantity(loan.getMaterialId());
     }
 
     public void updateLoan(Loan loan) throws SQLException {
@@ -48,10 +49,18 @@ public class LoanManager {
 
     public void returnLoan(int loanId) throws SQLException {
         loanDAO.returnLoan(loanId);
+        materialManager.increaseAvailableQuantity(loanDAO.getById(loanId).getMaterialId());
     }
 
     public List<Loan> getOverdueLoans() throws SQLException {
         return loanDAO.getOverdueLoans();
     }
 
+    public boolean isDocumentIssued(int userId, int materialId) {
+        return loanDAO.isDocumentIssued(userId, materialId);
+    }
+
+    public boolean isLoanExist(int loanId) {
+        return loanDAO.isExist(loanId);
+    }
 }

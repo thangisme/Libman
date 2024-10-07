@@ -12,6 +12,8 @@ public abstract class Material {
     protected String description;
     protected String publisher;
     protected MaterialType type;
+    protected int quantity;
+    protected int availableQuantity;
     protected boolean isAvailable;
 
     public void setTitle(String title) {
@@ -52,5 +54,30 @@ public abstract class Material {
 
     public void setAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
+        this.isAvailable = availableQuantity > 0;
     }
 }

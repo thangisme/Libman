@@ -8,6 +8,11 @@ public interface MaterialDAO {
     void add(Material material) throws SQLException;
     void update(Material material) throws SQLException;
     void delete(int id) throws SQLException;
+    boolean isExist(int id) throws SQLException;
+    int getAvailableQuantity(int id) throws SQLException;
+    int getQuantity(int id) throws SQLException;
+    void setAvailableQuantity(int id, int quantity) throws SQLException;
+    void setQuantity(int id, int quantity) throws SQLException;
     Material getById(int id) throws SQLException;
     List<Material> getAll() throws SQLException;
     List<Material> searchByTitle(String title) throws SQLException;

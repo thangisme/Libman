@@ -86,4 +86,29 @@ public class MySQLUserDAO implements UserDAO {
             throw new SQLException("Error getting all users: " + e.getMessage());
         }
     }
+
+    public boolean isExist(int userId) {
+        String query = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, userId);
+            ResultSet rs = stm.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println("Error checking user existence: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isExist(String email) {
+        String query = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setString(1, email);
+            ResultSet rs = stm.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println("Error checking user existence: " + e.getMessage());
+            return false;
+        }
+    }
 }

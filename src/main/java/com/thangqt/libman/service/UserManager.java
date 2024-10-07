@@ -32,4 +32,12 @@ public class UserManager {
     public List<User> getAllUsers() throws SQLException {
         return userDAO.getAll();
     }
+
+    public boolean isUserExist(int userId) {
+        return userDAO.isExist(userId);
+    }
+
+    public boolean isUserExist(String email) {
+        return userDAO.isExist(email);
+    }
 }

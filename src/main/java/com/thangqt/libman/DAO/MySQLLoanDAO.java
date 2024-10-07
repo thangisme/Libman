@@ -161,4 +161,29 @@ public class MySQLLoanDAO implements LoanDAO {
             throw new SQLException("Error getting loans by material: " + e.getMessage());
         }
     }
+
+    @Override
+    public boolean isDocumentIssued(int userId, int materialId) {
+        String query = "SELECT * FROM loans WHERE user_id = ? AND material_id = ? AND (return_date IS NULL OR return_date > CURDATE())";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, userId);
+            stm.setInt(2, materialId);
+            ResultSet rs = stm.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isExist(int loanId) {
+        String query = "SELECT * FROM loans WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, loanId);
+            ResultSet rs = stm.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }
