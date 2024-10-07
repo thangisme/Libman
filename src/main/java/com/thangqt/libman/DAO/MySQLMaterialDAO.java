@@ -126,6 +126,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
     }
 
     private Material createMaterialFromResult(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
         String title = rs.getString("title");
         String author = rs.getString("author");
         String description = rs.getString("description");
@@ -136,12 +137,14 @@ public class MySQLMaterialDAO implements MaterialDAO {
             String isbn = rs.getString("isbn");
             int pageCount = rs.getInt("page_count");
             Book book = new Book(title, author, description, publisher, isbn, pageCount);
+            book.setId(id);
             return book;
         } else if (rs.getString("type").equals("Magazine")) {
             String issn = rs.getString("issn");
             int issueNumber = rs.getInt("issueNumber");
             int currentIssue = rs.getInt("currentIssue");
             Magazine magazine = new Magazine(title, author, description, publisher, issn, issueNumber, currentIssue);
+            magazine.setId(id);
             return magazine;
         }
         return null;
