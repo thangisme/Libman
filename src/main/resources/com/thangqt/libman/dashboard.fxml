@@ -12,6 +12,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
 <GridPane xmlns:fx="http://javafx.com/fxml"
           fx:controller="com.thangqt.libman.GUIController" gridLinesVisible="true" GridPane.hgrow="ALWAYS"
           GridPane.vgrow="ALWAYS">
@@ -28,14 +30,30 @@
         </padding>
         <Text text="Libman"/>
         <VBox VBox.vgrow="ALWAYS"/>
-        <VBox spacing="5">
-            <Text text="Dashboard"/>
-            <Text text="Manage materials"/>
-            <Text text="Manage loans"/>
-            <Text text="Manage users"/>
+        <VBox spacing="15">
+            <HBox spacing="5">
+                <FontIcon iconLiteral="fth-home"/>
+                <Text text="Dashboard"/>
+            </HBox>
+            <HBox spacing="5">
+                <FontIcon iconLiteral="fth-book"/>
+                <Text text="Manage materials"/>
+            </HBox>
+            <HBox spacing="5">
+                <FontIcon iconLiteral="fth-inbox"/>
+                <Text text="Manage loans"/>
+            </HBox>
+            <HBox spacing="5">
+                <FontIcon iconLiteral="fth-users"/>
+                <Text text="Manage users"/>
+            </HBox>
         </VBox>
         <VBox VBox.vgrow="ALWAYS"/>
-        <Text text="Exit"/>
+        <Button>
+            <graphic>
+                <FontIcon iconLiteral="fth-log-out"/>
+            </graphic>
+        </Button>
     </VBox>
     <VBox VBox.vgrow="ALWAYS"/>
     <HBox GridPane.columnIndex="1" GridPane.rowIndex="0">

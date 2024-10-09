@@ -14,7 +14,7 @@ public class LibmanGUI extends Application {
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
 
         FXMLLoader fxmlLoader = new FXMLLoader(LibmanGUI.class.getResource("dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 1920, 1080);
         stage.setTitle("Libman");
         stage.setScene(scene);
         stage.show();
