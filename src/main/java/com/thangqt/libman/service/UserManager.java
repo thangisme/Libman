@@ -29,6 +29,10 @@ public class UserManager {
         return userDAO.getById(id);
     }
 
+    public User getUserByEmail(String email) throws SQLException {
+        return userDAO.getByEmail(email);
+    }
+
     public List<User> getAllUsers() throws SQLException {
         return userDAO.getAll();
     }

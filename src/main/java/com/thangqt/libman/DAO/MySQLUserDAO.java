@@ -72,6 +72,22 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     @Override
+    public User getByEmail(String email) throws SQLException {
+        String query = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setString(1, email);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return new User(rs.getInt("id"), rs.getString("name"), email);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error getting user by email: " + e.getMessage());
+        }
+    }
+
+    @Override
     public List<User> getAll() throws SQLException {
         String query = "SELECT * FROM users";
         try (PreparedStatement stm = conn.prepareStatement(query)) {

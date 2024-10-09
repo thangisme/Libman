@@ -122,14 +122,69 @@ public class ConsoleController {
         }
     }
 
+    private int searchAndDisplayMaterial(String title) throws SQLException {
+        List<Material> materials = materialManager.getMaterialsByTitle(title);
+        if (materials.isEmpty()) {
+            return -1;
+        }
+        int i = 1;
+        for (Material material : materials) {
+            System.out.println("[" + i + "] " + material.getTitle() + " - " + material.getAuthor());
+            i++;
+        }
+        return materials.get(0).getId();
+    }
+
     private void removeDocument() throws SQLException {
-        int id = getIntInput("Enter document ID to remove: ");
-        materialManager.deleteMaterial(id);
-        System.out.println("Document removed successfully.");
+        System.out.println(("\n--- Remove Document ---"));
+        System.out.println("[1] Remove by ID");
+        System.out.println("[2] Remove by title");
+        int choice = getIntInput("Enter your choice: ");
+        if (choice == 1) {
+            int id = getIntInput("Enter document ID to remove: ");
+            if (materialManager.isMaterialExist(id)) {
+                materialManager.deleteMaterial(id);
+                System.out.println("Document removed successfully.");
+            } else {
+                System.out.println("Document not found.");
+            }
+        } else if (choice == 2) {
+            String title = getStringInput("Enter document title to remove: ");
+            int id = searchAndDisplayMaterial(title);
+            if (id != -1) {
+                materialManager.deleteMaterial(id);
+                System.out.println("Document removed successfully.");
+            } else {
+                System.out.println("Document not found.");
+            }
+        } else {
+            System.out.println("Invalid choice.");
+        }
     }
 
     private void updateDocument() throws SQLException {
-        int id = getIntInput("Enter document ID to update: ");
+        System.out.println("\n--- Update Document ---");
+        System.out.println("[1] Update by ID");
+        System.out.println("[2] Update by title");
+        int choice = getIntInput("Enter your choice: ");
+        int id;
+        if (choice == 1) {
+            id = getIntInput("Enter document ID to update: ");
+            if (!materialManager.isMaterialExist(id)) {
+                System.out.println("Document not found.");
+                return;
+            }
+        } else if (choice == 2) {
+            String title = getStringInput("Enter document title to update: ");
+            id = searchAndDisplayMaterial(title);
+            if (id == -1) {
+                System.out.println("Document not found.");
+                return;
+            }
+        } else {
+            System.out.println("Invalid choice.");
+            return;
+        }
         Material material = materialManager.getMaterialById(id);
         if (material == null) {
             System.out.println("Document not found.");
@@ -189,23 +244,91 @@ public class ConsoleController {
     }
 
     private void findDocument() throws SQLException {
-        int id = getIntInput("Enter document ID to find: ");
+        System.out.println("\n--- Find Document ---");
+        System.out.println("[1] Find by ID");
+        System.out.println("[2] Find by title");
+        int choice = getIntInput("Enter your choice: ");
+        if (choice == 1) {
+            int id = getIntInput("Enter document ID to find: ");
+            displayDocument(id);
+        } else if (choice == 2) {
+            String title = getStringInput("Enter document title to find: ");
+            int id = searchAndDisplayMaterial(title);
+            if (id != -1) {
+                displayDocument(id);
+            } else {
+                System.out.println("Document not found.");
+            }
+        } else {
+            System.out.println("Invalid choice.");
+        }
+    }
+
+    private void displayDocument(int id) throws SQLException {
         Material material = materialManager.getMaterialById(id);
         if (material != null) {
-            System.out.println(material);
-        } else {
-            System.out.println("Document not found.");
+            System.out.println("Title: " + material.getTitle());
+            System.out.println("Description: " + material.getDescription());
+            System.out.println("Quantity: " + material.getQuantity());
+            if (material instanceof Book) {
+                Book book = (Book) material;
+                System.out.println("Author: " + book.getAuthor());
+                System.out.println("Publisher: " + book.getPublisher());
+                System.out.println("ISBN: " + book.getIsbn());
+            } else if (material instanceof Magazine) {
+                Magazine magazine = (Magazine) material;
+                System.out.println("Publisher: " + magazine.getPublisher());
+                System.out.println("ISSN: " + magazine.getIssn());
+            }
         }
     }
 
     private void displayDocuments() throws SQLException {
-        List<Material> materials = materialManager.getAllMaterials();
-        for (Material material : materials) {
-            System.out.println(material);
+        System.out.println("\n--- Display Documents ---");
+        System.out.println("[1] All documents:");
+        System.out.println("[2] Individual document:");
+        int choice = getIntInput("Enter your choice: ");
+        if (choice == 1) {
+            List<Material> materials = materialManager.getAllMaterials();
+            int i = 1;
+            for (Material material : materials) {
+                System.out.println("[" + i + "] " + material.getTitle() + " - " + material.getAuthor());
+            }
+            System.out.println("Enter document number to display in detail (0 to cancel): ");
+            int docNumber = getIntInput("Enter document number: ");
+            if (docNumber > 0 && docNumber <= materials.size()) {
+                displayDocument(materials.get(docNumber - 1).getId());
+            } else if (docNumber == 0) {
+                return;
+            } else {
+                System.out.println("Invalid document number.");
+            }
+        } else if (choice == 2) {
+            System.out.println("[1] Display by ID");
+            System.out.println("[2] Display by title");
+            int id;
+            int subChoice = getIntInput("Enter your choice: ");
+            if (subChoice == 1) {
+                id = getIntInput("Enter document ID to display: ");
+            } else if (subChoice == 2) {
+                String title = getStringInput("Enter document title to display: ");
+                id = searchAndDisplayMaterial(title);
+            } else {
+                System.out.println("Invalid choice.");
+                return;
+            }
+            if (id != -1) {
+                displayDocument(id);
+            } else {
+                System.out.println("Document not found.");
+            }
+        } else {
+            System.out.println("Invalid choice.");
         }
     }
 
     private void addUser() throws SQLException {
+        System.out.println("\n--- Add User ---");
         String name = getStringInput("Enter user name: ");
         String email = getStringInput("Enter user email: ");
 
@@ -223,17 +346,38 @@ public class ConsoleController {
         System.out.println("User added successfully.");
     }
 
+    private int userIdFromInput(String input) throws SQLException {
+        int userId;
+        if (isValidEmail(input)) {
+            User user = userManager.getUserByEmail(input);
+            if (user == null) {
+                return -1;
+            } else {
+                userId = user.getId();
+            }
+        } else {
+            userId = Integer.parseInt(input);
+        }
+        return userId;
+    }
     private void deleteUser() throws SQLException {
-        int userId = getIntInput("Enter user ID to delete: ");
-        if (!userManager.isUserExist(userId)) {
+        System.out.println("\n--- Delete User ---");
+        String input = getStringInput("Enter user ID or email: ");
+        int userId = userIdFromInput(input);
+        if (userId == -1) {
             System.out.println("User not found.");
             return;
         }
-        userManager.deleteUser(userId);
-        System.out.println("User deleted successfully.");
+        if (userManager.isUserExist(userId)) {
+            userManager.deleteUser(userId);
+            System.out.println("User deleted successfully.");
+        } else {
+            System.out.println("User not found.");
+        }
     }
 
     private void issueDocument() throws SQLException {
+        System.out.println("\n--- Issue Document ---");
         int userId = getIntInput("Enter user ID: ");
         int materialId = getIntInput("Enter document ID: ");
 
@@ -267,8 +411,48 @@ public class ConsoleController {
     }
 
     private void returnDocument() throws SQLException {
-        int loanId = getIntInput("Enter loan ID: ");
-        if (loanManager.isLoanExist(loanId)) {
+        System.out.println("\n--- Return Document ---");
+        System.out.println("[1] Return by loan ID");
+        System.out.println("[2] Return by user");
+        int loanId;
+        int choice = getIntInput("Enter your choice: ");
+        if (choice == 1) {
+            loanId = getIntInput("Enter loan ID: ");
+        } else if (choice == 2) {
+            String input = getStringInput("Enter user ID or email: ");
+            int userId;
+            if (isValidEmail(input)) {
+                User user = userManager.getUserByEmail(input);
+                if (user == null) {
+                    System.out.println("User not found.");
+                    return;
+                } else {
+                    userId = user.getId();
+                }
+            } else {
+                userId = Integer.parseInt(input);
+            }
+            List<Loan> loans = loanManager.getLoansByUser(userId);
+            if (loans.isEmpty()) {
+                System.out.println("No loans found for this user.");
+                return;
+            }
+            int i = 1;
+            for (Loan loan : loans) {
+                Material material = materialManager.getMaterialById(loan.getMaterialId());
+                System.out.println("[" + i + "] " + material.getTitle() + " (Due: " + loan.getDueDate() + ")");
+                i++;
+            }
+            int loanNumber = getIntInput("Enter loan number to return (0 to cancel): ");
+            if (loanNumber == 0) {
+                return;
+            }
+            loanId = loans.get(loanNumber - 1).getId();
+        } else {
+            System.out.println("Invalid choice.");
+            return;
+        }
+        if (!loanManager.isLoanExist(loanId)) {
             System.out.println("Loan not found.");
             return;
         }
@@ -277,7 +461,13 @@ public class ConsoleController {
     }
 
     private void displayUserInfo() throws SQLException {
-        int userId = getIntInput("Enter user ID: ");
+        System.out.println("\n--- User Info ---");
+        String input = getStringInput("Enter user ID or email: ");
+        int userId = userIdFromInput(input);
+        if (userId == -1) {
+            System.out.println("User not found.");
+            return;
+        }
         User user = userManager.getUserById(userId);
         if (user != null) {
             System.out.println("Name: " + user.getName() + " - ID: " + user.getId());
