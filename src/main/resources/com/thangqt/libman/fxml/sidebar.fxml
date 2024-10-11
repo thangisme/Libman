@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.SidebarController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <Text text="Libman"/>
+    <VBox VBox.vgrow="ALWAYS"/>
+    <VBox spacing="15">
+        <Button text="Dashboard" styleClass="flat" onAction="#loadHomeView">
+            <graphic>
+                <FontIcon iconLiteral="fth-home"/>
+            </graphic>
+        </Button>
+        <Button text="Manage materials" styleClass="flat" onAction="#loadMaterialsView">
+            <graphic>
+                <FontIcon iconLiteral="fth-book"/>
+            </graphic>
+        </Button>
+        <Button text="Manage loans" styleClass="flat" onAction="#loadLoansView">
+            <graphic>
+                <FontIcon iconLiteral="fth-inbox"/>
+            </graphic>
+        </Button>
+        <Button text="Manage users" styleClass="flat" onAction="#loadUsersView">
+            <graphic>
+                <FontIcon iconLiteral="fth-users"/>
+            </graphic>
+        </Button>
+    </VBox>
+    <VBox VBox.vgrow="ALWAYS"/>
+    <Button styleClass="flat">
+        <graphic>
+            <FontIcon iconLiteral="fth-log-out"/>
+        </graphic>
+    </Button>
+</VBox>

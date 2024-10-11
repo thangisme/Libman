@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+
+<?import javafx.scene.layout.VBox?>
+<BorderPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.DashboardController">
+    <left>
+        <fx:include fx:id="sidebarPane" source="sidebar.fxml"/>
+    </left>
+    <center>
+        <VBox fx:id="contentPane"/>
+    </center>
+</BorderPane>

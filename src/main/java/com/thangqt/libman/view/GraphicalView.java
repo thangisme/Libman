@@ -1,4 +1,4 @@
-package com.thangqt.libman;
+package com.thangqt.libman.view;
 
 import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
@@ -8,13 +8,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LibmanGUI extends Application {
+public class GraphicalView extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
 
-        FXMLLoader fxmlLoader = new FXMLLoader(LibmanGUI.class.getResource("dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1920, 1080);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/thangqt/libman/fxml/dashboard.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        scene.getStylesheets().add(getClass().getResource("/com/thangqt/libman/style.css").toExternalForm());
+
         stage.setTitle("Libman");
         stage.setScene(scene);
         stage.show();

@@ -1,4 +1,4 @@
-package com.thangqt.libman.view.cli;
+package com.thangqt.libman.view;
 
 import com.thangqt.libman.controller.ConsoleController;
 import java.sql.SQLException;

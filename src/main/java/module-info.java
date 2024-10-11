@@ -8,5 +8,8 @@ module com.thangqt.libman {
     requires org.kordamp.ikonli.feather;
 
     opens com.thangqt.libman to javafx.fxml;
+    opens com.thangqt.libman.controller to javafx.fxml;
     exports com.thangqt.libman;
+    exports com.thangqt.libman.view;
+    exports com.thangqt.libman.controller;
 }
