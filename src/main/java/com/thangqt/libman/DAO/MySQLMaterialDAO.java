@@ -277,4 +277,19 @@ public class MySQLMaterialDAO implements MaterialDAO {
             throw new SQLException("Error checking if material exists: " + e.getMessage());
         }
     }
+
+    @Override
+    public int getTotalMaterialsNumber() throws SQLException {
+        String query = "SELECT COUNT(*) FROM materials";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
 }

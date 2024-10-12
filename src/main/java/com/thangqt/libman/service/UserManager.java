@@ -37,11 +37,15 @@ public class UserManager {
         return userDAO.getAll();
     }
 
-    public boolean isUserExist(int userId) {
+    public boolean isUserExist(int userId) throws SQLException {
         return userDAO.isExist(userId);
     }
 
-    public boolean isUserExist(String email) {
+    public boolean isUserExist(String email) throws SQLException {
         return userDAO.isExist(email);
+    }
+
+    public int getTotalUsersNumber() throws SQLException {
+        return userDAO.getTotalUsersNumber();
     }
 }

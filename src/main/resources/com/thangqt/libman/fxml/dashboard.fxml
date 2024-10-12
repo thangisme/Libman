@@ -3,11 +3,9 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <?import javafx.scene.layout.VBox?>
-<BorderPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.DashboardController">
-    <left>
-        <fx:include fx:id="sidebarPane" source="sidebar.fxml"/>
-    </left>
-    <center>
-        <VBox fx:id="contentPane"/>
-    </center>
-</BorderPane>
+<?import javafx.scene.layout.GridPane?>
+<GridPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.thangqt.libman.controller.DashboardController" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+    <fx:include fx:id="sidebarPane" source="sidebar.fxml" GridPane.columnIndex="0" GridPane.vgrow="ALWAYS"/>
+    <VBox fx:id="contentPane" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+</GridPane>

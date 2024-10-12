@@ -103,7 +103,7 @@ public class MySQLUserDAO implements UserDAO {
         }
     }
 
-    public boolean isExist(int userId) {
+    public boolean isExist(int userId) throws SQLException {
         String query = "SELECT * FROM users WHERE id = ?";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             stm.setInt(1, userId);
@@ -116,7 +116,7 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean isExist(String email) {
+    public boolean isExist(String email) throws SQLException {
         String query = "SELECT * FROM users WHERE email = ?";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             stm.setString(1, email);
@@ -125,6 +125,22 @@ public class MySQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             System.out.println("Error checking user existence: " + e.getMessage());
             return false;
+        }
+    }
+
+    @Override
+    public int getTotalUsersNumber() throws SQLException {
+        String query = "SELECT COUNT(*) FROM users";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting total users number: " + e.getMessage());
+            return 0;
         }
     }
 }

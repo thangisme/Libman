@@ -56,11 +56,31 @@ public class LoanManager {
         return loanDAO.getOverdueLoans();
     }
 
-    public boolean isDocumentIssued(int userId, int materialId) {
+    public List<Loan> getBorrowedLoansWithinDayRange(int range) throws SQLException {
+        return loanDAO.getBorrowedLoansWithinDayRange(range);
+    }
+
+    public List<Loan> getOverdueLoanWithinDayRange(int range) throws SQLException {
+        return loanDAO.getOverdueLoanWithinDayRange(range);
+    }
+
+    public List<Loan> getReturnedLoansWithinDayRange(int range) throws SQLException {
+        return loanDAO.getReturnedLoansWithinDayRange(range);
+    }
+
+    public boolean isDocumentIssued(int userId, int materialId) throws SQLException {
         return loanDAO.isDocumentIssued(userId, materialId);
     }
 
-    public boolean isLoanExist(int loanId) {
+    public boolean isLoanExist(int loanId) throws SQLException {
         return loanDAO.isExist(loanId);
+    }
+
+    public int getTotalBorrowedNumber() throws SQLException {
+        return loanDAO.getTotalBorrowedNumber();
+    }
+
+    public int getTotalOverdueNumber() throws SQLException {
+        return loanDAO.getOverdueLoansNumber();
     }
 }

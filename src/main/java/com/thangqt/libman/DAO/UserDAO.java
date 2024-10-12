@@ -12,6 +12,7 @@ public interface UserDAO {
     User getById(int id) throws SQLException;
     User getByEmail(String email) throws SQLException;
     List<User> getAll() throws SQLException;
-    boolean isExist(int userId);
-    boolean isExist(String email);
+    boolean isExist(int userId) throws SQLException;
+    boolean isExist(String email) throws SQLException;
+    int getTotalUsersNumber() throws SQLException;
 }

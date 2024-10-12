@@ -2,8 +2,8 @@ package com.thangqt.libman.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public class DashboardController {
     private VBox contentPane;
 
     @FXML
-    private BorderPane rootPane;
+    private GridPane rootPane;
 
     @FXML
     private SidebarController sidebarController;
@@ -29,7 +29,7 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(("/com/thangqt/libman/fxml/sidebar.fxml")));
             try {
                 VBox sidebar = loader.load();
-                rootPane.setLeft(sidebar);
+                rootPane.add(sidebar, 0, 0);
                 sidebarController = loader.getController();
                 sidebarController.setDashboardController(this);
             } catch (IOException e) {
@@ -41,7 +41,7 @@ public class DashboardController {
 
     public void setContent(String fxml) {
         try {
-            VBox pane = FXMLLoader.load(getClass().getResource("/com/thangqt/libman/fxml/" + fxml));
+            GridPane pane = FXMLLoader.load(getClass().getResource("/com/thangqt/libman/fxml/" + fxml));
             contentPane.getChildren().setAll(pane);
         } catch (IOException e) {
             e.printStackTrace();

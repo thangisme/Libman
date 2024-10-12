@@ -15,6 +15,12 @@ public interface LoanDAO {
     List<Loan> getOverdueLoans() throws SQLException;
     List<Loan> getLoansByUser(int userId) throws SQLException;
     List<Loan> getLoansByMaterial(int materialId) throws SQLException;
-    boolean isDocumentIssued(int userId, int materialId);
-    boolean isExist(int loanId);
+    List<Loan> getBorrowedLoansWithinDayRange(int range) throws SQLException;
+    List<Loan> getOverdueLoanWithinDayRange(int range) throws SQLException;
+    List<Loan> getReturnedLoansWithinDayRange(int range) throws SQLException;
+    boolean isDocumentIssued(int userId, int materialId) throws SQLException;
+    boolean isExist(int loanId) throws SQLException;
+    int getTotalBorrowedNumber() throws SQLException;
+    int getOverdueLoansNumber() throws SQLException;
+
 }

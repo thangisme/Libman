@@ -16,4 +16,5 @@ public interface MaterialDAO {
     Material getById(int id) throws SQLException;
     List<Material> getAll() throws SQLException;
     List<Material> searchByTitle(String title) throws SQLException;
+    int getTotalMaterialsNumber() throws SQLException;
 }

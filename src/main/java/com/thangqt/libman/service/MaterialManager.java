@@ -57,4 +57,8 @@ public class MaterialManager {
     public List<Material> getMaterialsByTitle(String title) throws SQLException {
         return materialDAO.searchByTitle(title);
     }
+
+    public int getTotalMaterialsNumber() throws SQLException {
+        return materialDAO.getTotalMaterialsNumber();
+    }
 }

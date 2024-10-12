@@ -75,7 +75,8 @@ public class MySQLLoanDAO implements LoanDAO {
         int materialId = rs.getInt("material_id");
         LocalDate borrowDate = rs.getDate("borrow_date").toLocalDate();
         LocalDate dueDate = rs.getDate("due_date").toLocalDate();
-        Loan loan = new Loan(userId, materialId, borrowDate, dueDate);
+        LocalDate returnDate = rs.getDate("return_date") != null ? rs.getDate("return_date").toLocalDate() : null;
+        Loan loan = new Loan(userId, materialId, borrowDate, dueDate, returnDate);
         loan.setId(id);
         return loan;
     }
@@ -117,7 +118,7 @@ public class MySQLLoanDAO implements LoanDAO {
         String query = "SELECT * FROM loans WHERE due_date < CURDATE() AND return_date IS NULL";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             ResultSet rs = stm.executeQuery();
-            List<Loan> loans = null;
+            List<Loan> loans = new ArrayList<>();
             while (rs.next()) {
                 Loan loan = createLoanFromResult(rs);
                 loans.add(loan);
@@ -163,7 +164,7 @@ public class MySQLLoanDAO implements LoanDAO {
     }
 
     @Override
-    public boolean isDocumentIssued(int userId, int materialId) {
+    public boolean isDocumentIssued(int userId, int materialId) throws SQLException {
         String query = "SELECT * FROM loans WHERE user_id = ? AND material_id = ? AND (return_date IS NULL OR return_date > CURDATE())";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             stm.setInt(1, userId);
@@ -176,7 +177,7 @@ public class MySQLLoanDAO implements LoanDAO {
     }
 
     @Override
-    public boolean isExist(int loanId) {
+    public boolean isExist(int loanId) throws SQLException {
         String query = "SELECT * FROM loans WHERE id = ?";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             stm.setInt(1, loanId);
@@ -184,6 +185,87 @@ public class MySQLLoanDAO implements LoanDAO {
             return rs.next();
         } catch (SQLException e) {
             return false;
+        }
+    }
+
+    @Override
+    public int getTotalBorrowedNumber() throws SQLException {
+        String query = "SELECT COUNT(*) FROM loans WHERE return_date IS NULL";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public int getOverdueLoansNumber() throws SQLException {
+        String query = "SELECT COUNT(*) FROM loans WHERE due_date < CURDATE() AND return_date IS NULL";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public List<Loan> getBorrowedLoansWithinDayRange(int range) throws SQLException {
+        String query = "SELECT * FROM loans WHERE borrow_date >= CURDATE() - INTERVAL ? DAY";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, range);
+            ResultSet rs = stm.executeQuery();
+            List<Loan> loans = new ArrayList<>();
+            while (rs.next()) {
+                Loan loan = createLoanFromResult(rs);
+                loans.add(loan);
+            }
+            return loans;
+        } catch (SQLException e) {
+            throw new SQLException("Error getting loans within day range: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Loan> getOverdueLoanWithinDayRange(int range) throws SQLException {
+        String query = "SELECT * FROM loans WHERE due_date >= CURDATE() - INTERVAL ? DAY AND return_date IS NULL";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, range);
+            ResultSet rs = stm.executeQuery();
+            List<Loan> loans = new ArrayList<>();
+            while (rs.next()) {
+                Loan loan = createLoanFromResult(rs);
+                loans.add(loan);
+            }
+            return loans;
+        } catch (SQLException e) {
+            throw new SQLException("Error getting overdue loans within day range: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Loan> getReturnedLoansWithinDayRange(int range) throws SQLException {
+        String query = "SELECT * FROM loans WHERE return_date >= CURDATE() - INTERVAL ? DAY";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, range);
+            ResultSet rs = stm.executeQuery();
+            List<Loan> loans = new ArrayList<>();
+            while (rs.next()) {
+                Loan loan = createLoanFromResult(rs);
+                loans.add(loan);
+            }
+            return loans;
+        } catch (SQLException e) {
+            throw new SQLException("Error getting returned loans within day range: " + e.getMessage());
         }
     }
 }

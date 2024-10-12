@@ -20,6 +20,14 @@ public class Loan {
         this.dueDate = dueDate;
     }
 
+    public Loan(int userId, int materialId, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate) {
+        this.userId = userId;
+        this.materialId = materialId;
+        this.borrowDate = borrowDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+    }
+
     public LocalDate getReturnDate() {
         return returnDate;
     }
