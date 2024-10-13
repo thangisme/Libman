@@ -268,4 +268,21 @@ public class MySQLLoanDAO implements LoanDAO {
             throw new SQLException("Error getting returned loans within day range: " + e.getMessage());
         }
     }
+
+    @Override
+    public List<Loan> getRecentlyBorrowedLoans(int i) throws SQLException {
+        String query = "SELECT * FROM loans ORDER BY borrow_date DESC LIMIT ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, i);
+            ResultSet rs = stm.executeQuery();
+            List<Loan> loans = new ArrayList<>();
+            while (rs.next()) {
+                Loan loan = createLoanFromResult(rs);
+                loans.add(loan);
+            }
+            return loans;
+        } catch (SQLException e) {
+            throw new SQLException("Error getting recently borrowed loans: " + e.getMessage());
+        }
+    }
 }

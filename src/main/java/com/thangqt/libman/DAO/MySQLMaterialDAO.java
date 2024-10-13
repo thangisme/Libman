@@ -7,6 +7,7 @@ import com.thangqt.libman.service.DatabaseConnection;
 
 import java.sql.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,13 @@ public class MySQLMaterialDAO implements MaterialDAO {
 
     @Override
     public void add(Material material) throws SQLException {
-        String query = "INSERT INTO materials (title, author, type, is_available) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO materials (title, author, type, is_available, added_date) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stm.setString(1, material.getTitle());
             stm.setString(2, material.getAuthor());
             stm.setString(3, material instanceof Book ? "Book" : "Magazine");
             stm.setBoolean(4, material.isAvailable());
+            stm.setDate(5, Date.valueOf(LocalDate.now()));
             stm.executeUpdate();
 
             try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
@@ -133,11 +135,13 @@ public class MySQLMaterialDAO implements MaterialDAO {
         String publisher = rs.getString("publisher");
         int quantity = rs.getInt("quantity");
         int availableQuantity = rs.getInt("available_quantity");
+        LocalDate addedDate = rs.getDate("added_date").toLocalDate();
         if (rs.getString("type").equals("Book")) {
             String isbn = rs.getString("isbn");
             int pageCount = rs.getInt("page_count");
             Book book = new Book(title, author, description, publisher, isbn, pageCount);
             book.setId(id);
+            book.setAddedDate(addedDate);
             return book;
         } else if (rs.getString("type").equals("Magazine")) {
             String issn = rs.getString("issn");
@@ -145,6 +149,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
             int currentIssue = rs.getInt("currentIssue");
             Magazine magazine = new Magazine(title, author, description, publisher, issn, issueNumber, currentIssue);
             magazine.setId(id);
+            magazine.setAddedDate(addedDate);
             return magazine;
         }
         return null;
@@ -290,6 +295,26 @@ public class MySQLMaterialDAO implements MaterialDAO {
             }
         } catch (SQLException e) {
             return 0;
+        }
+    }
+
+    public List<Material> getRecentlyAddedMaterials(int i) throws SQLException {
+        String query = "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue " +
+                "FROM materials " +
+                "LEFT JOIN books ON materials.id = books.id " +
+                "LEFT JOIN magazines ON materials.id = magazines.id " +
+                "ORDER BY added_date DESC LIMIT ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, i);
+            ResultSet rs = stm.executeQuery();
+            List<Material> allMaterials = new ArrayList<>();
+            while (rs.next()) {
+                Material material = createMaterialFromResult(rs);
+                allMaterials.add(material);
+            }
+            return allMaterials;
+        } catch (SQLException e) {
+            throw new SQLException("Error getting recently added materials: " + e.getMessage());
         }
     }
 }

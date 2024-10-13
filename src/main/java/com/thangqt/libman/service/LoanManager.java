@@ -83,4 +83,8 @@ public class LoanManager {
     public int getTotalOverdueNumber() throws SQLException {
         return loanDAO.getOverdueLoansNumber();
     }
+
+    public List<Loan> getRecentlyBorrowedLoans(int i) throws SQLException {
+        return loanDAO.getRecentlyBorrowedLoans(i);
+    }
 }

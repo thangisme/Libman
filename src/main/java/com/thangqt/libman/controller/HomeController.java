@@ -49,6 +49,12 @@ public class HomeController {
     @FXML
     private VBox overdueTableContainer;
 
+    @FXML
+    private VBox recentlyBorrowedTableContainer;
+
+    @FXML
+    private VBox recentlyAddedMaterialsContainer;
+
     public void initialize() throws SQLException {
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         userManager = serviceFactory.getUserManager();
@@ -72,6 +78,9 @@ public class HomeController {
             overdueTableContainer.setAlignment(Pos.CENTER);
             overdueTableContainer.getChildren().add(new Text("No overdue loans"));
         }
+
+        recentlyBorrowedTableContainer.getChildren().add(createRecentlyBorrowedMaterials());
+        recentlyAddedMaterialsContainer.getChildren().add(createRecentlyAddedMaterials());
     }
 
     private int getTotalMaterialsNum() throws SQLException {
@@ -186,5 +195,75 @@ public class HomeController {
                 TableView.CONSTRAINED_RESIZE_POLICY
         );
         return table;
+    }
+
+    private TableView<Loan> createRecentlyBorrowedMaterials() throws SQLException {
+        var col1 = new TableColumn<Loan, String>("Title");
+        col1.setCellValueFactory(
+                c -> {
+                    try {
+                        return new SimpleStringProperty(materialManager.getMaterialById(c.getValue().getMaterialId()).getTitle());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return new SimpleStringProperty("Error");
+                    }
+                }
+        );
+
+        var col2 = new TableColumn<Loan, String>("Author");
+        col2.setCellValueFactory(
+                c -> {
+                    try {
+                        return new SimpleStringProperty(materialManager.getMaterialById(c.getValue().getMaterialId()).getAuthor());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return new SimpleStringProperty("Error");
+                    }
+                }
+        );
+
+        var col3 = new TableColumn<Loan, String>("Issued Date");
+        col3.setCellValueFactory(
+                c -> new SimpleStringProperty(c.getValue().getBorrowDate().toString())
+        );
+
+        var col4 = new TableColumn<Loan, String>("Due Date");
+        col4.setCellValueFactory(
+                c -> new SimpleStringProperty(c.getValue().getDueDate().toString())
+        );
+
+        var col5 = new TableColumn<Loan, String>("Borrower");
+        col5.setCellValueFactory(
+                c -> {
+                    try {
+                        return new SimpleStringProperty(userManager.getUserById(c.getValue().getUserId()).getName() + " (#" + c.getValue().getUserId() + ")");
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
+        var table = new TableView<Loan>();
+        table.getColumns().setAll(col1, col2, col3, col4, col5);
+        table.getItems().addAll(loanManager.getRecentlyBorrowedLoans(5));
+        table.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
+        table.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+        );
+        return table;
+    }
+
+    public VBox createRecentlyAddedMaterials() throws SQLException {
+        var materials = materialManager.getRecentlyAddedMaterials(5);
+        var container = new VBox();
+        container.setSpacing(10);
+        container.setAlignment(Pos.CENTER);
+
+        materials.forEach(material -> {
+            var text = new Text(material.getTitle() + " by " + material.getAuthor());
+            container.getChildren().add(text);
+        });
+
+        return container;
     }
 }

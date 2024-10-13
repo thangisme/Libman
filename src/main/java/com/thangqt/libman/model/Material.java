@@ -1,5 +1,7 @@
 package com.thangqt.libman.model;
 
+import java.time.LocalDate;
+
 enum MaterialType {
     Book,
     Magazine
@@ -15,6 +17,7 @@ public abstract class Material {
     protected int quantity;
     protected int availableQuantity;
     protected boolean isAvailable;
+    protected LocalDate addedDate;
 
     public void setTitle(String title) {
         this.title = title;
@@ -79,5 +82,13 @@ public abstract class Material {
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
         this.isAvailable = availableQuantity > 0;
+    }
+
+    public void setAddedDate(LocalDate addedDate) {
+        this.addedDate = addedDate;
+    }
+
+    public LocalDate getAddedDate() {
+        return addedDate;
     }
 }

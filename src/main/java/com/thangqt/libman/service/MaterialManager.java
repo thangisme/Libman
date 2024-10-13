@@ -61,4 +61,8 @@ public class MaterialManager {
     public int getTotalMaterialsNumber() throws SQLException {
         return materialDAO.getTotalMaterialsNumber();
     }
+
+    public List<Material> getRecentlyAddedMaterials(int i) throws SQLException {
+        return materialDAO.getRecentlyAddedMaterials(i);
+    }
 }
