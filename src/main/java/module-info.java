@@ -6,6 +6,7 @@ module com.thangqt.libman {
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.feather;
+    requires dotenv.java;
 
     opens com.thangqt.libman to javafx.fxml;
     opens com.thangqt.libman.controller to javafx.fxml;
