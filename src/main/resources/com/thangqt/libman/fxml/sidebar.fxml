@@ -10,32 +10,32 @@
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
-    <Text text="Libman"/>
+    <Text text="Libman" styleClass="title-1" fx:id="appLogo"/>
     <VBox VBox.vgrow="ALWAYS"/>
     <VBox spacing="15">
-        <Button text="Dashboard" styleClass="flat" onAction="#loadHomeView">
+        <Button text="Dashboard" onAction="#loadHomeView" fx:id="test">
             <graphic>
                 <FontIcon iconLiteral="fth-home"/>
             </graphic>
         </Button>
-        <Button text="Manage materials" styleClass="flat" onAction="#loadMaterialsView">
+        <Button text="Manage materials" onAction="#loadMaterialsView">
             <graphic>
                 <FontIcon iconLiteral="fth-book"/>
             </graphic>
         </Button>
-        <Button text="Manage loans" styleClass="flat" onAction="#loadLoansView">
+        <Button text="Manage loans" onAction="#loadLoansView">
             <graphic>
                 <FontIcon iconLiteral="fth-inbox"/>
             </graphic>
         </Button>
-        <Button text="Manage users" styleClass="flat" onAction="#loadUsersView">
+        <Button text="Manage users" onAction="#loadUsersView">
             <graphic>
                 <FontIcon iconLiteral="fth-users"/>
             </graphic>
         </Button>
     </VBox>
     <VBox VBox.vgrow="ALWAYS"/>
-    <Button styleClass="flat" fx:id="exitBtn" onAction="#exitApp">
+    <Button styleClass="flat, danger" fx:id="exitBtn" onAction="#exitApp" >
         <graphic>
             <FontIcon iconLiteral="fth-log-out"/>
         </graphic>
