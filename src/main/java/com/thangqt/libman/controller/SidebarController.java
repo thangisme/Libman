@@ -31,4 +31,9 @@ public class SidebarController {
         dashboardController.setContent("loans.fxml");
     }
 
+    @FXML
+    private void exitApp() {
+        System.exit(0);
+    }
+
 }

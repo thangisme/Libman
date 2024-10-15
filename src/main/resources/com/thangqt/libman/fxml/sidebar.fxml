@@ -35,7 +35,7 @@
         </Button>
     </VBox>
     <VBox VBox.vgrow="ALWAYS"/>
-    <Button styleClass="flat">
+    <Button styleClass="flat" fx:id="exitBtn" onAction="#exitApp">
         <graphic>
             <FontIcon iconLiteral="fth-log-out"/>
         </graphic>
