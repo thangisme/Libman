@@ -35,5 +35,6 @@ public class SidebarController {
     private void exitApp() {
         System.exit(0);
     }
+    
 
 }

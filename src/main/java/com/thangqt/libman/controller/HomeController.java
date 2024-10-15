@@ -1,5 +1,7 @@
 package com.thangqt.libman.controller;
 
+import atlantafx.base.controls.Card;
+import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
 import com.thangqt.libman.model.Loan;
 import com.thangqt.libman.service.LoanManager;
@@ -14,6 +16,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.control.TableView;
 import javafx.geometry.Pos;
@@ -44,7 +47,7 @@ public class HomeController {
     private Text totalUsersNum;
 
     @FXML
-    private VBox checkoutStatsContainer;
+    private Card checkoutStatsCard;
 
     @FXML
     private VBox overdueTableContainer;
@@ -71,7 +74,7 @@ public class HomeController {
         this.borrowedNum.setText(String.valueOf(borrowedNum));
         this.overdueNum.setText(String.valueOf(overdueNum));
 
-        checkoutStatsContainer.getChildren().add(createCheckoutStatsChart());
+        checkoutStatsCard.setBody(createCheckoutStatsChart());
         if (overdueNum > 0) {
             overdueTableContainer.getChildren().add(createOverdueTable());
         } else {
@@ -139,8 +142,7 @@ public class HomeController {
         returnedCount.forEach((date, count) -> returnedNum.getData().add(new XYChart.Data<>(date, count)));
 
         var chart = new LineChart<>(x, y);
-        chart.setTitle("Loan stats for the last 7 days");
-        chart.setMinHeight(300);
+        chart.setMinHeight(250);
         chart.getData().addAll(borrowedNum, returnedNum);
 
         return chart;
@@ -254,14 +256,24 @@ public class HomeController {
     }
 
     public VBox createRecentlyAddedMaterials() throws SQLException {
-        var materials = materialManager.getRecentlyAddedMaterials(5);
+        var materials = materialManager.getRecentlyAddedMaterials(3);
         var container = new VBox();
         container.setSpacing(10);
-        container.setAlignment(Pos.CENTER);
 
         materials.forEach(material -> {
-            var text = new Text(material.getTitle() + " by " + material.getAuthor());
-            container.getChildren().add(text);
+            var materialContainer = new VBox();
+            materialContainer.getStyleClass().add("material-container");
+
+            var title = new Text(material.getTitle());
+            materialContainer.getChildren().add(title);
+
+            if (material.getAuthor() != null) {
+                var author = new Text(material.getAuthor());
+                author.getStyleClass().add(Styles.TEXT_MUTED);
+                materialContainer.getChildren().add(author);
+            }
+
+            container.getChildren().add(materialContainer);
         });
 
         return container;

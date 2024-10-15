@@ -53,21 +53,39 @@
             <Text fx:id="totalUsersNum">N/N</Text>
         </body>
     </Card>
-    <VBox GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="1" fx:id="checkoutStatsContainer">
-    </VBox>
-    <VBox GridPane.columnSpan="2" GridPane.columnIndex="2" GridPane.rowIndex="1" alignment="CENTER" spacing="15">
-        <Text GridPane.halignment="CENTER" styleClass="title-4">Overdue materials</Text>
-        <VBox fx:id="overdueTableContainer">
-        </VBox>
-    </VBox>
-    <VBox GridPane.columnSpan="3" GridPane.columnIndex="0" GridPane.rowIndex="2" alignment="CENTER" spacing="15">
-        <Text GridPane.halignment="CENTER" styleClass="title-4">Recently borrowed materials</Text>
-        <VBox fx:id="recentlyBorrowedTableContainer">
-        </VBox>
-    </VBox>
-    <VBox GridPane.columnIndex="3" GridPane.rowIndex="2" alignment="CENTER" spacing="15">
-        <Text GridPane.halignment="CENTER" styleClass="title-4">Recently added materials</Text>
-        <VBox fx:id="recentlyAddedMaterialsContainer">
-        </VBox>
-    </VBox>
+    <Card GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="1" fx:id="checkoutStatsCard">
+        <header>
+            <Label styleClass="title-4">Loan stats for the last 7 days</Label>
+        </header>
+        <body>
+
+        </body>
+    </Card>
+    <Card GridPane.columnSpan="2" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <header>
+            <Label styleClass="title-4">Overdue materials</Label>
+        </header>
+        <body>
+            <VBox fx:id="overdueTableContainer">
+            </VBox>
+        </body>
+    </Card>
+    <Card GridPane.columnSpan="3" GridPane.columnIndex="0" GridPane.rowIndex="2">
+        <header>
+            <Label styleClass="title-4">Recently borrowed materials</Label>
+        </header>
+        <body>
+            <VBox fx:id="recentlyBorrowedTableContainer">
+            </VBox>
+        </body>
+    </Card>
+    <Card GridPane.columnIndex="3" GridPane.rowIndex="2">
+        <header>
+            <Label styleClass="title-4">Recently added materials</Label>
+        </header>
+        <body>
+            <VBox fx:id="recentlyAddedMaterialsContainer">
+            </VBox>
+        </body>
+    </Card>
 </GridPane>

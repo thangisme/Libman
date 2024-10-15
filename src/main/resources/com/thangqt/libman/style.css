@@ -2,4 +2,10 @@
     -fx-padding: 15px;
     -fx-border-color: black;
     -fx-border-width: 0 0 0 1;
+    -fx-background-color: #f9f9f9;
+}
+.material-container {
+    -fx-border-color: rgba(0, 0, 0, 0.08);
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 5 0 5 0;
 }
