@@ -4,6 +4,17 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.layout.GridPane?>
-<GridPane xmlns:fx="http://javafx.com/fxml">
-    <Text text="Users Content"/>
+<?import atlantafx.base.controls.Tile?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.HBox?>
+<?import atlantafx.base.controls.Card?>
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.UserViewController"
+          fx:id="userViewContainer">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>
+    </columnConstraints>
+    <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="userViewHeadlineContainer"></HBox>
+    <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="userViewTableContainer">
+
+    </VBox>
 </GridPane>
