@@ -135,7 +135,9 @@ public class HomeController {
 
         for (Loan loan : returnedLoans) {
             String returnDate = loan.getReturnDate().format(formatter);
-            returnedCount.put(returnDate, returnedCount.get(returnDate) + 1);
+            if (returnedCount.get(returnDate) != null) {
+                returnedCount.put(returnDate, returnedCount.get(returnDate) + 1);
+            }
         }
 
         borrowedCount.forEach((date, count) -> borrowedNum.getData().add(new XYChart.Data<>(date, count)));
