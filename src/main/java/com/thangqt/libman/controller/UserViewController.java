@@ -146,7 +146,7 @@ public class UserViewController {
         TableView tableView = new TableView();
         var column1 = new TableColumn<User, String>("ID");
         column1.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
-        column1.prefWidthProperty().bind(tableView.widthProperty().multiply(0.1));
+        column1.prefWidthProperty().bind(tableView.widthProperty().multiply(0.05));
 
         var column2 = new TableColumn<User, String>("Name");
         column2.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getName()));
@@ -163,9 +163,6 @@ public class UserViewController {
         tableView.getColumns().addAll(column1, column2, column3, column4);
         tableView.getItems().addAll(users.subList(0, Math.min(pageSize, users.size())));
         tableView.getStyleClass().addAll(Tweaks.EDGE_TO_EDGE, Styles.STRIPED, Styles.BORDERED);
-        tableView.setColumnResizePolicy(
-                TableView.CONSTRAINED_RESIZE_POLICY
-        );
         return tableView;
     }
 

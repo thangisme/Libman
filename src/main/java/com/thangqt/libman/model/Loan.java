@@ -55,4 +55,12 @@ public class Loan {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
 }

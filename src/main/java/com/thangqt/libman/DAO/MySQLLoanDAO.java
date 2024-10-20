@@ -102,7 +102,7 @@ public class MySQLLoanDAO implements LoanDAO {
         String query = "SELECT * FROM loans";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             ResultSet rs = stm.executeQuery();
-            List<Loan> loans = null;
+            List<Loan> loans = new ArrayList<>();
             while (rs.next()) {
                 Loan loan = createLoanFromResult(rs);
                 loans.add(loan);
