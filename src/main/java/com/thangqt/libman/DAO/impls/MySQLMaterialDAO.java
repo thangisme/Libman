@@ -1,5 +1,6 @@
-package com.thangqt.libman.DAO;
+package com.thangqt.libman.DAO.impls;
 
+import com.thangqt.libman.DAO.MaterialDAO;
 import com.thangqt.libman.model.Book;
 import com.thangqt.libman.model.Magazine;
 import com.thangqt.libman.model.Material;

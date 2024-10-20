@@ -1,5 +1,6 @@
-package com.thangqt.libman.DAO;
+package com.thangqt.libman.DAO.impls;
 
+import com.thangqt.libman.DAO.LoanDAO;
 import com.thangqt.libman.model.Loan;
 import com.thangqt.libman.service.DatabaseConnection;
 
