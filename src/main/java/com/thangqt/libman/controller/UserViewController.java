@@ -64,6 +64,9 @@ public class UserViewController {
         clearIcon.setCursor(Cursor.HAND);
         clearIcon.setOnMouseClicked(event -> searchField.clear());
         searchField.setRight(clearIcon);
+        searchField.setOnAction(event -> {
+            searchUser(searchField.getText());
+        });
         HBox.setHgrow(searchField, Priority.ALWAYS);
         Button searchBtn = new Button("Search", new FontIcon(Feather.SEARCH));
         searchBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);
