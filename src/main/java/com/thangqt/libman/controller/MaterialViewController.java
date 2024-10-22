@@ -1,6 +1,7 @@
 package com.thangqt.libman.controller;
 
 import atlantafx.base.controls.Card;
+import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.controls.Tile;
 import atlantafx.base.theme.Styles;
 import com.thangqt.libman.model.Material;
@@ -12,6 +13,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
@@ -64,9 +66,13 @@ public class MaterialViewController {
         tile.setDescription("Manage and view material details");
         HBox actionContainer = new HBox();
         actionContainer.setSpacing(5);
-        TextField searchField = new TextField();
+        CustomTextField searchField = new CustomTextField();
         searchField.setPromptText("Search materials");
         searchField.getStyleClass().add(Styles.ROUNDED);
+        FontIcon clearIcon = new FontIcon(Feather.X);
+        clearIcon.setCursor(Cursor.HAND);
+        clearIcon.setOnMouseClicked(event -> searchField.clear());
+        searchField.setRight(clearIcon);
         HBox.setHgrow(searchField, Priority.ALWAYS);
         Button searchBtn = new Button("Search", new FontIcon(Feather.SEARCH));
         searchBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);

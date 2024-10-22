@@ -1,6 +1,7 @@
 package com.thangqt.libman.controller;
 
 import atlantafx.base.controls.Card;
+import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.controls.Tile;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
@@ -9,6 +10,7 @@ import com.thangqt.libman.model.User;
 import com.thangqt.libman.service.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -135,9 +137,13 @@ public class LoanViewController {
         tile.setDescription("Manage and view loan details");
         HBox actionContainer = new HBox();
         actionContainer.setSpacing(5);
-        TextField searchField = new TextField();
+        CustomTextField searchField = new CustomTextField();
         searchField.setPromptText("Search loan");
         searchField.getStyleClass().add(Styles.ROUNDED);
+        FontIcon clearIcon = new FontIcon(Feather.X);
+        clearIcon.setCursor(Cursor.HAND);
+        clearIcon.setOnMouseClicked(event -> searchField.clear());
+        searchField.setRight(clearIcon);
         HBox.setHgrow(searchField, Priority.ALWAYS);
         Button searchBtn = new Button("Search", new FontIcon(Feather.SEARCH));
         searchBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);

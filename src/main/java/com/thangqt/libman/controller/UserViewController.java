@@ -1,6 +1,7 @@
 package com.thangqt.libman.controller;
 
 import atlantafx.base.controls.Card;
+import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.controls.Tile;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
@@ -13,6 +14,7 @@ import com.thangqt.libman.service.ServiceFactory;
 import com.thangqt.libman.service.UserManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Callback;
@@ -55,9 +57,13 @@ public class UserViewController {
         tile.setDescription("Manage and view user details");
         HBox actionContainer = new HBox();
         actionContainer.setSpacing(15);
-        TextField searchField = new TextField();
+        CustomTextField searchField = new CustomTextField();
         searchField.setPromptText("Search by ID or email");
         searchField.getStyleClass().add(Styles.ROUNDED);
+        FontIcon clearIcon = new FontIcon(Feather.X);
+        clearIcon.setCursor(Cursor.HAND);
+        clearIcon.setOnMouseClicked(event -> searchField.clear());
+        searchField.setRight(clearIcon);
         HBox.setHgrow(searchField, Priority.ALWAYS);
         Button searchBtn = new Button("Search", new FontIcon(Feather.SEARCH));
         searchBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);
