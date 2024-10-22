@@ -52,7 +52,7 @@ public class LoanViewController {
     private void setupLoanTable() throws SQLException {
         List<Loan> loans = loanManager.getAllLoans();
         loans.sort((loan1, loan2) -> Integer.compare(loan2.getId(), loan1.getId()));
-        TableView userTable = createLoansTable(loans, 10);
+        TableView userTable = createLoansTable(loans, 15);
         Card userTableCard = new Card();
         userTableCard.setBody(userTable);
         loanViewTableContainer.getChildren().add(userTableCard);
@@ -60,11 +60,11 @@ public class LoanViewController {
     }
 
     private void setupPagination(List<Loan> loans, TableView loanTable) {
-        Pagination pagination = new Pagination((loans.size() / 10) + 1, 0);
+        Pagination pagination = new Pagination((loans.size() / 15) + 1, 0);
         pagination.setMaxPageIndicatorCount(5);
         pagination.setPageFactory(pageIndex -> {
-            int fromIndex = pageIndex * 10;
-            int toIndex = Math.min(fromIndex + 10, loans.size());
+            int fromIndex = pageIndex * 15;
+            int toIndex = Math.min(fromIndex + 15, loans.size());
             loanTable.getItems().setAll(loans.subList(fromIndex, toIndex));
             return new StackPane();
         });
@@ -73,6 +73,8 @@ public class LoanViewController {
 
     private TableView createLoansTable(List<Loan> loans, int pageSize) {
         TableView tableView = new TableView();
+        tableView.setPrefHeight(680)
+        ;
         var column1 = new TableColumn<Loan, String>("ID");
         column1.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
         column1.prefWidthProperty().bind(tableView.widthProperty().multiply(0.05));

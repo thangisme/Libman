@@ -122,7 +122,7 @@ public class UserViewController {
 
     private void setupUserTable() throws SQLException {
         List<User> users = userManager.getAllUsers();
-        TableView userTable = createUserTable(users, 10);
+        TableView userTable = createUserTable(users, 15);
         Card userTableCard = new Card();
         userTableCard.setBody(userTable);
         userViewTableContainer.getChildren().add(userTableCard);
@@ -140,11 +140,11 @@ public class UserViewController {
     }
 
     private void setupPagination(List<User> users, TableView userTable) {
-        Pagination pagination = new Pagination(users.size() / 10 + 1, 0);
+        Pagination pagination = new Pagination(users.size() / 15 + 1, 0);
         pagination.setMaxPageIndicatorCount(5);
         pagination.setPageFactory(pageIndex -> {
-            int fromIndex = pageIndex * 10;
-            int toIndex = Math.min(fromIndex + 10, users.size());
+            int fromIndex = pageIndex * 15;
+            int toIndex = Math.min(fromIndex + 15, users.size());
             userTable.getItems().setAll(users.subList(fromIndex, toIndex));
             return new StackPane();
         });
@@ -153,6 +153,8 @@ public class UserViewController {
 
     private TableView createUserTable(List<User> users, int pageSize) {
         TableView tableView = new TableView();
+        tableView.setPrefHeight(680);
+
         var column1 = new TableColumn<User, String>("ID");
         column1.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
         column1.prefWidthProperty().bind(tableView.widthProperty().multiply(0.05));
