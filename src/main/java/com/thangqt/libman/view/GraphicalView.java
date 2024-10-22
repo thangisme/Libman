@@ -14,7 +14,7 @@ public class GraphicalView extends Application {
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/thangqt/libman/fxml/dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        Scene scene = new Scene(fxmlLoader.load(), 1360, 760);
         scene.getStylesheets().add(getClass().getResource("/com/thangqt/libman/style.css").toExternalForm());
 
         stage.setTitle("Libman");

@@ -92,4 +92,12 @@ public abstract class Material {
     public LocalDate getAddedDate() {
         return addedDate;
     }
+
+    public String getCoverImageUrl() {
+        return coverImageUrl;
+    }
+
+    public void setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl;
+    }
 }

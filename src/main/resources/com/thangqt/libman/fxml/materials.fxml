@@ -2,8 +2,16 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
 <?import javafx.scene.layout.GridPane?>
-<GridPane xmlns:fx="http://javafx.com/fxml">
-    <Text text="Documents Content"/>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.MaterialViewController">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>
+    </columnConstraints>
+    <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="materialsViewHeadlineContainer"/>
+    <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="materialsListingContainer"/>
+    <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" fx:id="materialsViewFooterContainer" alignment="CENTER"/>
 </GridPane>

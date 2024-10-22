@@ -73,13 +73,15 @@ public class MySQLMaterialDAO implements MaterialDAO {
 
     @Override
     public void update(Material material) throws SQLException {
-        String query = "UPDATE materials SET title = ?, author = ?, type = ?, is_available = ? WHERE id = ?";
+        String query = "UPDATE materials SET title = ?, author = ?, type = ?, is_available = ?, cover_image_url = ?, publisher = ? WHERE id = ?";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             stm.setString(1, material.getTitle());
             stm.setString(2, material.getAuthor());
             stm.setString(3, material instanceof Book ? "Book" : "Magazine");
             stm.setBoolean(4, material.isAvailable());
-            stm.setInt(5, material.getId());
+            stm.setString(5, material.getCoverImageUrl());
+            stm.setString(6, material.getPublisher());
+            stm.setInt(7, material.getId());
             stm.executeUpdate();
 
             if (material instanceof Book) {
@@ -136,6 +138,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
         String publisher = rs.getString("publisher");
         int quantity = rs.getInt("quantity");
         int availableQuantity = rs.getInt("available_quantity");
+        String coverImageUrl = rs.getString("cover_image_url");
         LocalDate addedDate = rs.getDate("added_date").toLocalDate();
         if (rs.getString("type").equals("Book")) {
             String isbn = rs.getString("isbn");
@@ -143,6 +146,11 @@ public class MySQLMaterialDAO implements MaterialDAO {
             Book book = new Book(title, author, description, publisher, isbn, pageCount);
             book.setId(id);
             book.setAddedDate(addedDate);
+            if (coverImageUrl != null) {
+                book.setCoverImageUrl(coverImageUrl);
+            }
+            book.setQuantity(quantity);
+            book.setAvailableQuantity(availableQuantity);
             return book;
         } else if (rs.getString("type").equals("Magazine")) {
             String issn = rs.getString("issn");
@@ -151,6 +159,11 @@ public class MySQLMaterialDAO implements MaterialDAO {
             Magazine magazine = new Magazine(title, author, description, publisher, issn, issueNumber, currentIssue);
             magazine.setId(id);
             magazine.setAddedDate(addedDate);
+            if (coverImageUrl != null) {
+                magazine.setCoverImageUrl(coverImageUrl);
+            }
+            magazine.setQuantity(quantity);
+            magazine.setAvailableQuantity(availableQuantity);
             return magazine;
         }
         return null;
