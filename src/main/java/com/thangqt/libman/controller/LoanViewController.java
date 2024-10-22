@@ -49,6 +49,7 @@ public class LoanViewController {
 
     private void setupLoanTable() throws SQLException {
         List<Loan> loans = loanManager.getAllLoans();
+        loans.sort((loan1, loan2) -> Integer.compare(loan2.getId(), loan1.getId()));
         TableView userTable = createLoansTable(loans, 10);
         Card userTableCard = new Card();
         userTableCard.setBody(userTable);
