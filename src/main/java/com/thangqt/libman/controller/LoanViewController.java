@@ -278,8 +278,13 @@ public class LoanViewController {
                         Loan loan = getTableView().getItems().get(getIndex());
 
                         if (loan.getReturnDate() == null) {
-                            statusLabel.setText("Borrowed");
-                            statusLabel.getStyleClass().setAll("label", Styles.WARNING);
+                            if (loan.getDueDate().isBefore(LocalDate.now())) {
+                                statusLabel.setText("Overdue");
+                                statusLabel.getStyleClass().setAll("label", Styles.DANGER);
+                            } else {
+                                statusLabel.setText("Borrowed");
+                                statusLabel.getStyleClass().setAll("label", Styles.WARNING);
+                            }
                         } else {
                             statusLabel.setText("Returned");
                             statusLabel.getStyleClass().setAll("label", Styles.SUCCESS);
