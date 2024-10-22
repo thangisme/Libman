@@ -13,6 +13,7 @@
 <?import atlantafx.base.controls.Card?>
 <?import javafx.scene.control.Label?>
 
+<?import javafx.scene.control.ScrollPane?>
 <GridPane xmlns:fx="http://javafx.com/fxml" hgap="10" vgap="10" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
           fx:controller="com.thangqt.libman.controller.HomeController">
     <columnConstraints>
@@ -84,8 +85,10 @@
             <Label styleClass="title-4">Recently added materials</Label>
         </header>
         <body>
-            <VBox fx:id="recentlyAddedMaterialsContainer">
-            </VBox>
+            <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED">
+                <VBox fx:id="recentlyAddedMaterialsContainer">
+                </VBox>
+            </ScrollPane>
         </body>
     </Card>
 </GridPane>

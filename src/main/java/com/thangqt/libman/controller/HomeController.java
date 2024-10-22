@@ -258,7 +258,7 @@ public class HomeController {
     }
 
     public VBox createRecentlyAddedMaterials() throws SQLException {
-        var materials = materialManager.getRecentlyAddedMaterials(3);
+        var materials = materialManager.getRecentlyAddedMaterials(5);
         var container = new VBox();
         container.setSpacing(10);
 
