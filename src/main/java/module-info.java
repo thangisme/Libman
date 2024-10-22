@@ -7,6 +7,9 @@ module com.thangqt.libman {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.feather;
     requires dotenv.java;
+    requires org.apache.httpcomponents.httpclient;
+    requires org.apache.httpcomponents.httpcore;
+    requires com.google.gson;
 
     opens com.thangqt.libman to javafx.fxml;
     opens com.thangqt.libman.controller to javafx.fxml;

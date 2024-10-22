@@ -18,6 +18,7 @@ public abstract class Material {
     protected int availableQuantity;
     protected boolean isAvailable;
     protected LocalDate addedDate;
+    protected String coverImageUrl;
 
     public void setTitle(String title) {
         this.title = title;
