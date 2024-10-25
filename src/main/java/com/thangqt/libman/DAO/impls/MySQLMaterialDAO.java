@@ -230,6 +230,27 @@ public class MySQLMaterialDAO implements MaterialDAO {
     }
 
     @Override
+    public List<Material> searchByAuthor(String author) throws SQLException {
+        String query = "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue " +
+                "FROM materials " +
+                "LEFT JOIN books ON materials.id = books.id " +
+                "LEFT JOIN magazines ON materials.id = magazines.id " +
+                "WHERE author LIKE ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setString(1, "%" + author + "%");
+            ResultSet rs = stm.executeQuery();
+            List<Material> allMaterials = new ArrayList<>();
+            while (rs.next()) {
+                Material material = createMaterialFromResult(rs);
+                allMaterials.add(material);
+            }
+            return allMaterials;
+        } catch (SQLException e) {
+            throw new SQLException("Error searching materials by author: " + e.getMessage());
+        }
+    }
+
+    @Override
     public int getAvailableQuantity(int id) throws SQLException {
         String query = "SELECT available_quantity FROM materials WHERE id = ?";
         try (PreparedStatement stm = conn.prepareStatement(query)) {

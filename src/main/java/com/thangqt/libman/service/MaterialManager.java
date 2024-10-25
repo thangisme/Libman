@@ -58,6 +58,10 @@ public class MaterialManager {
         return materialDAO.searchByTitle(title);
     }
 
+    public List<Material> getMaterialsByAuthor(String author) throws SQLException {
+        return materialDAO.searchByAuthor(author);
+    }
+
     public int getTotalMaterialsNumber() throws SQLException {
         return materialDAO.getTotalMaterialsNumber();
     }

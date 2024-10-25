@@ -14,10 +14,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -29,13 +26,13 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MaterialViewController {
     private MaterialManager materialManager;
     private LoanManager loanManager;
     private UserManager userManager;
-    private List<Material> materials;
 
     @FXML
     private HBox materialsViewHeadlineContainer;
@@ -55,9 +52,8 @@ public class MaterialViewController {
 
     @FXML
     public void initialize() throws SQLException {
-        materials = materialManager.getAllMaterials();
         setupTile();
-        setupPagination(materials);
+        setupPagination(materialManager.getAllMaterials());
     }
 
     private void setupTile() {
@@ -89,6 +85,34 @@ public class MaterialViewController {
     }
 
     private void searchMaterial(String text) {
+        try {
+            List<Material> results = new ArrayList<>();
+            if (text.isEmpty()) {
+                setupPagination(materialManager.getAllMaterials());
+                return;
+            } else {
+                if (text.matches("\\d+")) {
+                    Material material = materialManager.getMaterialById(Integer.parseInt(text));
+                    if (material != null) {
+                        System.out.println(material.getTitle());
+                        results.add(material);
+                    }
+                }
+                results.addAll(materialManager.getMaterialsByTitle(text));
+                results.addAll(materialManager.getMaterialsByAuthor(text));
+                if (results.isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Search result");
+                    alert.setHeaderText("No result found");
+                    alert.setContentText("No material found with the given search query");
+                    alert.showAndWait();
+                    return;
+                }
+            }
+            setupPagination(results);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupPagination(List<Material> materials) {
@@ -98,16 +122,17 @@ public class MaterialViewController {
             int fromIndex = pageIndex * 9;
             int toIndex = Math.min(fromIndex + 9, materials.size());
             try {
-                setupMaterialsListing(fromIndex, toIndex);
+                setupMaterialsListing(fromIndex, toIndex, materials);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             return new StackPane();
         });
+        materialsViewFooterContainer.getChildren().clear();
         materialsViewFooterContainer.getChildren().add(pagination);
     }
 
-    private void setupMaterialsListing(int startIndex, int endIndex) throws SQLException {
+    private void setupMaterialsListing(int startIndex, int endIndex, List<Material> materials) throws SQLException {
         materialsListingContainer.getChildren().clear();
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
@@ -121,7 +146,7 @@ public class MaterialViewController {
 
         int row = 0;
         int col = 0;
-        for (Material material : materialManager.getAllMaterials().subList(startIndex, endIndex)) {
+        for (Material material : materials.subList(startIndex, endIndex)) {
             MaterialTile materialTile = new MaterialTile(material);
             gridPane.add(materialTile, col, row);
             col++;
