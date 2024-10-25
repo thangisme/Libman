@@ -144,7 +144,10 @@ public class LoanViewController {
         searchField.getStyleClass().add(Styles.ROUNDED);
         FontIcon clearIcon = new FontIcon(Feather.X);
         clearIcon.setCursor(Cursor.HAND);
-        clearIcon.setOnMouseClicked(event -> searchField.clear());
+        clearIcon.setOnMouseClicked(event -> {
+            searchField.clear();
+            refreshLoanTable();
+        });
         searchField.setRight(clearIcon);
         searchField.setOnAction(event -> {
             searchLoan(searchField.getText());

@@ -67,7 +67,14 @@ public class MaterialViewController {
         searchField.getStyleClass().add(Styles.ROUNDED);
         FontIcon clearIcon = new FontIcon(Feather.X);
         clearIcon.setCursor(Cursor.HAND);
-        clearIcon.setOnMouseClicked(event -> searchField.clear());
+        clearIcon.setOnMouseClicked(event -> {
+            searchField.clear();
+            try {
+                setupPagination(materialManager.getAllMaterials());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
         searchField.setRight(clearIcon);
         searchField.setOnAction(event -> {
             searchMaterial(searchField.getText());
