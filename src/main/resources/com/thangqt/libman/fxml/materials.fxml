@@ -7,11 +7,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.ScrollPane?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.MaterialViewController">
-    <columnConstraints>
-        <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>
-    </columnConstraints>
-    <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="materialsViewHeadlineContainer"/>
-    <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="materialsListingContainer"/>
-    <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" fx:id="materialsViewFooterContainer" alignment="CENTER"/>
-</GridPane>
+<?import atlantafx.base.controls.ModalPane?>
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.MaterialViewController">
+    <GridPane fx:id="rootPane" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>
+        </columnConstraints>
+        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="materialsViewHeadlineContainer"/>
+        <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="materialsListingContainer"/>
+        <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" fx:id="materialsViewFooterContainer" alignment="CENTER"/>
+    </GridPane>
+    <ModalPane fx:id="modalPane">
+    </ModalPane>
+</StackPane>

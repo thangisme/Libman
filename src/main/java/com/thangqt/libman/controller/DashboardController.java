@@ -41,7 +41,8 @@ public class DashboardController {
 
     public void setContent(String fxml) {
         try {
-            GridPane pane = FXMLLoader.load(getClass().getResource("/com/thangqt/libman/fxml/" + fxml));
+            VBox pane = new VBox();
+            pane.getChildren().add(FXMLLoader.load(getClass().getResource("/com/thangqt/libman/fxml/" + fxml)));
             contentPane.getChildren().setAll(pane);
         } catch (IOException e) {
             e.printStackTrace();

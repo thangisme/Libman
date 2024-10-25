@@ -1,8 +1,8 @@
 package com.thangqt.libman.controller;
 
-import atlantafx.base.controls.Card;
 import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.controls.Tile;
+import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.LoanManager;
@@ -13,15 +13,14 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import atlantafx.base.controls.ModalPane;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -33,6 +32,9 @@ public class MaterialViewController {
     private MaterialManager materialManager;
     private LoanManager loanManager;
     private UserManager userManager;
+
+    @FXML
+    private ModalPane modalPane;
 
     @FXML
     private HBox materialsViewHeadlineContainer;
@@ -54,6 +56,9 @@ public class MaterialViewController {
     public void initialize() throws SQLException {
         setupTile();
         setupPagination(materialManager.getAllMaterials());
+
+        modalPane.setInTransitionFactory(null);
+        modalPane.setOutTransitionFactory(null);
     }
 
     private void setupTile() {
@@ -155,6 +160,8 @@ public class MaterialViewController {
         int col = 0;
         for (Material material : materials.subList(startIndex, endIndex)) {
             MaterialTile materialTile = new MaterialTile(material);
+            materialTile.setOnMouseClicked(e -> showMaterialDetails(material));
+
             gridPane.add(materialTile, col, row);
             col++;
             if (col == columns) {
@@ -163,6 +170,60 @@ public class MaterialViewController {
             }
         }
         materialsListingContainer.getChildren().add(gridPane);
+    }
+
+    private void showMaterialDetails(Material material) {
+        ModalBox modalBox = new ModalBox(modalPane);
+        modalBox.addContent(new MaterialDetailsView(material, loanManager, userManager));
+        modalPane.show(modalBox);
+    }
+
+    class MaterialDetailsView extends VBox {
+        private Material material;
+        private LoanManager loanManager;
+        private UserManager userManager;
+
+        public MaterialDetailsView(Material material, LoanManager loanManager, UserManager userManager) {
+            this.material = material;
+            this.loanManager = loanManager;
+            this.userManager = userManager;
+            initialize();
+        }
+
+        private void initialize() {
+            setPadding(new Insets(12));
+            setSpacing(10);
+            setStyle("-fx-background-color: #fff");
+            HBox topContainer = new HBox();
+            ImageView coverImage = new ImageView();
+            coverImage.setFitWidth(200);
+            HBox.setMargin(coverImage, new Insets(0, 20, 0, 10));
+            coverImage.preserveRatioProperty().set(true);
+            if (material.getCoverImageUrl() != null) {
+                coverImage.setImage(new Image(material.getCoverImageUrl()));
+            } else {
+                coverImage.setImage(new Image(getClass().getResourceAsStream("/com/thangqt/libman/images/no_cover.png")));
+            }
+
+            VBox infoContainer = new VBox();
+            Text title = new Text(material.getTitle());
+            title.getStyleClass().add(Styles.TITLE_2);
+
+            Text author = new Text(material.getAuthor());
+            author.getStyleClass().addAll(Styles.TEXT_SMALL, Styles.TEXT_SUBTLE);
+
+            Text description = new Text(material.getDescription());
+            description.getStyleClass().add(Styles.TEXT_MUTED);
+
+            infoContainer.getChildren().addAll(title, author, description);
+            topContainer.getChildren().addAll(infoContainer, coverImage);
+
+            Button issueBtn = new Button("Issue material");
+            issueBtn.setOnMouseClicked(e -> {
+            });
+
+            getChildren().addAll(topContainer, issueBtn);
+        }
     }
 
     class MaterialTile extends HBox {
