@@ -4,7 +4,9 @@ import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.controls.Tile;
 import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
+import com.thangqt.libman.model.Loan;
 import com.thangqt.libman.model.Material;
+import com.thangqt.libman.model.User;
 import com.thangqt.libman.service.LoanManager;
 import com.thangqt.libman.service.MaterialManager;
 import com.thangqt.libman.service.ServiceFactory;
@@ -25,6 +27,7 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,6 +178,7 @@ public class MaterialViewController {
     private void showMaterialDetails(Material material) {
         ModalBox modalBox = new ModalBox(modalPane);
         modalBox.addContent(new MaterialDetailsView(material, loanManager, userManager));
+        modalBox.setMaxSize(760, 360);
         modalPane.show(modalBox);
     }
 
@@ -191,13 +195,13 @@ public class MaterialViewController {
         }
 
         private void initialize() {
-            setPadding(new Insets(12));
+            setPadding(new Insets(15));
             setSpacing(10);
-            setStyle("-fx-background-color: #fff");
             HBox topContainer = new HBox();
+
             ImageView coverImage = new ImageView();
             coverImage.setFitWidth(200);
-            HBox.setMargin(coverImage, new Insets(0, 20, 0, 10));
+            HBox.setMargin(coverImage, new Insets(0, 30, 0, 10));
             coverImage.preserveRatioProperty().set(true);
             if (material.getCoverImageUrl() != null) {
                 coverImage.setImage(new Image(material.getCoverImageUrl()));
@@ -206,24 +210,137 @@ public class MaterialViewController {
             }
 
             VBox infoContainer = new VBox();
+
             Text title = new Text(material.getTitle());
             title.getStyleClass().add(Styles.TITLE_2);
+            title.setStyle("-fx-font-size: 36px; -fx-font-weight: 500;");
 
             Text author = new Text(material.getAuthor());
-            author.getStyleClass().addAll(Styles.TEXT_SMALL, Styles.TEXT_SUBTLE);
+            author.getStyleClass().addAll(Styles.TEXT_SUBTLE);
+            author.setStyle("-fx-font-size: 18px;");
 
             Text description = new Text(material.getDescription());
-            description.getStyleClass().add(Styles.TEXT_MUTED);
+            VBox.setMargin(description, new Insets(10, 0, 0, 0));
+            description.setStyle("-fx-font-size: 22px;");
+            description.setWrappingWidth(540);
 
             infoContainer.getChildren().addAll(title, author, description);
             topContainer.getChildren().addAll(infoContainer, coverImage);
 
-            Button issueBtn = new Button("Issue material");
-            issueBtn.setOnMouseClicked(e -> {
-            });
+            HBox actionContainer = new HBox();
+            actionContainer.setSpacing(10);
+            Button issueBtn = new Button("Issue", new FontIcon(Feather.ARCHIVE));
+            issueBtn.setOnAction(e -> showIssueDialog());
+            Button editBtn = new Button("Edit", new FontIcon(Feather.EDIT));
+            editBtn.setOnAction(e -> showEditView());
+            Button deleteBtn = new Button("Delete", new FontIcon(Feather.TRASH_2));
+            deleteBtn.setOnAction(e -> showConfirmDeleteDialog(material));
+            actionContainer.getChildren().addAll(issueBtn, editBtn, deleteBtn);
 
-            getChildren().addAll(topContainer, issueBtn);
+            getChildren().addAll(topContainer, actionContainer);
         }
+
+        private void showEditView() {
+            ModalBox modalBox = new ModalBox(modalPane);
+            modalBox.addContent(new MaterialEditView(material, materialManager));
+            modalBox.setMaxSize(760, 360);
+            modalPane.show(modalBox);
+        }
+
+        private void showIssueDialog() {
+            Dialog<Loan> dialog = new Dialog<>();
+            dialog.setTitle("Issue material");
+            dialog.setHeaderText("Issue" + material.getTitle() + " to user");
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+            Label userIdLabel = new Label("User ID");
+            Label loanPeriodLabel = new Label("Loan period");
+            TextField userId = new TextField();
+            TextField loanPeriod = new TextField("14");
+            VBox form = new VBox(userIdLabel, userId, loanPeriodLabel, loanPeriod);
+            form.setSpacing(10);
+            dialog.getDialogPane().setContent(form);
+            dialog.setResultConverter(buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                    LocalDate issueDate = LocalDate.now();
+                    LocalDate returnDate = issueDate.plusDays(Integer.parseInt(loanPeriod.getText()));
+                    return new Loan(Integer.parseInt(userId.getText()), material.getId(), issueDate, returnDate);
+                }
+                return null;
+            });
+            dialog.showAndWait().ifPresent(newLoan -> issueLoan(newLoan));
+        }
+
+        private void issueLoan(Loan loan) {
+            try {
+                User user = userManager.getUserById(loan.getUserId());
+                if (user == null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Issue failed");
+                    alert.setHeaderText("User not found");
+                    alert.setContentText("No user found with the given ID");
+                    alert.showAndWait();
+                    return;
+                }
+                loanManager.addLoan(loan);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Issue successful");
+                alert.setHeaderText("Material issued successfully");
+                alert.setContentText("Material " + material.getTitle() + " has been issued to " + user.getName());
+                alert.showAndWait();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void showConfirmDeleteDialog(Material material) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Delete material");
+            alert.setHeaderText("Are you sure you want to delete " + material.getTitle() + "?");
+            alert.setContentText("This action cannot be undone");
+            alert.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                    try {
+                        if (loanManager.getLoansByMaterial(material.getId()).size() > 0) {
+                            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                            errorAlert.setTitle("Delete failed");
+                            errorAlert.setHeaderText("Material has active loans");
+                            errorAlert.setContentText("Cannot delete material with active loans");
+                            errorAlert.showAndWait();
+                            return;
+                        }
+                        materialManager.deleteMaterial(material.getId());
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Delete successful");
+                        successAlert.setHeaderText("Material deleted successfully");
+                        successAlert.setContentText("Material " + material.getTitle() + " has been deleted");
+                        successAlert.showAndWait();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setTitle("Delete failed");
+                        errorAlert.setHeaderText("Failed to delete material");
+                        errorAlert.setContentText("An error occurred while deleting the material");
+                        errorAlert.showAndWait();
+                    }
+                }
+            });
+        }
+    }
+
+    class MaterialEditView extends VBox {
+        private Material material;
+        private MaterialManager materialManager;
+
+        public MaterialEditView(Material material, MaterialManager materialManager) {
+            this.material = material;
+            this.materialManager = materialManager;
+            initialize();
+        }
+
+        private void initialize() {
+            // To be implemented
+        }
+
     }
 
     class MaterialTile extends HBox {

@@ -130,7 +130,9 @@ public class HomeController {
 
         for (Loan loan : borrowedLoans) {
             String borrowDate = loan.getBorrowDate().format(formatter);
-            borrowedCount.put(borrowDate, borrowedCount.get(borrowDate) + 1);
+            if (borrowedCount.get(borrowDate) != null) {
+                borrowedCount.put(borrowDate, borrowedCount.get(borrowDate) + 1);
+            }
         }
 
         for (Loan loan : returnedLoans) {
