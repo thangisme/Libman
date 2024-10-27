@@ -73,7 +73,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
 
     @Override
     public void update(Material material) throws SQLException {
-        String query = "UPDATE materials SET title = ?, author = ?, type = ?, is_available = ?, cover_image_url = ?, publisher = ? WHERE id = ?";
+        String query = "UPDATE materials SET title = ?, author = ?, type = ?, is_available = ?, cover_image_url = ?, publisher = ?, description = ? WHERE id = ?";
         try (PreparedStatement stm = conn.prepareStatement(query)) {
             stm.setString(1, material.getTitle());
             stm.setString(2, material.getAuthor());
@@ -81,7 +81,8 @@ public class MySQLMaterialDAO implements MaterialDAO {
             stm.setBoolean(4, material.isAvailable());
             stm.setString(5, material.getCoverImageUrl());
             stm.setString(6, material.getPublisher());
-            stm.setInt(7, material.getId());
+            stm.setString(7, material.getDescription());
+            stm.setInt(8, material.getId());
             stm.executeUpdate();
 
             if (material instanceof Book) {
