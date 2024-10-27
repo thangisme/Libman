@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import atlantafx.base.controls.ModalPane;
+import javafx.scene.text.TextFlow;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -219,12 +220,15 @@ public class MaterialViewController {
             author.getStyleClass().addAll(Styles.TEXT_SUBTLE);
             author.setStyle("-fx-font-size: 18px;");
 
+            TextFlow descriptionScrollPane = new TextFlow();
+            descriptionScrollPane.setMaxWidth(540);
+            VBox.setMargin(descriptionScrollPane, new Insets(10, 0, 0, 0));
             Text description = new Text(material.getDescription());
-            VBox.setMargin(description, new Insets(10, 0, 0, 0));
-            description.setStyle("-fx-font-size: 22px;");
+            description.getStyleClass().add(Styles.TEXT_MUTED);
             description.setWrappingWidth(540);
+            descriptionScrollPane.getChildren().add(description);
 
-            infoContainer.getChildren().addAll(title, author, description);
+            infoContainer.getChildren().addAll(title, author, descriptionScrollPane);
             topContainer.getChildren().addAll(infoContainer, coverImage);
 
             HBox actionContainer = new HBox();
@@ -297,8 +301,11 @@ public class MaterialViewController {
             alert.setTitle("Delete material");
             alert.setHeaderText("Are you sure you want to delete " + material.getTitle() + "?");
             alert.setContentText("This action cannot be undone");
+            ButtonType yesBtn = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+            ButtonType noBtn = new ButtonType("No", ButtonBar.ButtonData.NO);
+            alert.getButtonTypes().setAll(yesBtn, noBtn);
             alert.showAndWait().ifPresent(buttonType -> {
-                if (buttonType == ButtonType.OK) {
+                if (buttonType == yesBtn) {
                     try {
                         if (loanManager.getLoansByMaterial(material.getId()).size() > 0) {
                             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -369,7 +376,7 @@ public class MaterialViewController {
             author.getStyleClass().addAll(Styles.TEXT_SMALL, Styles.TEXT_SUBTLE);
             author.setWrappingWidth(200);
 
-            Text description = new Text(material.getDescription());
+            Text description = new Text(material.getDescription().substring(0, Math.min(material.getDescription().length(), 150)) + "...");
             description.getStyleClass().add(Styles.TEXT_MUTED);
             description.setWrappingWidth(200);
 
