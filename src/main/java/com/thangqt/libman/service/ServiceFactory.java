@@ -1,7 +1,6 @@
 package com.thangqt.libman.service;
 
 import com.thangqt.libman.DAO.DAOFactory;
-
 import java.sql.SQLException;
 
 public class ServiceFactory {

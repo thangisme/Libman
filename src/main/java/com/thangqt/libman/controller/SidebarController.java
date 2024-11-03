@@ -1,7 +1,6 @@
 package com.thangqt.libman.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.layout.VBox;
 
 public class SidebarController {
 

@@ -1,18 +1,17 @@
 package com.thangqt.libman.service;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.thangqt.libman.model.Book;
+import java.io.IOException;
+import java.net.URLEncoder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import com.google.gson.JsonElement;
-
-import java.io.IOException;
-import java.net.URLEncoder;
 
 public class GoogleBooksService {
 

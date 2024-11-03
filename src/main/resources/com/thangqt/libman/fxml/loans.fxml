@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
-
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.LoanViewController">
     <columnConstraints>
         <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>

@@ -5,9 +5,7 @@ import com.thangqt.libman.model.Book;
 import com.thangqt.libman.model.Magazine;
 import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.DatabaseConnection;
-
 import java.sql.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

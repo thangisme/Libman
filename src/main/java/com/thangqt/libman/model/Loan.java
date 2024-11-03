@@ -1,7 +1,6 @@
 package com.thangqt.libman.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Loan {
     private int id;
@@ -32,12 +31,20 @@ public class Loan {
         return returnDate;
     }
 
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+
     public int getMaterialId() {
         return materialId;
     }
 
     public LocalDate getDueDate() {
         return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     public int getUserId() {
@@ -54,13 +61,5 @@ public class Loan {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
     }
 }

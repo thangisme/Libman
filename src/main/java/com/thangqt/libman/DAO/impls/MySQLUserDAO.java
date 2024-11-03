@@ -3,7 +3,6 @@ package com.thangqt.libman.DAO.impls;
 import com.thangqt.libman.DAO.UserDAO;
 import com.thangqt.libman.model.User;
 import com.thangqt.libman.service.DatabaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -3,7 +3,6 @@ package com.thangqt.libman.DAO;
 import com.thangqt.libman.DAO.impls.MySQLLoanDAO;
 import com.thangqt.libman.DAO.impls.MySQLMaterialDAO;
 import com.thangqt.libman.DAO.impls.MySQLUserDAO;
-
 import java.sql.SQLException;
 
 public class DAOFactory {

@@ -2,7 +2,6 @@ package com.thangqt.libman.service;
 
 import com.thangqt.libman.DAO.LoanDAO;
 import com.thangqt.libman.model.Loan;
-
 import java.sql.SQLException;
 import java.util.List;
 

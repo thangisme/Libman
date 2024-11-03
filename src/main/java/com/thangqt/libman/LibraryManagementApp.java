@@ -3,7 +3,6 @@ package com.thangqt.libman;
 import com.thangqt.libman.controller.ConsoleController;
 import com.thangqt.libman.service.*;
 import com.thangqt.libman.view.ConsoleView;
-
 import java.sql.SQLException;
 
 public class LibraryManagementApp {

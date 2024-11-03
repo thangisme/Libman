@@ -1,11 +1,16 @@
 package com.thangqt.libman.controller;
 
 import atlantafx.base.controls.CustomTextField;
+import atlantafx.base.controls.ModalPane;
 import atlantafx.base.controls.Tile;
 import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import com.thangqt.libman.model.*;
 import com.thangqt.libman.service.*;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -17,15 +22,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import atlantafx.base.controls.ModalPane;
 import javafx.scene.text.TextFlow;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MaterialViewController {
   private MaterialManager materialManager;

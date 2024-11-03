@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.ScrollPane?>
-
 <?import atlantafx.base.controls.ModalPane?>
-<?import javafx.scene.layout.StackPane?>
-
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.MaterialViewController" GridPane.vgrow="ALWAYS">
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.MaterialViewController"
+           GridPane.vgrow="ALWAYS">
     <GridPane fx:id="rootPane" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>

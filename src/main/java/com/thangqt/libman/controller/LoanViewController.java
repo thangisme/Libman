@@ -8,6 +8,10 @@ import atlantafx.base.theme.Tweaks;
 import com.thangqt.libman.model.Loan;
 import com.thangqt.libman.model.User;
 import com.thangqt.libman.service.*;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -19,11 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoanViewController {
     private LoanManager loanManager;

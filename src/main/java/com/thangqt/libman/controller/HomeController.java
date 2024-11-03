@@ -8,26 +8,24 @@ import com.thangqt.libman.service.LoanManager;
 import com.thangqt.libman.service.MaterialManager;
 import com.thangqt.libman.service.ServiceFactory;
 import com.thangqt.libman.service.UserManager;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.IntStream;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javafx.scene.control.TableView;
-import javafx.geometry.Pos;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.IntStream;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class HomeController {
     private MaterialManager materialManager;

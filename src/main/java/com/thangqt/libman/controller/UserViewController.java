@@ -3,7 +3,6 @@ package com.thangqt.libman.controller;
 import atlantafx.base.controls.Card;
 import atlantafx.base.controls.CustomTextField;
 import atlantafx.base.controls.Tile;
-import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
 import com.thangqt.libman.model.Loan;
@@ -12,6 +11,8 @@ import com.thangqt.libman.service.LoanManager;
 import com.thangqt.libman.service.MaterialManager;
 import com.thangqt.libman.service.ServiceFactory;
 import com.thangqt.libman.service.UserManager;
+import java.sql.SQLException;
+import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -20,9 +21,6 @@ import javafx.scene.layout.*;
 import javafx.util.Callback;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.sql.SQLException;
-import java.util.List;
 
 public class UserViewController {
     private final UserManager userManager;
