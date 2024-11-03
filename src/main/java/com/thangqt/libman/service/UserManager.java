@@ -6,45 +6,45 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserManager {
-    private UserDAO userDAO;
+  private UserDAO userDAO;
 
-    public UserManager(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
+  public UserManager(UserDAO userDAO) {
+    this.userDAO = userDAO;
+  }
 
-    public void addUser(User user) throws SQLException {
-        userDAO.add(user);
-    }
+  public void addUser(User user) throws SQLException {
+    userDAO.add(user);
+  }
 
-    public void updateUser(User user) throws SQLException {
-        userDAO.update(user);
-    }
+  public void updateUser(User user) throws SQLException {
+    userDAO.update(user);
+  }
 
-    public void deleteUser(int id) throws SQLException {
-        userDAO.delete(id);
-    }
+  public void deleteUser(int id) throws SQLException {
+    userDAO.delete(id);
+  }
 
-    public User getUserById(int id) throws SQLException {
-        return userDAO.getById(id);
-    }
+  public User getUserById(int id) throws SQLException {
+    return userDAO.getById(id);
+  }
 
-    public User getUserByEmail(String email) throws SQLException {
-        return userDAO.getByEmail(email);
-    }
+  public User getUserByEmail(String email) throws SQLException {
+    return userDAO.getByEmail(email);
+  }
 
-    public List<User> getAllUsers() throws SQLException {
-        return userDAO.getAll();
-    }
+  public List<User> getAllUsers() throws SQLException {
+    return userDAO.getAll();
+  }
 
-    public boolean isUserExist(int userId) throws SQLException {
-        return userDAO.isExist(userId);
-    }
+  public boolean isUserExist(int userId) throws SQLException {
+    return userDAO.isExist(userId);
+  }
 
-    public boolean isUserExist(String email) throws SQLException {
-        return userDAO.isExist(email);
-    }
+  public boolean isUserExist(String email) throws SQLException {
+    return userDAO.isExist(email);
+  }
 
-    public int getTotalUsersNumber() throws SQLException {
-        return userDAO.getTotalUsersNumber();
-    }
+  public int getTotalUsersNumber() throws SQLException {
+    return userDAO.getTotalUsersNumber();
+  }
 }

@@ -9,21 +9,28 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class updateBook {
-    public static void main(String[] args) throws SQLException, IOException {
-        MaterialManager materialManager = ServiceFactory.getInstance().getMaterialManager();
-        for (Material book : materialManager.getAllMaterials()) {
-            Book fetchedBook = GoogleBooksService.fetchBookInfo(book.getTitle() + " - " + book.getAuthor());
-            if (fetchedBook == null) {
-                continue;
-            }
-            book.setDescription(fetchedBook.getDescription());
-            book.setCoverImageUrl(fetchedBook.getCoverImageUrl());
-            book.setPublisher(fetchedBook.getPublisher());
-            if (book instanceof Book) {
-                ((Book) book).setIsbn(fetchedBook.getIsbn());
-            }
-            System.out.println("Updating book: " + book.getTitle() + " " + fetchedBook.getDescription() + " " + fetchedBook.getCoverImageUrl());
-            materialManager.updateMaterial(book);
-        }
+  public static void main(String[] args) throws SQLException, IOException {
+    MaterialManager materialManager = ServiceFactory.getInstance().getMaterialManager();
+    for (Material book : materialManager.getAllMaterials()) {
+      Book fetchedBook =
+          GoogleBooksService.fetchBookInfo(book.getTitle() + " - " + book.getAuthor());
+      if (fetchedBook == null) {
+        continue;
+      }
+      book.setDescription(fetchedBook.getDescription());
+      book.setCoverImageUrl(fetchedBook.getCoverImageUrl());
+      book.setPublisher(fetchedBook.getPublisher());
+      if (book instanceof Book) {
+        ((Book) book).setIsbn(fetchedBook.getIsbn());
+      }
+      System.out.println(
+          "Updating book: "
+              + book.getTitle()
+              + " "
+              + fetchedBook.getDescription()
+              + " "
+              + fetchedBook.getCoverImageUrl());
+      materialManager.updateMaterial(book);
     }
+  }
 }

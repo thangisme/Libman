@@ -31,7 +31,6 @@ public class MaterialViewController {
   private UserManager userManager;
   private MaterialGridLayout gridLayout;
 
-
   @FXML private HBox materialsViewHeadlineContainer;
   @FXML private VBox materialsListingContainer;
   @FXML private HBox materialsViewFooterContainer;
@@ -116,18 +115,18 @@ public class MaterialViewController {
       throws SQLException {
     gridLayout.displayMaterials(materials, startIndex, endIndex, this::showMaterialDetails);
   }
-  
+
   public void refreshMaterialsListing() {
     try {
       materialsListingContainer.getChildren().clear();
       gridLayout = new MaterialGridLayout();
-        materialsListingContainer.getChildren().add(gridLayout);
+      materialsListingContainer.getChildren().add(gridLayout);
       setupPagination(materialManager.getAllMaterials());
     } catch (SQLException e) {
       e.printStackTrace();
     }
   }
-  
+
   public ModalPane getModalPane() {
     return modalPane;
   }
