@@ -33,6 +33,19 @@ public class Book extends Material{
         this.type = MaterialType.Book;
     }
 
+    public Book(String title, String author, String description, String publisher, String isbn, String coverImageUrl, int quantity, int availableQuantity) {
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.publisher = publisher;
+        this.isbn = isbn;
+        this.coverImageUrl = coverImageUrl;
+        this.quantity = quantity;
+        this.availableQuantity = availableQuantity;
+        this.isAvailable = true;
+        this.type = MaterialType.Book;
+    }
+
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }

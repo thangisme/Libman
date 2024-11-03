@@ -100,4 +100,9 @@ public abstract class Material {
     public void setCoverImageUrl(String coverImageUrl) {
         this.coverImageUrl = coverImageUrl;
     }
+
+    public String getType() {
+        return type.toString();
+    }
+
 }

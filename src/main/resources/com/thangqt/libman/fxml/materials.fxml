@@ -9,7 +9,8 @@
 
 <?import atlantafx.base.controls.ModalPane?>
 <?import javafx.scene.layout.StackPane?>
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.MaterialViewController">
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.MaterialViewController" GridPane.vgrow="ALWAYS">
     <GridPane fx:id="rootPane" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>
