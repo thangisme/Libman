@@ -19,4 +19,5 @@ module com.thangqt.libman {
   exports com.thangqt.libman;
   exports com.thangqt.libman.view;
   exports com.thangqt.libman.controller;
+    exports com.thangqt.libman.view.GraphicalView;
 }
