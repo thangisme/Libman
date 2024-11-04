@@ -13,6 +13,7 @@ public class MaterialEditController {
   public MaterialEditController(
       MaterialManager materialManager, MaterialViewController parentController) {
     this.materialManager = materialManager;
+    this.parentController = parentController;
   }
 
   public void saveMaterial(
@@ -124,11 +125,9 @@ public class MaterialEditController {
       return false;
     }
 
-    try {
-      int id = Integer.parseInt(identifier);
-    } catch (NumberFormatException e) {
-      showErrorAlert("Identifier should be an integer.");
-      return false;
+    if (!identifier.matches("\\d+")) {
+        showErrorAlert("Identifier should contain only digits.");
+        return false;
     }
 
     try {

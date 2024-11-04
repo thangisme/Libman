@@ -161,7 +161,8 @@ public class MaterialDetailsController {
         .showAndWait()
         .ifPresent(
             buttonType -> {
-              if (buttonType == ButtonType.YES) {
+              System.out.println(buttonType);
+              if (buttonType.getButtonData() == ButtonBar.ButtonData.YES) {
                 deleteMaterial();
               }
             });
@@ -169,6 +170,12 @@ public class MaterialDetailsController {
 
   private void deleteMaterial() {
     try {
+      if (!loanManager.getLoansByMaterial(material.getId()).isEmpty()) {
+        showErrorAlert(
+            "Cannot delete material",
+            "Material " + material.getTitle() + " is currently issued and cannot be deleted");
+        return;
+      }
       materialManager.deleteMaterial(material.getId());
       showAlert(
           Alert.AlertType.INFORMATION,
@@ -176,6 +183,7 @@ public class MaterialDetailsController {
           "Material deleted successfully",
           "Material " + material.getTitle() + " has been deleted");
       controller.refreshMaterialsListing();
+      controller.getModalPane().hide();
     } catch (SQLException e) {
       showErrorAlert("Failed to delete material", "An error occurred while deleting the material.");
     }

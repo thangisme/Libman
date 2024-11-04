@@ -173,10 +173,8 @@ public class MaterialAddController {
       return false;
     }
 
-    try {
-      int id = Integer.parseInt(identifier);
-    } catch (NumberFormatException e) {
-      showErrorAlert("Identifier should be an integer.");
+    if (!identifier.matches("\\d+")) {
+      showErrorAlert("Identifier should contain only digits.");
       return false;
     }
 
