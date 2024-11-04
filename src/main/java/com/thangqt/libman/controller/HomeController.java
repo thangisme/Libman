@@ -191,7 +191,7 @@ public class HomeController {
     var table = new TableView<Loan>();
     table.getColumns().setAll(col1, col2, col3, col4);
     table.getItems().addAll(loanManager.getOverdueLoans());
-    table.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
+    table.getStyleClass().addAll(Tweaks.EDGE_TO_EDGE, Styles.STRIPED, "table-view-home");
     table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     return table;
   }
@@ -245,7 +245,7 @@ public class HomeController {
     var table = new TableView<Loan>();
     table.getColumns().setAll(col1, col2, col3, col4, col5);
     table.getItems().addAll(loanManager.getRecentlyBorrowedLoans(5));
-    table.getStyleClass().add(Tweaks.EDGE_TO_EDGE);
+    table.getStyleClass().addAll(Tweaks.EDGE_TO_EDGE, Styles.STRIPED, "table-view-home");
     table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     return table;
   }

@@ -16,3 +16,11 @@
     -fx-border-width: 0 0 1 0;
     -fx-padding: 5 0 5 0;
 }
+
+.table-view-home {
+    -color-header-bg: -color-bg-default;
+}
+
+.table-view-home > .column-header-background .column-header {
+    -fx-border-width: 0 0 1 0;
+}
