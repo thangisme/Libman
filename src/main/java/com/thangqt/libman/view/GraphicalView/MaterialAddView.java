@@ -81,6 +81,16 @@ public class MaterialAddView extends MaterialFormView {
               String coverImageUrl = getCoverImageField().getText();
               int totalCopies = Integer.parseInt(getTotalCopiesField().getText());
               int availableCopies = Integer.parseInt(getAvailableCopiesField().getText());
+              if (!controller.validateInputs(
+                  title,
+                  author,
+                  publisher,
+                  identifier,
+                  coverImageUrl,
+                  getTotalCopiesField().getText(),
+                  getAvailableCopiesField().getText())) {
+                return;
+              }
               controller.saveMaterial(
                   type,
                   title,

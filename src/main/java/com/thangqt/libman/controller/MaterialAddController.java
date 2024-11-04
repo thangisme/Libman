@@ -149,4 +149,60 @@ public class MaterialAddController {
       showErrorAlert("An error occurred while fetching book info: " + e.getMessage());
     }
   }
+
+  public boolean validateInputs(
+      String title,
+      String author,
+      String publisher,
+      String identifier,
+      String coverImageUrl,
+      String totalCopies,
+      String availableCopies) {
+    if (title.isEmpty()
+        || author.isEmpty()
+        || publisher.isEmpty()
+        || identifier.isEmpty()
+        || totalCopies.isEmpty()
+        || availableCopies.isEmpty()) {
+      showErrorAlert("All fields except cover image URL are required.");
+      return false;
+    }
+
+    if (identifier.length() > 13) {
+      showErrorAlert("Identifier should not be longer than 13 characters.");
+      return false;
+    }
+
+    try {
+      int id = Integer.parseInt(identifier);
+    } catch (NumberFormatException e) {
+      showErrorAlert("Identifier should be an integer.");
+      return false;
+    }
+
+    try {
+      int total = Integer.parseInt(totalCopies);
+      int available = Integer.parseInt(availableCopies);
+
+      if (total < 0 || available < 0) {
+        showErrorAlert("Total copies and available copies should not be negative.");
+        return false;
+      }
+
+      if (total < available) {
+        showErrorAlert("Total copies should be greater than or equal to available copies.");
+        return false;
+      }
+    } catch (NumberFormatException e) {
+      showErrorAlert("Total copies and available copies should be integers.");
+      return false;
+    }
+
+    if (!coverImageUrl.isEmpty() && !coverImageUrl.matches("^(http|https)://.*$")) {
+      showErrorAlert("Cover image URL is not valid.");
+      return false;
+    }
+
+    return true;
+  }
 }

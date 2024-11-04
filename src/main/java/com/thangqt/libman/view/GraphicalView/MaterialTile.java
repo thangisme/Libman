@@ -55,7 +55,7 @@ public class MaterialTile extends HBox {
         new Task<>() {
           @Override
           protected Image call() throws Exception {
-            if (material.getCoverImageUrl() == null) {
+            if (material.getCoverImageUrl() == null || material.getCoverImageUrl().isEmpty()) {
               return new Image(
                   getClass().getResourceAsStream("/com/thangqt/libman/images/no_cover.png"));
             } else {
