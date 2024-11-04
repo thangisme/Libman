@@ -24,6 +24,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -250,6 +251,7 @@ public class HomeController {
   }
 
   public VBox createRecentlyAddedMaterials() throws SQLException {
+    recentlyAddedMaterialsContainer.setMinWidth(220);
     var materials = materialManager.getRecentlyAddedMaterials(5);
     var container = new VBox();
     container.setSpacing(10);
@@ -257,6 +259,7 @@ public class HomeController {
     materials.forEach(
         material -> {
           var materialContainer = new VBox();
+          materialContainer.setFillWidth(true);
           materialContainer.getStyleClass().add("material-container");
 
           var title = new Text(material.getTitle());
