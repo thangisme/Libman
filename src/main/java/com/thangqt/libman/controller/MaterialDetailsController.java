@@ -131,7 +131,7 @@ public class MaterialDetailsController {
     } catch (SQLException e) {
       showErrorAlert("Failed to validate user ID", "An error occurred while validating user ID");
     }
-    return false;
+    return true;
   }
 
   private void issueLoan(Loan loan) {
