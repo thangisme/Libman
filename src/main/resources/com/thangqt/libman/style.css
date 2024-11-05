@@ -3,10 +3,6 @@
     -fx-font-weight: 500;
 }
 
-#contentPane {
-    -fx-padding: 15px;
-}
-
 #sidebarPane {
     -fx-background-color: #f3f4ed;
 }
