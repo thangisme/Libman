@@ -12,6 +12,7 @@ import com.thangqt.libman.service.MaterialManager;
 import com.thangqt.libman.service.ServiceFactory;
 import com.thangqt.libman.service.UserManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -57,7 +58,15 @@ public class UserViewController {
     searchField.getStyleClass().add(Styles.ROUNDED);
     FontIcon clearIcon = new FontIcon(Feather.X);
     clearIcon.setCursor(Cursor.HAND);
-    clearIcon.setOnMouseClicked(event -> searchField.clear());
+    clearIcon.setOnMouseClicked(event -> {
+        searchField.clear();
+        userViewTableContainer.getChildren().clear();
+        try {
+            setupUserTable();
+        } catch (SQLException e) {
+            showErrorDialog(e);
+        }
+    });
     searchField.setRight(clearIcon);
     searchField.setOnAction(
         event -> {
@@ -83,28 +92,34 @@ public class UserViewController {
 
   private void searchUser(String text) {
     if (!text.isEmpty()) {
-      if (text.matches("\\d+")) {
-        try {
+      List<User> users = new ArrayList<>();
+      try {
+        if (text.matches("\\d+")) {
           User user = userManager.getUserById(Integer.parseInt(text));
-          if (user == null) {
-            showUserNotFoundDialog();
-          } else {
-            showUserDetailsDialog(user);
+          if (user != null) {
+            users.add(user);
           }
-        } catch (SQLException e) {
-          showErrorDialog(e);
-        }
-      } else {
-        try {
+        } else {
           User user = userManager.getUserByEmail(text);
-          if (user == null) {
-            showUserNotFoundDialog();
-          } else {
-            showUserDetailsDialog(user);
+          if (user != null) {
+            users.add(user);
           }
-        } catch (SQLException e) {
-          showErrorDialog(e);
+          List<User> usersByName = userManager.searchUserByName(text);
+          if (usersByName != null) {
+            users.addAll(usersByName);
+          }
         }
+      } catch (SQLException e) {
+        showErrorDialog(e);
+      }
+      if (users.isEmpty()) {
+        showUserNotFoundDialog();
+      } else {
+        TableView userTable = createUserTable(users, 10000);
+        Card userTableCard = new Card();
+        userTableCard.setBody(userTable);
+        userViewTableContainer.getChildren().clear();
+        userViewTableContainer.getChildren().add(userTableCard);
       }
     }
   }

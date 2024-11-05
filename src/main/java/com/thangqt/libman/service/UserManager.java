@@ -47,4 +47,8 @@ public class UserManager {
   public int getTotalUsersNumber() throws SQLException {
     return userDAO.getTotalUsersNumber();
   }
+
+  public List<User>  searchUserByName(String name) throws SQLException {
+    return userDAO.searchByName(name);
+  }
 }

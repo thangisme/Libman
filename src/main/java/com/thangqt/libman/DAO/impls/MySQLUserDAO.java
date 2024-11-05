@@ -141,4 +141,21 @@ public class MySQLUserDAO implements UserDAO {
       return 0;
     }
   }
+
+  @Override
+  public List<User> searchByName(String name) throws SQLException {
+    String query = "SELECT * FROM users WHERE name LIKE ?";
+    try (PreparedStatement stm = conn.prepareStatement(query)) {
+      stm.setString(1, "%" + name + "%");
+      ResultSet rs = stm.executeQuery();
+      List<User> allUsers = new ArrayList<>();
+      while (rs.next()) {
+        User user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"));
+        allUsers.add(user);
+      }
+      return allUsers;
+    } catch (SQLException e) {
+      throw new SQLException("Error getting all users: " + e.getMessage());
+    }
+  }
 }
