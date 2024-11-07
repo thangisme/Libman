@@ -12,8 +12,12 @@ public class UserManager {
     this.userDAO = userDAO;
   }
 
-  public void addUser(User user) throws SQLException {
-    userDAO.add(user);
+  public User authenticate(String email, String password) throws SQLException {
+    return userDAO.authenticate(email, password);
+  }
+
+  public User addUser(User user) throws SQLException {
+    return userDAO.add(user);
   }
 
   public void updateUser(User user) throws SQLException {

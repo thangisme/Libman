@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.LoginController" spacing="10"
+      alignment="CENTER" fillHeight="true">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <VBox fillWidth="true" HBox.hgrow="ALWAYS" alignment="CENTER">
+        <ImageView fitWidth="380" preserveRatio="true">
+            <image>
+                <Image url="@../images/login_page_illustration.png"/>
+            </image>
+        </ImageView>
+        <Label text="Libman" styleClass="title-1"/>
+        <Label text="Your library companion" styleClass="subtitle"/>
+    </VBox>
+    <VBox fillWidth="true" HBox.hgrow="ALWAYS" alignment="CENTER">
+        <VBox maxWidth="380" spacing="15" alignment="CENTER" fx:id="loginForm">
+            <Label text="Login" styleClass="text-caption"/>
+            <Label text="Sign in to continue your reading journey" styleClass="text-muted"/>
+            <TextField fx:id="emailField" promptText="Email"/>
+            <PasswordField fx:id="passwordField" promptText="Password"/>
+            <Button text="Login" onAction="#handleLogin"/>
+            <Label fx:id="errorMessage" textFill="red"/>
+            <HBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS">
+                <Label text="Don't have an account? " styleClass="text-muted"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Hyperlink text="Sign up" onAction="#loadSignupForm"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</HBox>

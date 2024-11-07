@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class MySQLUserDAO implements UserDAO {
   private Connection conn;
@@ -18,12 +19,39 @@ public class MySQLUserDAO implements UserDAO {
   }
 
   @Override
-  public void add(User user) throws SQLException {
-    String query = "INSERT INTO users (name, email) VALUES (?, ?)";
+  public User authenticate(String email, String password) throws SQLException {
+    String query = "SELECT * FROM users WHERE email = ?";
     try (PreparedStatement stm = conn.prepareStatement(query)) {
+      stm.setString(1, email);
+      ResultSet rs = stm.executeQuery();
+      if (rs.next()) {
+        String passwordHash = rs.getString("password_hash");
+        if (BCrypt.checkpw(password, passwordHash)) {
+          return new User(
+              rs.getInt("id"), rs.getString("name"), email, rs.getString("role"), passwordHash);
+        }
+      }
+      return null;
+    } catch (SQLException e) {
+      throw new SQLException("Error authenticating user: " + e.getMessage());
+    }
+  }
+
+  @Override
+  public User add(User user) throws SQLException {
+    String query = "INSERT INTO users (name, email, role, password_hash) VALUES (?, ?, ?, ?)";
+    try (PreparedStatement stm = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
       stm.setString(1, user.getName());
       stm.setString(2, user.getEmail());
+      stm.setString(3, user.getRole());
+      stm.setString(4, user.getPasswordHash());
       stm.executeUpdate();
+
+      ResultSet generatedKeys = stm.getGeneratedKeys();
+      if (generatedKeys.next()) {
+        user.setId(generatedKeys.getInt(1));
+      }
+      return user;
     } catch (SQLException e) {
       throw new SQLException("Error adding user: " + e.getMessage());
     }
@@ -31,11 +59,13 @@ public class MySQLUserDAO implements UserDAO {
 
   @Override
   public void update(User user) throws SQLException {
-    String query = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+    String query = "UPDATE users SET name = ?, email = ?, role = ?, password_hash = ? WHERE id = ?";
     try (PreparedStatement stm = conn.prepareStatement(query)) {
       stm.setString(1, user.getName());
       stm.setString(2, user.getEmail());
-      stm.setInt(3, user.getId());
+      stm.setString(3, user.getRole());
+      stm.setString(4, user.getPasswordHash());
+      stm.setInt(5, user.getId());
       stm.executeUpdate();
     } catch (SQLException e) {
       throw new SQLException("Error updating user: " + e.getMessage());

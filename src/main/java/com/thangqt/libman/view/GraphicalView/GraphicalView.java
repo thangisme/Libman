@@ -16,15 +16,11 @@ public class GraphicalView extends Application {
   public void start(Stage stage) throws IOException {
     Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
 
-    FXMLLoader fxmlLoader =
-        new FXMLLoader(getClass().getResource("/com/thangqt/libman/fxml/dashboard.fxml"));
-    Scene scene = new Scene(fxmlLoader.load(), 1360, 760);
-    scene
-        .getStylesheets()
-        .add(getClass().getResource("/com/thangqt/libman/style.css").toExternalForm());
-
-    stage.setTitle("Libman");
-    stage.setScene(scene);
+    FXMLLoader loginLoader =
+        new FXMLLoader(getClass().getResource("/com/thangqt/libman/fxml/login.fxml"));
+    Scene loginScene = new Scene(loginLoader.load(), 1360, 760);
+    stage.setScene(loginScene);
+    stage.setTitle("Login");
     stage.show();
   }
 }

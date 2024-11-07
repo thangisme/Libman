@@ -10,8 +10,10 @@ module com.thangqt.libman {
   requires org.apache.httpcomponents.httpclient;
   requires org.apache.httpcomponents.httpcore;
   requires com.google.gson;
+    requires jbcrypt;
+    requires commons.validator;
 
-  opens com.thangqt.libman to
+    opens com.thangqt.libman to
       javafx.fxml;
   opens com.thangqt.libman.controller to
       javafx.fxml;

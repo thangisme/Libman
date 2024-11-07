@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDAO {
-  void add(User user) throws SQLException;
+  User authenticate(String email, String password) throws SQLException;
+
+  User add(User user) throws SQLException;
 
   void update(User user) throws SQLException;
 
