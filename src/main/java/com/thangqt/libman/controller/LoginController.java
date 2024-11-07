@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -32,6 +33,12 @@ public class LoginController {
   private void initialize() {
     // Remove autofocus on email field
     Platform.runLater(() -> loginForm.requestFocus());
+
+    loginForm.setOnKeyPressed(event -> {
+      if (event.getCode().equals(KeyCode.ENTER)) {
+        handleLogin();
+      }
+    });
   }
 
   @FXML
