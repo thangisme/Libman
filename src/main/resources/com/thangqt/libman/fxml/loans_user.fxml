@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import atlantafx.base.controls.ModalPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.UserLoanController">
+    <VBox VBox.vgrow="ALWAYS">
+        <Text text="Loans User"/>
+    </VBox>
+    <ModalPane fx:id="modalPane">
+    </ModalPane>
+</StackPane>

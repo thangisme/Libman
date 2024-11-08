@@ -69,4 +69,8 @@ public class MaterialManager {
   public List<Material> getRecentlyAddedMaterials(int i) throws SQLException {
     return materialDAO.getRecentlyAddedMaterials(i);
   }
+
+    public List<Material> getPopularMaterials(int numberOfMaterials, int period) throws SQLException {
+        return materialDAO.getPopularMaterials(numberOfMaterials, period);
+    }
 }

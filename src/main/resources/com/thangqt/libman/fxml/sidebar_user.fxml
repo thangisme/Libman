@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.UserSidebarController"
+      VBox.vgrow="ALWAYS">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <Text text="Libman" styleClass="title-1" fx:id="appLogo"/>
+    <VBox VBox.vgrow="ALWAYS"/>
+    <VBox spacing="15">
+        <Button text="Homepage" onAction="#loadHomeView" fx:id="test">
+            <graphic>
+                <FontIcon iconLiteral="fth-home"/>
+            </graphic>
+        </Button>
+        <Button text="My loans" onAction="#loadLoansView">
+            <graphic>
+                <FontIcon iconLiteral="fth-inbox"/>
+            </graphic>
+        </Button>
+    </VBox>
+    <VBox VBox.vgrow="ALWAYS"/>
+    <Button styleClass="flat, danger" fx:id="exitBtn" onAction="#exitApp">
+        <graphic>
+            <FontIcon iconLiteral="fth-log-out"/>
+        </graphic>
+    </Button>
+</VBox>

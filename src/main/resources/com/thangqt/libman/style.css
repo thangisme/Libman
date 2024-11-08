@@ -3,8 +3,9 @@
     -fx-font-weight: 500;
 }
 
-#sidebarPane {
+.sidebarPane {
     -fx-background-color: #f3f4ed;
+    -fx-min-width: 220;
 }
 
 .material-container {
@@ -19,4 +20,33 @@
 
 .table-view-home > .column-header-background .column-header {
     -fx-border-width: 0 0 1 0;
+}
+
+.headline-container {
+    -fx-padding: 15 0 15 30;
+}
+
+.headline {
+    -fx-font-size: 2.5em;
+    -fx-font-weight: 600;
+}
+
+.sub-headline {
+    -fx-font-size: 1.3em;
+}
+
+.section-container {
+    -fx-max-width: Infinity;
+}
+
+.section-headline {
+    -fx-padding: 0 0 18 0;
+ }
+
+.section-content {
+    -fx-padding: 0 0 10 0;
+}
+
+.home-user-container {
+    -fx-padding: 15 30 15 30;
 }

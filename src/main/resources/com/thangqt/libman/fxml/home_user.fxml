@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.ModalPane?>
+<?import atlantafx.base.layout.InputGroup?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.UserHomeController">
+    <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER" maxWidth="Infinity" fitToWidth="true">
+        <VBox VBox.vgrow="ALWAYS" spacing="15" fx:id="homeUserContainer" styleClass="home-user-container"
+              maxWidth="Infinity">
+            <HBox styleClass="headline-container" HBox.hgrow="ALWAYS">
+                <VBox alignment="CENTER_LEFT">
+                    <Label text="Welcome back!" styleClass="headline, title-1"/>
+                    <Text text="Explore a vast collection of knowledge and resources through our library."
+                          styleClass="text-muted, sub-headline" wrappingWidth="360"/>
+                    <VBox fx:id="searchFieldContainer">
+                        <InputGroup>
+                            <TextField fx:id="searchField" promptText="Search..." onKeyReleased="#handleSearch"/>
+                            <Button onAction="#handleSearch">
+                                <graphic>
+                                    <FontIcon iconLiteral="fth-search"/>
+                                </graphic>
+                            </Button>
+                        </InputGroup>
+                    </VBox>
+                </VBox>
+                <HBox HBox.hgrow="ALWAYS"/>
+                <ImageView fitWidth="280" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/home_user_illustration.png"/>
+                    </image>
+                </ImageView>
+            </HBox>
+            <VBox styleClass="section-container">
+                <VBox styleClass="section-headline">
+                    <Label text="New Arrivals" styleClass="title-4"/>
+                    <Text text="Browse through the most recent materials in the library." styleClass="text-muted"/>
+                </VBox>
+                <ScrollPane vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToWidth="true">
+                    <HBox fx:id="recentMaterialsContainer" spacing="10" styleClass="section-content"/>
+                </ScrollPane>
+            </VBox>
+            <VBox styleClass="section-container">
+                <VBox styleClass="section-headline">
+                    <Label text="Popular Materials" styleClass="title-4"/>
+                    <Text text="Explore our most popular reads." styleClass="text-muted"/>
+                </VBox>
+                <ScrollPane vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToWidth="true">
+                    <HBox fx:id="popularMaterialsContainer" spacing="10" styleClass="section-content"/>
+                </ScrollPane>
+            </VBox>
+            <VBox styleClass="section-container">
+                <VBox styleClass="section-headline">
+                    <Label text="Curated Materials" styleClass="title-4"/>
+                    <Text text="Discover materials handpicked by our librarians." styleClass="text-muted"/>
+                </VBox>
+                <ScrollPane vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToWidth="true">
+                    <HBox fx:id="curatedMaterialsContainer" spacing="10" styleClass="section-content"/>
+                </ScrollPane>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+    <ModalPane fx:id="modalPane">
+    </ModalPane>
+</StackPane>

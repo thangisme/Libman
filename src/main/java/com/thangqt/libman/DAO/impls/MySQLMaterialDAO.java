@@ -363,4 +363,31 @@ public class MySQLMaterialDAO implements MaterialDAO {
       throw new SQLException("Error getting recently added materials: " + e.getMessage());
     }
   }
+
+  @Override
+  public List<Material> getPopularMaterials(int numberOfMaterials, int period) throws SQLException {
+    String query =
+            "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue, COUNT(loans.material_id) AS borrow_count " +
+                    "FROM materials " +
+                    "LEFT JOIN books ON materials.id = books.id " +
+                    "LEFT JOIN magazines ON materials.id = magazines.id " +
+                    "LEFT JOIN loans ON materials.id = loans.material_id " +
+                    "WHERE loans.borrow_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
+                    "GROUP BY materials.id " +
+                    "ORDER BY borrow_count DESC " +
+                    "LIMIT ?";
+    try (PreparedStatement stm = conn.prepareStatement(query)) {
+      stm.setInt(1, period);
+      stm.setInt(2, numberOfMaterials);
+      ResultSet rs = stm.executeQuery();
+      List<Material> popularMaterials = new ArrayList<>();
+      while (rs.next()) {
+        Material material = createMaterialFromResult(rs);
+        popularMaterials.add(material);
+      }
+      return popularMaterials;
+    } catch (SQLException e) {
+      throw new SQLException("Error getting popular materials: " + e.getMessage());
+    }
+  }
 }

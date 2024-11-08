@@ -32,4 +32,6 @@ public interface MaterialDAO {
   int getTotalMaterialsNumber() throws SQLException;
 
   List<Material> getRecentlyAddedMaterials(int i) throws SQLException;
+
+  List<Material> getPopularMaterials(int numberOfMaterials, int period) throws SQLException;
 }
