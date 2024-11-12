@@ -1,6 +1,8 @@
 package com.thangqt.libman.controller;
 
+import com.thangqt.libman.service.SessionManager;
 import javafx.fxml.FXML;
+import javafx.stage.Stage;
 
 public class SidebarController {
 
@@ -33,5 +35,13 @@ public class SidebarController {
   @FXML
   private void exitApp() {
     System.exit(0);
+  }
+
+  @FXML
+  private void logOut() {
+    SessionManager.clearSession();
+    Stage stage = (Stage) dashboardController.getRootPane().getScene().getWindow();
+    stage.close();
+    dashboardController.showLoginStage();
   }
 }

@@ -4,8 +4,10 @@ import com.thangqt.libman.service.SessionManager;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class DashboardController {
 
@@ -27,7 +29,10 @@ public class DashboardController {
   }
 
   private void loadSidebar() {
-    String sidebarFxml = SessionManager.isAdmin() ? "/com/thangqt/libman/fxml/sidebar.fxml" : "/com/thangqt/libman/fxml/sidebar_user.fxml";
+    String sidebarFxml =
+        SessionManager.isAdmin()
+            ? "/com/thangqt/libman/fxml/sidebar.fxml"
+            : "/com/thangqt/libman/fxml/sidebar_user.fxml";
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource(sidebarFxml));
       VBox sidebar = loader.load();
@@ -48,8 +53,27 @@ public class DashboardController {
   public void setContent(String fxml) {
     try {
       VBox pane = new VBox();
-      pane.getChildren().add(FXMLLoader.load(getClass().getResource("/com/thangqt/libman/fxml/" + fxml)));
+      pane.getChildren()
+          .add(FXMLLoader.load(getClass().getResource("/com/thangqt/libman/fxml/" + fxml)));
       contentPane.getChildren().setAll(pane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public GridPane getRootPane() {
+    return rootPane;
+  }
+
+  public void showLoginStage() {
+    try {
+      Stage loginStage = new Stage();
+      FXMLLoader loginLoader =
+          new FXMLLoader(getClass().getResource("/com/thangqt/libman/fxml/login.fxml"));
+      Scene loginScene = new Scene(loginLoader.load(), 1360, 760);
+      loginStage.setScene(loginScene);
+      loginStage.setTitle("Login");
+      loginStage.show();
     } catch (IOException e) {
       e.printStackTrace();
     }

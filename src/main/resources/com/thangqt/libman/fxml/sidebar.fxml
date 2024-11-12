@@ -34,9 +34,16 @@
         </Button>
     </VBox>
     <VBox VBox.vgrow="ALWAYS"/>
-    <Button styleClass="flat, danger" fx:id="exitBtn" onAction="#exitApp">
-        <graphic>
-            <FontIcon iconLiteral="fth-log-out"/>
-        </graphic>
-    </Button>
+    <HBox>
+        <Button styleClass="flat, danger" fx:id="exitBtn" onAction="#exitApp">
+            <graphic>
+                <FontIcon iconLiteral="fth-power"/>
+            </graphic>
+        </Button>
+        <Button styleClass="flat, danger" fx:id="logOutBtn" onAction="#logOut">
+            <graphic>
+                <FontIcon iconLiteral="fth-log-out"/>
+            </graphic>
+        </Button>
+    </HBox>
 </VBox>

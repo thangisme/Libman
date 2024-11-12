@@ -16,4 +16,8 @@ public class SessionManager {
     public static boolean isAdmin() {
         return currentUser != null && "ADMIN".equals(currentUser.getRole());
     }
+
+    public static void clearSession() {
+        currentUser = null;
+    }
 }
