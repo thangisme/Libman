@@ -25,6 +25,8 @@ public interface MaterialDAO {
 
   List<Material> getAll() throws SQLException;
 
+  List<Material> search(String query) throws SQLException;
+
   List<Material> searchByTitle(String title) throws SQLException;
 
   List<Material> searchByAuthor(String author) throws SQLException;

@@ -50,6 +50,11 @@ public class LoanManager {
     materialManager.increaseAvailableQuantity(loanDAO.getById(loanId).getMaterialId());
   }
 
+    public void returnLoan(int userId, int materialId) throws SQLException {
+        loanDAO.returnLoan(userId, materialId);
+        materialManager.increaseAvailableQuantity(materialId);
+    }
+
   public List<Loan> getOverdueLoans() throws SQLException {
     return loanDAO.getOverdueLoans();
   }

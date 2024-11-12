@@ -54,6 +54,10 @@ public class MaterialManager {
     return materialDAO.isExist(id);
   }
 
+  public List<Material> searchMaterials(String query) throws SQLException {
+    return materialDAO.search(query);
+  }
+
   public List<Material> getMaterialsByTitle(String title) throws SQLException {
     return materialDAO.searchByTitle(title);
   }

@@ -13,6 +13,8 @@ public interface LoanDAO {
 
   void returnLoan(int id) throws SQLException;
 
+  void returnLoan(int userId, int materialId) throws SQLException;
+
   Loan getById(int id) throws SQLException;
 
   List<Loan> getAll() throws SQLException;

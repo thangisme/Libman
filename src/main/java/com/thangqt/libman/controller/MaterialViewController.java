@@ -132,8 +132,10 @@ public class MaterialViewController {
   }
 
   private void showMaterialDetails(Material material) {
-    MaterialDetailsView materialDetailsView =
-        new MaterialDetailsView(new MaterialDetailsController(material, loanManager, userManager, materialManager, this));
+    MaterialDetailsController materialDetailsController =
+        new MaterialDetailsController(material, loanManager, userManager, materialManager, this);
+    MaterialDetailsView materialDetailsView = materialDetailsController.createMaterialDetailsView();
+
     ModalBox modalBox = new ModalBox(modalPane);
     modalBox.addContent(materialDetailsView);
     modalBox.setMaxSize(420, 100);

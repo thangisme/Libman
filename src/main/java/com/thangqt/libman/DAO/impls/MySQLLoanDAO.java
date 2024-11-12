@@ -45,6 +45,18 @@ public class MySQLLoanDAO implements LoanDAO {
   }
 
   @Override
+    public void returnLoan(int userId, int materialId) throws SQLException {
+        String query = "UPDATE loans SET return_date = CURDATE() WHERE user_id = ? AND material_id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+        stm.setInt(1, userId);
+        stm.setInt(2, materialId);
+        stm.executeUpdate();
+        } catch (SQLException e) {
+        throw new SQLException("Error returning loan: " + e.getMessage());
+        }
+    }
+
+  @Override
   public void update(Loan loan) throws SQLException {
     String query =
         "UPDATE loans SET user_id = ?, material_id = ?, borrow_date = ?, due_date = ? WHERE id = ?";
@@ -290,4 +302,5 @@ public class MySQLLoanDAO implements LoanDAO {
       throw new SQLException("Error getting recently borrowed loans: " + e.getMessage());
     }
   }
+
 }

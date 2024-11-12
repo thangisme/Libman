@@ -1,5 +1,6 @@
 package com.thangqt.libman.view.GraphicalView;
 
+import com.thangqt.libman.controller.UserHomeController;
 import com.thangqt.libman.model.Material;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -12,9 +13,11 @@ import javafx.scene.text.Text;
 public class VerticalMaterialTile extends VBox {
   private Material material;
   private ImageView img;
+  private UserHomeController controller;
 
-  public VerticalMaterialTile(Material material) {
+  public VerticalMaterialTile(Material material, UserHomeController controller) {
     this.material = material;
+    this.controller = controller;
     initialize();
   }
 
@@ -39,6 +42,11 @@ public class VerticalMaterialTile extends VBox {
     getChildren().add(infoContainer);
 
     loadImageAsync();
+
+    setOnMouseClicked(
+        e -> {
+          controller.showMaterialDetails(material);
+        });
   }
 
   private void loadImageAsync() {

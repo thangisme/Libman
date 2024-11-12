@@ -1,7 +1,6 @@
 package com.thangqt.libman.view.GraphicalView;
 
 import atlantafx.base.theme.Styles;
-import com.thangqt.libman.controller.MaterialDetailsController;
 import com.thangqt.libman.model.Material;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -11,23 +10,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import org.kordamp.ikonli.feather.Feather;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 public class MaterialDetailsView extends VBox {
-  private final MaterialDetailsController controller;
+  private final Material material;
 
-  public MaterialDetailsView(MaterialDetailsController controller) {
-    this.controller = controller;
-    initialize();
+  public MaterialDetailsView(Material material, Button... actionButtons) {
+    this.material = material;
+    initialize(actionButtons);
   }
 
-  private void initialize() {
+  private void initialize(Button... actionButtons) {
     setPadding(new Insets(15));
     setSpacing(10);
 
     HBox topContainer = createTopContainer();
-    HBox actionContainer = createActionContainer();
+    HBox actionContainer = createActionContainer(actionButtons);
 
     getChildren().addAll(topContainer, actionContainer);
   }
@@ -46,10 +43,10 @@ public class MaterialDetailsView extends VBox {
     ImageView coverImage = new ImageView();
     coverImage.setFitWidth(200);
     coverImage.setPreserveRatio(true);
-    if (controller.getMaterialCoverImageUrl() == null || controller.getMaterialCoverImageUrl().isEmpty()) {
+    if (material.getCoverImageUrl() == null || material.getCoverImageUrl().isEmpty()) {
       coverImage.setImage(new Image(getClass().getResourceAsStream("/com/thangqt/libman/images/no_cover.png")));
     } else {
-      coverImage.setImage(new Image(controller.getMaterialCoverImageUrl()));
+      coverImage.setImage(new Image(material.getCoverImageUrl()));
     }
     HBox.setMargin(coverImage, new Insets(0, 30, 0, 10));
     return coverImage;
@@ -67,14 +64,14 @@ public class MaterialDetailsView extends VBox {
   }
 
   private Text createTitleText() {
-    Text title = new Text(controller.getMaterialTitle());
+    Text title = new Text(material.getTitle());
     title.getStyleClass().add(Styles.TITLE_2);
     title.setStyle("-fx-font-size: 36px; -fx-font-weight: 500;");
     return title;
   }
 
   private Text createAuthorText() {
-    Text author = new Text(controller.getMaterialAuthor());
+    Text author = new Text(material.getAuthor());
     author.getStyleClass().add(Styles.TEXT_SUBTLE);
     author.setStyle("-fx-font-size: 18px;");
     return author;
@@ -85,7 +82,7 @@ public class MaterialDetailsView extends VBox {
     descriptionFlow.setMaxWidth(540);
     VBox.setMargin(descriptionFlow, new Insets(10, 0, 0, 0));
 
-    Text description = new Text(controller.getMaterialDescription());
+    Text description = new Text(material.getDescription());
     description.getStyleClass().add(Styles.TEXT_MUTED);
     description.setWrappingWidth(540);
     descriptionFlow.getChildren().add(description);
@@ -93,28 +90,10 @@ public class MaterialDetailsView extends VBox {
     return descriptionFlow;
   }
 
-  private HBox createActionContainer() {
+  private HBox createActionContainer(Button... actionButtons) {
     HBox actionContainer = new HBox();
     actionContainer.setSpacing(10);
-
-    Button issueBtn =
-        createActionButton("Issue", Feather.ARCHIVE, e -> controller.showIssueDialog());
-    Button editBtn =
-        createActionButton(
-            "Edit", Feather.EDIT, e -> controller.showEditView(controller.getModalPane()));
-    Button deleteBtn =
-        createActionButton("Delete", Feather.TRASH_2, e -> controller.showConfirmDeleteDialog());
-
-    actionContainer.getChildren().addAll(issueBtn, editBtn, deleteBtn);
+    actionContainer.getChildren().addAll(actionButtons);
     return actionContainer;
-  }
-
-  private Button createActionButton(
-      String text,
-      Feather iconType,
-      javafx.event.EventHandler<javafx.event.ActionEvent> eventHandler) {
-    Button button = new Button(text, new FontIcon(iconType));
-    button.setOnAction(eventHandler);
-    return button;
   }
 }

@@ -27,7 +27,7 @@
 }
 
 .headline {
-    -fx-font-size: 2.5em;
+    -fx-font-size: 3.5em;
     -fx-font-weight: 600;
 }
 
@@ -49,4 +49,8 @@
 
 .home-user-container {
     -fx-padding: 15 30 15 30;
+}
+
+.search-container {
+    -fx-padding: 25 0 0 0;
 }

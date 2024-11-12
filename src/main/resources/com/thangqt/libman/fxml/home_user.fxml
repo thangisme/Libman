@@ -8,22 +8,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.UserHomeController">
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.UserHomeController"
+           fx:id="rootStackpane">
     <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER" maxWidth="Infinity" fitToWidth="true">
         <VBox VBox.vgrow="ALWAYS" spacing="15" fx:id="homeUserContainer" styleClass="home-user-container"
               maxWidth="Infinity">
             <HBox styleClass="headline-container" HBox.hgrow="ALWAYS">
-                <VBox alignment="CENTER_LEFT">
+                <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                     <Label text="Welcome back!" styleClass="headline, title-1"/>
                     <Text text="Explore a vast collection of knowledge and resources through our library."
                           styleClass="text-muted, sub-headline" wrappingWidth="360"/>
-                    <VBox fx:id="searchFieldContainer">
-                        <InputGroup>
-                            <TextField fx:id="searchField" promptText="Search..." onKeyReleased="#handleSearch"/>
-                            <Button onAction="#handleSearch">
+                    <VBox fx:id="searchFieldContainer" styleClass="search-container" spacing="10" VBox.vgrow="ALWAYS">
+                        <Label text="Looking for something?" styleClass="title-4"/>
+                        <InputGroup fx:id="searchInputGroup" styleClass="search-input-group, rounded" prefWidth="500">
+                            <TextField fx:id="searchField" promptText="Search for materials" styleClass="search-field"
+                                       onAction="#searchMaterials"/>
+                            <Button onAction="#searchMaterials">
                                 <graphic>
-                                    <FontIcon iconLiteral="fth-search"/>
-                                </graphic>
+                                <FontIcon iconLiteral="fth-search" styleClass="search-icon"/></graphic>
                             </Button>
                         </InputGroup>
                     </VBox>
@@ -64,6 +66,8 @@
             </VBox>
         </VBox>
     </ScrollPane>
-    <ModalPane fx:id="modalPane">
+    <ModalPane fx:id="topModalPane">
+    </ModalPane>
+    <ModalPane fx:id="innerModalPane">
     </ModalPane>
 </StackPane>

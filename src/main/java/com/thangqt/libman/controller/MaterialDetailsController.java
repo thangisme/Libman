@@ -7,11 +7,14 @@ import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.LoanManager;
 import com.thangqt.libman.service.MaterialManager;
 import com.thangqt.libman.service.UserManager;
+import com.thangqt.libman.view.GraphicalView.MaterialDetailsView;
 import com.thangqt.libman.view.GraphicalView.MaterialEditView;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class MaterialDetailsController {
   private Material material;
@@ -33,20 +36,21 @@ public class MaterialDetailsController {
     this.controller = controller;
   }
 
-  public String getMaterialCoverImageUrl() {
-    return material.getCoverImageUrl();
+  public MaterialDetailsView createMaterialDetailsView() {
+    Button issueBtn = createActionButton("Issue", Feather.ARCHIVE, e -> showIssueDialog());
+    Button editBtn = createActionButton("Edit", Feather.EDIT, e -> showEditView(controller.getModalPane()));
+    Button deleteBtn = createActionButton("Delete", Feather.TRASH_2, e -> showConfirmDeleteDialog());
+
+    return new MaterialDetailsView(material, issueBtn, editBtn, deleteBtn);
   }
 
-  public String getMaterialTitle() {
-    return material.getTitle();
-  }
-
-  public String getMaterialAuthor() {
-    return material.getAuthor();
-  }
-
-  public String getMaterialDescription() {
-    return material.getDescription();
+  private Button createActionButton(
+          String text,
+          Feather iconType,
+          javafx.event.EventHandler<javafx.event.ActionEvent> eventHandler) {
+    Button button = new Button(text, new FontIcon(iconType));
+    button.setOnAction(eventHandler);
+    return button;
   }
 
   public void showEditView(ModalPane modalPane) {
