@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -37,6 +38,7 @@ public class UserHomeController {
   @FXML private HBox curatedMaterialsContainer;
   @FXML private ModalPane topModalPane;
   @FXML private ModalPane innerModalPane;
+  @FXML private VBox searchFieldContainer;
   @FXML private TextField searchField;
 
   public UserHomeController() throws SQLException {
@@ -57,6 +59,8 @@ public class UserHomeController {
     topModalPane.setOutTransitionFactory(null);
     innerModalPane.setInTransitionFactory(null);
     innerModalPane.setOutTransitionFactory(null);
+
+    Platform.runLater(() -> searchFieldContainer.requestFocus());
   }
 
   public void setUpRecentlyAddedMaterials(int numMaterials) {
