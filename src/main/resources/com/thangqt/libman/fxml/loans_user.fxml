@@ -4,9 +4,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
 <?import atlantafx.base.controls.ModalPane?>
+<?import javafx.scene.control.ScrollPane?>
 <StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.UserLoanController">
     <VBox VBox.vgrow="ALWAYS">
-        <Text text="Loans User"/>
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+        <VBox fx:id="userLoanHeader">
+
+        </VBox>
+        <VBox spacing="10" VBox.vgrow="ALWAYS" fillWidth="true">
+            <ScrollPane fx:id="userLoanContainer" hbarPolicy="NEVER" vbarPolicy="NEVER" fitToWidth="true"
+                        VBox.vgrow="ALWAYS">
+            </ScrollPane>
+        </VBox>
     </VBox>
     <ModalPane fx:id="modalPane">
     </ModalPane>
