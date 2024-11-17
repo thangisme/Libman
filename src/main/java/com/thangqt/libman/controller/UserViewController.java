@@ -13,6 +13,8 @@ import com.thangqt.libman.service.ServiceFactory;
 import com.thangqt.libman.service.UserManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -135,6 +137,7 @@ public class UserViewController {
 
   private void setupUserTable() throws SQLException {
     List<User> users = userManager.getAllUsers();
+    Collections.reverse(users); // Show the latest users first
     TableView userTable = createUserTable(users, 15);
     Card userTableCard = new Card();
     userTableCard.setBody(userTable);
@@ -144,6 +147,7 @@ public class UserViewController {
 
   private void refreshUserTable() throws SQLException {
     List<User> users = userManager.getAllUsers();
+    Collections.reverse(users);
     TableView userTable = createUserTable(users, 10);
     Card userTableCard = new Card();
     userTableCard.setBody(userTable);
