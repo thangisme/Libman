@@ -22,6 +22,7 @@ import javafx.scene.layout.*;
 import javafx.util.Callback;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserViewController {
   private final UserManager userManager;
@@ -264,6 +265,27 @@ public class UserViewController {
     dialog.showAndWait().ifPresent(updatedUser -> updateUser(updatedUser));
   }
 
+  public void handlePassChangeAction(User user) {
+    Dialog<User> dialog = new Dialog<>();
+    dialog.setTitle("Change password");
+    dialog.setHeaderText("Change user password");
+    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+    Label passLabel = new Label("New password");
+    PasswordField passField = new PasswordField();
+    VBox form = new VBox(passLabel, passField);
+    form.setSpacing(10);
+    dialog.getDialogPane().setContent(form);
+    dialog.setResultConverter(
+        buttonType -> {
+          if (buttonType == ButtonType.OK) {
+            user.setPasswordHash(BCrypt.hashpw(passField.getText(), BCrypt.gensalt()));
+            return user;
+          }
+          return null;
+        });
+    dialog.showAndWait().ifPresent(updatedUser -> updateUser(updatedUser));
+  }
+
   private void updateUser(User updatedUser) {
     try {
       userManager.updateUser(updatedUser);
@@ -365,10 +387,11 @@ class UserTableActionCellFactory
       MenuButton menuButton = new MenuButton("Actions");
 
       {
-        MenuItem viewItem = new MenuItem("View details", new FontIcon(Feather.EYE));
-        MenuItem editItem = new MenuItem("Edit", new FontIcon(Feather.EDIT));
-        MenuItem deleteItem = new MenuItem("Delete", new FontIcon(Feather.TRASH));
-        menuButton.getItems().addAll(viewItem, editItem, deleteItem);
+        MenuItem viewItem = new MenuItem("View user details", new FontIcon(Feather.EYE));
+        MenuItem editItem = new MenuItem("Edit user", new FontIcon(Feather.EDIT));
+        MenuItem changePasswordItem = new MenuItem("Change password", new FontIcon(Feather.KEY));
+        MenuItem deleteItem = new MenuItem("Delete user", new FontIcon(Feather.TRASH));
+        menuButton.getItems().addAll(viewItem, editItem, changePasswordItem, deleteItem);
 
         viewItem.setOnAction(
             event ->
@@ -376,6 +399,9 @@ class UserTableActionCellFactory
         editItem.setOnAction(
             event ->
                 userViewController.handleEditAction(getTableView().getItems().get(getIndex())));
+        changePasswordItem.setOnAction(
+            event ->
+                userViewController.handlePassChangeAction(getTableView().getItems().get(getIndex())));
         deleteItem.setOnAction(
             event ->
                 userViewController.handleDeleteAction(getTableView().getItems().get(getIndex())));
