@@ -102,6 +102,13 @@ public class LoanTile extends Card {
     dateGrid.add(dueDateLabel, 0, 1);
     dateGrid.add(dueDateText, 1, 1);
 
+    if (isReturned) {
+      Text returnDateLabel = new Text("Returned on:");
+      Text returnDateText = new Text(loan.getReturnDate().toString());
+      dateGrid.add(returnDateLabel, 0, 2);
+      dateGrid.add(returnDateText, 1, 2);
+    }
+
     HBox actionContainer = new HBox();
     actionContainer.setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
     actionContainer.setSpacing(10);
