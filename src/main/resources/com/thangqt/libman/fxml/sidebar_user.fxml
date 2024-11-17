@@ -23,6 +23,11 @@
                 <FontIcon iconLiteral="fth-inbox"/>
             </graphic>
         </Button>
+        <Button text="Profile" onAction="#loadProfileView">
+            <graphic>
+                <FontIcon iconLiteral="fth-user"/>
+            </graphic>
+        </Button>
     </VBox>
     <VBox VBox.vgrow="ALWAYS"/>
     <HBox>

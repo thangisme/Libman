@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import atlantafx.base.controls.Card?>
+<HBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" styleClass="profile-container" spacing="15"
+      fx:controller="com.thangqt.libman.controller.UserProfileController" HBox.hgrow="ALWAYS" fillHeight="true">
+    <padding>
+        <Insets top="40" right="20" bottom="40" left="20"/>
+    </padding>
+    <Card minWidth="420">
+        <body>
+            <VBox spacing="15" alignment="CENTER">
+                <padding>
+                    <Insets top="10" right="20" bottom="10" left="20"/>
+                </padding>
+                <Label text="Change profile informations" styleClass="title-3"/>
+                <VBox spacing="10">
+                    <Label text="Name"/>
+                    <TextField fx:id="nameField" promptText="Your name"/>
+                    <Label text="Email"/>
+                    <TextField fx:id="emailField" promptText="Your email"/>
+                </VBox>
+                <Button text="Save" alignment="CENTER" minWidth="160" onAction="#updateProfile"/>
+                <Text fx:id="profileInfoText"/>
+            </VBox>
+        </body>
+    </Card>
+    <Separator orientation="VERTICAL"/>
+    <Card minWidth="420">
+        <body>
+            <VBox spacing="15" alignment="CENTER">
+                <padding>
+                    <Insets top="10" right="20" bottom="10" left="20"/>
+                </padding>
+                <Label text="Change password" styleClass="title-3"/>
+                <VBox spacing="10">
+                    <Label text="Current password"/>
+                    <PasswordField fx:id="currentPasswordField" promptText="Current password"/>
+                    <Label text="New password"/>
+                    <PasswordField fx:id="newPasswordField" promptText="New password"/>
+                    <Label text="Confirm new password"/>
+                    <PasswordField fx:id="confirmNewPasswordField" promptText="Confirm new password"/>
+                </VBox>
+                <Button text="Save" alignment="CENTER" minWidth="160" onAction="#updatePassword"/>
+                <Text fx:id="passwordInfoText"/>
+            </VBox>
+        </body>
+    </Card>
+</HBox>

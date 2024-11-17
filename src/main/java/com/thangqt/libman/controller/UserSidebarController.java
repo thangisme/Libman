@@ -1,6 +1,7 @@
 package com.thangqt.libman.controller;
 
 import com.thangqt.libman.service.SessionManager;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
@@ -20,6 +21,11 @@ public class UserSidebarController {
   @FXML
   private void loadLoansView() {
     dashboardController.setContent("loans_user.fxml");
+  }
+
+  @FXML
+  public void loadProfileView() {
+    dashboardController.setContent("profile.fxml");
   }
 
   @FXML
