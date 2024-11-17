@@ -2,6 +2,7 @@ package com.thangqt.libman.view.GraphicalView;
 
 import atlantafx.base.theme.Styles;
 import atlantafx.base.controls.Card;
+import com.thangqt.libman.controller.UserLoanController;
 import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.LoanManager;
 import com.thangqt.libman.service.MaterialManager;
@@ -31,9 +32,11 @@ public class LoanTile extends Card {
   private LoanManager loanManager;
   private MaterialManager materialManager;
   private ImageView img;
+  private UserLoanController controller;
 
-  public LoanTile(Loan loan) throws SQLException {
+  public LoanTile(Loan loan, UserLoanController controller) throws SQLException {
     this.loan = loan;
+    this.controller = controller;
     this.loanManager = ServiceFactory.getInstance().getLoanManager();
     this.materialManager = ServiceFactory.getInstance().getMaterialManager();
     this.material = materialManager.getMaterialById(loan.getMaterialId());
@@ -104,13 +107,16 @@ public class LoanTile extends Card {
     actionContainer.setSpacing(10);
     if (!isReturned) {
       Button returnBtn = new Button("Return", new FontIcon(Feather.CORNER_LEFT_UP));
+      returnBtn.setOnAction(e -> controller.returnLoan(loan));
       Button renewBtn = new Button("Renew", new FontIcon(Feather.REFRESH_CW));
-      actionContainer.getChildren().addAll(returnBtn, renewBtn);
+      renewBtn.setOnAction(e -> controller.renewLoan(loan));
+      actionContainer.getChildren().add(returnBtn);
+      if (dueDate.isAfter(LocalDate.now())) {
+        actionContainer.getChildren().add(renewBtn);
+      }
     }
 
-    infoContainer
-        .getChildren()
-        .addAll(status, title, author, dateGrid, actionContainer);
+    infoContainer.getChildren().addAll(status, title, author, dateGrid, actionContainer);
     container.getChildren().add(infoContainer);
 
     this.setBody(container);
