@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.*?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.SidebarController">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.SidebarController" VBox.vgrow="ALWAYS">
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>

@@ -6,7 +6,9 @@
 .sidebarPane {
     -fx-background-color: #f3f4ed;
     -fx-min-width: 220;
+    -fx-min-height: 100%;
 }
+
 
 .material-container {
     -fx-border-color: rgba(0, 0, 0, 0.08);
