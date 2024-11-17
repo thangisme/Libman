@@ -42,7 +42,7 @@
                     <Label text="New Arrivals" styleClass="title-4"/>
                     <Text text="Browse through the most recent materials in the library." styleClass="text-muted"/>
                 </VBox>
-                <ScrollPane vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToWidth="true">
+                <ScrollPane vbarPolicy="NEVER" hbarPolicy="NEVER" fitToWidth="true">
                     <HBox fx:id="recentMaterialsContainer" spacing="10" styleClass="section-content"/>
                 </ScrollPane>
             </VBox>
@@ -51,7 +51,7 @@
                     <Label text="Popular Materials" styleClass="title-4"/>
                     <Text text="Explore our most popular reads." styleClass="text-muted"/>
                 </VBox>
-                <ScrollPane vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToWidth="true">
+                <ScrollPane vbarPolicy="NEVER" hbarPolicy="NEVER" fitToWidth="true">
                     <HBox fx:id="popularMaterialsContainer" spacing="10" styleClass="section-content"/>
                 </ScrollPane>
             </VBox>
@@ -60,7 +60,7 @@
                     <Label text="Curated Materials" styleClass="title-4"/>
                     <Text text="Discover materials handpicked by our librarians." styleClass="text-muted"/>
                 </VBox>
-                <ScrollPane vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToWidth="true">
+                <ScrollPane vbarPolicy="NEVER" hbarPolicy="NEVER" fitToWidth="true">
                     <HBox fx:id="curatedMaterialsContainer" spacing="10" styleClass="section-content"/>
                 </ScrollPane>
             </VBox>
