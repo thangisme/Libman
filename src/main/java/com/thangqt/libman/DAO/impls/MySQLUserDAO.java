@@ -40,7 +40,8 @@ public class MySQLUserDAO implements UserDAO {
   @Override
   public User add(User user) throws SQLException {
     String query = "INSERT INTO users (name, email, role, password_hash) VALUES (?, ?, ?, ?)";
-    try (PreparedStatement stm = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+    try (PreparedStatement stm =
+        conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
       stm.setString(1, user.getName());
       stm.setString(2, user.getEmail());
       stm.setString(3, user.getRole());
@@ -90,7 +91,12 @@ public class MySQLUserDAO implements UserDAO {
       stm.setInt(1, id);
       ResultSet rs = stm.executeQuery();
       if (rs.next()) {
-        return new User(id, rs.getString("name"), rs.getString("email"));
+        return new User(
+            id,
+            rs.getString("name"),
+            rs.getString("email"),
+            rs.getString("role"),
+            rs.getString("password_hash"));
       } else {
         return null;
       }
@@ -106,7 +112,12 @@ public class MySQLUserDAO implements UserDAO {
       stm.setString(1, email);
       ResultSet rs = stm.executeQuery();
       if (rs.next()) {
-        return new User(rs.getInt("id"), rs.getString("name"), email);
+        return new User(
+            rs.getInt("id"),
+            rs.getString("name"),
+            email,
+            rs.getString("role"),
+            rs.getString("password_hash"));
       } else {
         return null;
       }
@@ -122,7 +133,13 @@ public class MySQLUserDAO implements UserDAO {
       ResultSet rs = stm.executeQuery();
       List<User> allUsers = new ArrayList<>();
       while (rs.next()) {
-        User user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"));
+        User user =
+            new User(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("role"),
+                rs.getString("password_hash"));
         allUsers.add(user);
       }
       return allUsers;
@@ -180,7 +197,13 @@ public class MySQLUserDAO implements UserDAO {
       ResultSet rs = stm.executeQuery();
       List<User> allUsers = new ArrayList<>();
       while (rs.next()) {
-        User user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"));
+        User user =
+            new User(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("role"),
+                rs.getString("password_hash"));
         allUsers.add(user);
       }
       return allUsers;
