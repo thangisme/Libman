@@ -23,7 +23,25 @@ public class ConsoleController {
 
   public void start() throws SQLException {
     boolean running = true;
+    boolean isAuthenticated = false;
     while (running) {
+      while (!isAuthenticated) {
+        System.out.println("\n--- Login ---");
+        String email = getStringInput("Enter email: ");
+        String password = getStringInput("Enter password: ");
+        User user = userManager.authenticate(email, password);
+        if (user != null) {
+          if (!user.getRole().equals("ADMIN")) {
+            System.out.println("You are not authorized to access this application.");
+            continue;
+          }
+          isAuthenticated = true;
+          SessionManager.setCurrentUser(user);
+          System.out.println("Login successful.");
+        } else {
+          System.out.println("Invalid email or password. Please try again.");
+        }
+      }
       displayMenu();
       int choice = getIntInput("Enter your choice: ");
       switch (choice) {
@@ -69,7 +87,7 @@ public class ConsoleController {
   }
 
   private void displayMenu() {
-    System.out.println("\nWelcome to My Application!");
+    System.out.println("\nWelcome to Libman!");
     System.out.println("[0] Exit");
     System.out.println("[1] Add Document");
     System.out.println("[2] Remove Document");
