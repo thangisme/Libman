@@ -65,14 +65,17 @@ public class UserHomeController {
 
   public void setUpRecentlyAddedMaterials(int numMaterials) {
     try {
-      materialManager
-          .getRecentlyAddedMaterials(numMaterials)
-          .forEach(
-              material -> {
-                VerticalMaterialTile tile = new VerticalMaterialTile(material, this);
-                tile.setOnMouseClicked(event -> showMaterialDetails(material));
-                recentMaterialsContainer.getChildren().add(tile);
-              });
+      List<Material> recentMaterials = materialManager.getRecentlyAddedMaterials(numMaterials);
+      if (recentMaterials.isEmpty()) {
+        recentMaterialsContainer.getChildren().add(new Text("No recently added materials found"));
+        return;
+      }
+      recentMaterials.forEach(
+          material -> {
+            VerticalMaterialTile tile = new VerticalMaterialTile(material, this);
+            tile.setOnMouseClicked(event -> showMaterialDetails(material));
+            recentMaterialsContainer.getChildren().add(tile);
+          });
     } catch (SQLException e) {
       System.out.println(e.getMessage());
       recentMaterialsContainer
@@ -83,14 +86,17 @@ public class UserHomeController {
 
   public void setUpPopularMaterials(int numMaterials) {
     try {
-      materialManager
-          .getPopularMaterials(numMaterials, 30)
-          .forEach(
-              material -> {
-                VerticalMaterialTile tile = new VerticalMaterialTile(material, this);
-                tile.setOnMouseClicked(event -> showMaterialDetails(material));
-                popularMaterialsContainer.getChildren().add(tile);
-              });
+      List<Material> popularMaterials = materialManager.getPopularMaterials(numMaterials, 30);
+      if (popularMaterials.isEmpty()) {
+        popularMaterialsContainer.getChildren().add(new Text("No popular materials found"));
+        return;
+      }
+      popularMaterials.forEach(
+          material -> {
+            VerticalMaterialTile tile = new VerticalMaterialTile(material, this);
+            tile.setOnMouseClicked(event -> showMaterialDetails(material));
+            popularMaterialsContainer.getChildren().add(tile);
+          });
     } catch (SQLException e) {
       System.out.println(e.getMessage());
       popularMaterialsContainer.getChildren().add(new Text("Failed to load popular materials"));
@@ -102,10 +108,14 @@ public class UserHomeController {
     for (int id : materialIds) {
       try {
         Material material = materialManager.getMaterialById(id);
-        materialList.add(material);
+        if (material != null) materialList.add(material);
       } catch (SQLException e) {
         System.out.println(e.getMessage());
       }
+    }
+    if (materialList.isEmpty()) {
+      curatedMaterialsContainer.getChildren().add(new Text("Failed to load curated materials"));
+      return;
     }
     materialList.forEach(
         material -> {
@@ -172,7 +182,7 @@ public class UserHomeController {
             if (i + j < results.size()) {
               Material material = results.get(i + j);
               VerticalMaterialTile entry = new VerticalMaterialTile(material, this);
-                entry.setOnMouseClicked(event -> showMaterialDetails(material));
+              entry.setOnMouseClicked(event -> showMaterialDetails(material));
               HBox.setHgrow(entry, Priority.ALWAYS);
               entry.setMaxWidth(Double.MAX_VALUE);
               row.getChildren().add(entry);
@@ -189,7 +199,9 @@ public class UserHomeController {
 
   public void showMaterialDetails(Material material) {
     ModalBox modalBox = new ModalBox(innerModalPane);
-    UserMaterialDetailsController controller = new UserMaterialDetailsController(material, loanManager, userManager, materialManager, this);
+    UserMaterialDetailsController controller =
+        new UserMaterialDetailsController(
+            material, loanManager, userManager, materialManager, this);
     modalBox.addContent(controller.createMaterialDetailsView());
     modalBox.setMaxSize(420, 300);
     innerModalPane.show(modalBox);
