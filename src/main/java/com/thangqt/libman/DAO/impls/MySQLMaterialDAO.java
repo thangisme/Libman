@@ -20,7 +20,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
   @Override
   public void add(Material material) throws SQLException {
     String query =
-        "INSERT INTO materials (title, author, publisher, description, cover_image_url, type, is_available, added_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO materials (title, author, publisher, description, cover_image_url, type, quantity, available_quantity, is_available, added_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     try (PreparedStatement stm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
       stm.setString(1, material.getTitle());
       stm.setString(2, material.getAuthor());
@@ -28,8 +28,10 @@ public class MySQLMaterialDAO implements MaterialDAO {
       stm.setString(4, material.getDescription());
       stm.setString(5, material.getCoverImageUrl());
       stm.setString(6, material instanceof Book ? "Book" : "Magazine");
-      stm.setBoolean(7, material.isAvailable());
-      stm.setDate(8, Date.valueOf(LocalDate.now()));
+      stm.setInt(7, material.getQuantity());
+      stm.setInt(8, material.getAvailableQuantity());
+      stm.setBoolean(9, material.isAvailable());
+      stm.setDate(10, Date.valueOf(LocalDate.now()));
       stm.executeUpdate();
 
       try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
@@ -77,7 +79,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
   @Override
   public void update(Material material) throws SQLException {
     String query =
-        "UPDATE materials SET title = ?, author = ?, type = ?, is_available = ?, cover_image_url = ?, publisher = ?, description = ? WHERE id = ?";
+        "UPDATE materials SET title = ?, author = ?, type = ?, is_available = ?, cover_image_url = ?, publisher = ?, description = ?, quantity = ?, available_quantity = ? WHERE id = ?";
     try (PreparedStatement stm = conn.prepareStatement(query)) {
       stm.setString(1, material.getTitle());
       stm.setString(2, material.getAuthor());
@@ -86,7 +88,9 @@ public class MySQLMaterialDAO implements MaterialDAO {
       stm.setString(5, material.getCoverImageUrl());
       stm.setString(6, material.getPublisher());
       stm.setString(7, material.getDescription());
-      stm.setInt(8, material.getId());
+      stm.setInt(8, material.getQuantity());
+      stm.setInt(9, material.getAvailableQuantity());
+      stm.setInt(10, material.getId());
       stm.executeUpdate();
 
       if (material instanceof Book) {
@@ -219,11 +223,11 @@ public class MySQLMaterialDAO implements MaterialDAO {
   @Override
   public List<Material> search(String query) throws SQLException {
     String searchQuery =
-            "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue "
-                    + "FROM materials "
-                    + "LEFT JOIN books ON materials.id = books.id "
-                    + "LEFT JOIN magazines ON materials.id = magazines.id "
-                    + "WHERE title LIKE ? OR author LIKE ?";
+        "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue "
+            + "FROM materials "
+            + "LEFT JOIN books ON materials.id = books.id "
+            + "LEFT JOIN magazines ON materials.id = magazines.id "
+            + "WHERE title LIKE ? OR author LIKE ?";
 
     try (PreparedStatement stm = conn.prepareStatement(searchQuery)) {
       String likeQuery = "%" + query + "%";
@@ -393,15 +397,15 @@ public class MySQLMaterialDAO implements MaterialDAO {
   @Override
   public List<Material> getPopularMaterials(int numberOfMaterials, int period) throws SQLException {
     String query =
-            "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue, COUNT(loans.material_id) AS borrow_count " +
-                    "FROM materials " +
-                    "LEFT JOIN books ON materials.id = books.id " +
-                    "LEFT JOIN magazines ON materials.id = magazines.id " +
-                    "LEFT JOIN loans ON materials.id = loans.material_id " +
-                    "WHERE loans.borrow_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
-                    "GROUP BY materials.id " +
-                    "ORDER BY borrow_count DESC " +
-                    "LIMIT ?";
+        "SELECT materials.*, books.page_count, books.isbn, magazines.issn, magazines.issueNumber, magazines.currentIssue, COUNT(loans.material_id) AS borrow_count "
+            + "FROM materials "
+            + "LEFT JOIN books ON materials.id = books.id "
+            + "LEFT JOIN magazines ON materials.id = magazines.id "
+            + "LEFT JOIN loans ON materials.id = loans.material_id "
+            + "WHERE loans.borrow_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY) "
+            + "GROUP BY materials.id "
+            + "ORDER BY borrow_count DESC "
+            + "LIMIT ?";
     try (PreparedStatement stm = conn.prepareStatement(query)) {
       stm.setInt(1, period);
       stm.setInt(2, numberOfMaterials);
