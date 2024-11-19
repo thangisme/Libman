@@ -66,7 +66,8 @@ public class SignUpController {
         return;
       }
       String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
-      User user = userManager.addUser(new User(name, email, "USER", passwordHash));
+      String role = userManager.getTotalUsersNumber() == 0 ? "ADMIN" : "USER";
+      User user = userManager.addUser(new User(name, email, role, passwordHash));
       if (user != null) {
         SessionManager.setCurrentUser(user);
         loadDashboard();
