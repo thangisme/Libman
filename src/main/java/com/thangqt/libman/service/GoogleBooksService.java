@@ -7,6 +7,8 @@ import com.google.gson.JsonParser;
 import com.thangqt.libman.model.Book;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -42,9 +44,13 @@ public class GoogleBooksService {
       return null;
     }
     JsonObject item = items.get(0).getAsJsonObject();
+    if (item == null) {
+      return null;
+    }
     JsonObject volumeInfo = item.getAsJsonObject("volumeInfo");
     String title = volumeInfo.get("title").getAsString();
-    String author = volumeInfo.getAsJsonArray("authors").get(0).getAsString();
+    JsonArray authors = volumeInfo.getAsJsonArray("authors");
+    String author = (authors != null) ? authors.get(0).getAsString() : "";
     String description = null;
     String publisher = null;
     if (volumeInfo.get("publisher") != null) {
