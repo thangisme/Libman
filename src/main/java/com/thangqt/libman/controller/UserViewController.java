@@ -203,17 +203,21 @@ public class UserViewController {
     dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
     Label nameLabel = new Label("Name");
     Label emailLabel = new Label("Email");
+    Label passLabel = new Label("Password");
     TextField nameField = new TextField();
     nameField.setPromptText("Your name");
     TextField emailField = new TextField();
     emailField.setPromptText("example@gmail.com");
-    VBox form = new VBox(nameLabel, nameField, emailLabel, emailField);
+    PasswordField passField = new PasswordField();
+    passField.setPromptText("Your password");
+    VBox form = new VBox(nameLabel, nameField, emailLabel, emailField, passLabel, passField);
     form.setSpacing(10);
     dialog.getDialogPane().setContent(form);
     dialog.setResultConverter(
         buttonType -> {
           if (buttonType == ButtonType.OK) {
-            return new User(nameField.getText(), emailField.getText());
+            String passwordHash = BCrypt.hashpw(passField.getText(), BCrypt.gensalt());
+            return new User(nameField.getText(), emailField.getText(), "USER", passwordHash);
           }
           return null;
         });
