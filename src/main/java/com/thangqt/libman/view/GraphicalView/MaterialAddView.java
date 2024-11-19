@@ -49,7 +49,7 @@ public class MaterialAddView extends MaterialFormView {
     fetchBookInfoBtn.setOnAction(
         e -> {
           String query = "";
-          if (!getIdentifierField().getText().isEmpty()) {
+          if (getIdentifierField().getText() != null && !getIdentifierField().getText().isEmpty()) {
             query = getIdentifierField().getText();
           } else {
             query = getTitleField().getText() + " - " + getAuthorField().getText();
@@ -76,12 +76,15 @@ public class MaterialAddView extends MaterialFormView {
               String title = getTitleField().getText();
               String author = getAuthorField().getText();
               String description = getDescriptionField().getText();
+              if (description == null) description = "";
               String publisher = getPublisherField().getText();
               if (publisher == null || publisher.isEmpty()) {
                 publisher = "Unknown";
               }
               String identifier = getIdentifierField().getText();
+              if (identifier == null) identifier = "";
               String coverImageUrl = getCoverImageField().getText();
+              if (coverImageUrl == null) coverImageUrl = "";
               int totalCopies = Integer.parseInt(getTotalCopiesField().getText());
               int availableCopies = Integer.parseInt(getAvailableCopiesField().getText());
               if (!controller.validateInputs(
