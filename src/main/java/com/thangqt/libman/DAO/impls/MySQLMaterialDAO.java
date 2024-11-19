@@ -146,7 +146,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
     String coverImageUrl = rs.getString("cover_image_url");
     LocalDate addedDate = rs.getDate("added_date").toLocalDate();
     if (rs.getString("type").equals("Book")) {
-      String isbn = rs.getString("isbn");
+      String isbn = rs.getString("books.isbn");
       int pageCount = rs.getInt("page_count");
       Book book = new Book(title, author, description, publisher, isbn, pageCount);
       book.setId(id);
