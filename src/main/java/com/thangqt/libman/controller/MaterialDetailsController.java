@@ -61,6 +61,10 @@ public class MaterialDetailsController {
   }
 
   public void showIssueDialog() {
+    if (material.getAvailableQuantity() <= 0) {
+      showErrorAlert("Material not available", "No copies of " + material.getTitle() + " are available");
+      return;
+    }
     Dialog<Loan> dialog = createIssueDialog();
     dialog.showAndWait().ifPresent(this::issueLoan);
   }

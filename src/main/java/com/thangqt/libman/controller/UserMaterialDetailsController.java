@@ -92,6 +92,15 @@ public class UserMaterialDetailsController {
   }
 
   private void borrowDocument(String duration) {
+    if (material.getAvailableQuantity() <= 0) {
+      makeDialog(
+              Alert.AlertType.ERROR,
+              "Error",
+              "Failed to borrow document",
+              "There are no available copies of the document.")
+          .show();
+      return;
+    }
     try {
       Loan loan =
           new Loan(
