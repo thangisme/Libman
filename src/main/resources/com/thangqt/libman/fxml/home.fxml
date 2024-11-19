@@ -79,7 +79,7 @@
             <Label styleClass="title-4">Recently added materials</Label>
         </header>
         <body>
-            <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED">
+            <ScrollPane hbarPolicy="NEVER" vbarPolicy="NEVER">
                 <VBox fx:id="recentlyAddedMaterialsContainer">
                 </VBox>
             </ScrollPane>
