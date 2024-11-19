@@ -126,9 +126,9 @@ public class MaterialAddController {
   }
 
   public void fetchBookInfo(String query) {
-    if (view.getIdentifierField().getText() == null
+    if (view.getIdentifierField().getText() != null
         && view.getIdentifierField().getText().isEmpty()
-        && view.getTitleField().getText() == null
+        && view.getTitleField().getText() != null
         && view.getTitleField().getText().isEmpty()) {
       setInfoText("Please enter a title or an identifier", "error");
       return;
