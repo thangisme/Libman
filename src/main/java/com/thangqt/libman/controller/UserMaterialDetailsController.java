@@ -102,6 +102,15 @@ public class UserMaterialDetailsController {
       return;
     }
     try {
+      if (loanManager.isDocumentIssued(SessionManager.getCurrentUser().getId(), material.getId())) {
+        makeDialog(
+                Alert.AlertType.ERROR,
+                "Error",
+                "Failed to borrow document",
+                "You have already borrowed the document.")
+            .show();
+        return;
+      }
       Loan loan =
           new Loan(
               SessionManager.getCurrentUser().getId(),

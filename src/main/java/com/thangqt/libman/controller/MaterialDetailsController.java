@@ -120,6 +120,15 @@ public class MaterialDetailsController {
 
   private boolean validateLoan(String userId, String loanPeriod) {
     try {
+      if (loanManager.isDocumentIssued(Integer.parseInt(userId), material.getId())) {
+        showErrorAlert("Material already issued", "Material " + material.getTitle() + " is already issued to this user");
+        return false;
+      }
+    } catch (SQLException e) {
+      showErrorAlert("Failed to validate loan", "An error occurred while validating loan");
+    }
+
+    try {
       int id = Integer.parseInt(userId);
       int period = Integer.parseInt(loanPeriod);
       if (id <= 0 || period <= 0) {

@@ -17,6 +17,9 @@ public class LoanManager {
   }
 
   public void addLoan(Loan loan) throws SQLException {
+    if (loanDAO.isDocumentIssued(loan.getUserId(), loan.getMaterialId())) {
+      throw new SQLException("Document already issued to the user");
+    }
     loanDAO.add(loan);
     materialManager.decreaseAvailableQuantity(loan.getMaterialId());
   }
