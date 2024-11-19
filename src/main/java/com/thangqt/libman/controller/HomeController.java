@@ -244,7 +244,7 @@ public class HomeController {
 
     var table = new TableView<Loan>();
     table.getColumns().setAll(col1, col2, col3, col4, col5);
-    table.getItems().addAll(loanManager.getRecentlyBorrowedLoans(5));
+    table.getItems().addAll(loanManager.getRecentlyBorrowedLoans(10));
     table.getStyleClass().addAll(Tweaks.EDGE_TO_EDGE, Styles.STRIPED, "table-view-home");
     table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     return table;
@@ -252,7 +252,7 @@ public class HomeController {
 
   public VBox createRecentlyAddedMaterials() throws SQLException {
     recentlyAddedMaterialsContainer.setMinWidth(220);
-    var materials = materialManager.getRecentlyAddedMaterials(5);
+    var materials = materialManager.getRecentlyAddedMaterials(10);
     var container = new VBox();
     container.setSpacing(10);
 

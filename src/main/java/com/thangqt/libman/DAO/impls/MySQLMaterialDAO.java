@@ -20,7 +20,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
   @Override
   public void add(Material material) throws SQLException {
     String query =
-        "INSERT INTO materials (title, author, publisher, description, cover_image_url, type, quantity, available_quantity, is_available, added_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO materials (title, author, publisher, description, cover_image_url, type, quantity, available_quantity, is_available, added_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     try (PreparedStatement stm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
       stm.setString(1, material.getTitle());
       stm.setString(2, material.getAuthor());
