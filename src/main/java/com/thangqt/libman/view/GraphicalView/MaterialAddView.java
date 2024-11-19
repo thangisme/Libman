@@ -77,6 +77,9 @@ public class MaterialAddView extends MaterialFormView {
               String author = getAuthorField().getText();
               String description = getDescriptionField().getText();
               String publisher = getPublisherField().getText();
+              if (publisher == null || publisher.isEmpty()) {
+                publisher = "Unknown";
+              }
               String identifier = getIdentifierField().getText();
               String coverImageUrl = getCoverImageField().getText();
               int totalCopies = Integer.parseInt(getTotalCopiesField().getText());
