@@ -39,6 +39,9 @@ Password: 12345
 After setting up the database, copy the `example.env` file to `.env` and change the values to match your database
 configuration.
 
+This application depends on OpenCV 4.7.0 for scanning QR Code. Make sure you have the OpenCV native libraries installed on your system.
+Please refer to the [OpenCV installation guide](https://docs.opencv.org/4.x/df/d65/tutorial_table_of_content_introduction.html) for more information.
+
 To run the console application, you can use the following command:
 
 ```bash
