@@ -2,20 +2,37 @@ package com.thangqt.libman.controller;
 
 import atlantafx.base.controls.Card;
 import atlantafx.base.controls.CustomTextField;
+import atlantafx.base.controls.ModalPane;
 import atlantafx.base.controls.Tile;
+import atlantafx.base.layout.InputGroup;
+import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.theme.Tweaks;
 import com.thangqt.libman.model.Loan;
+import com.thangqt.libman.model.Material;
 import com.thangqt.libman.model.User;
 import com.thangqt.libman.service.*;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.thangqt.libman.view.GraphicalView.LoanModalView;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -33,6 +50,8 @@ public class LoanViewController {
 
   @FXML private VBox loanViewTableContainer;
 
+  @FXML private ModalPane modalPane;
+
   public LoanViewController() throws SQLException {
     ServiceFactory serviceFactory = ServiceFactory.getInstance();
     this.loanManager = serviceFactory.getLoanManager();
@@ -44,6 +63,46 @@ public class LoanViewController {
   public void initialize() throws SQLException {
     setupTile();
     setupLoanTable();
+
+    modalPane.setInTransitionFactory(null);
+    modalPane.setOutTransitionFactory(null);
+  }
+
+  private void setupTile() {
+    Tile tile = new Tile();
+    tile.setTitle("Loans");
+    tile.setDescription("Manage and view loan details");
+    HBox actionContainer = new HBox();
+    actionContainer.setSpacing(5);
+    CustomTextField searchField = new CustomTextField();
+    searchField.setPromptText("Search loan");
+    searchField.getStyleClass().add(Styles.ROUNDED);
+    FontIcon clearIcon = new FontIcon(Feather.X);
+    clearIcon.setCursor(Cursor.HAND);
+    clearIcon.setOnMouseClicked(
+        event -> {
+          searchField.clear();
+          refreshLoanTable();
+        });
+    searchField.setRight(clearIcon);
+    searchField.setOnAction(
+        event -> {
+          searchLoan(searchField.getText());
+        });
+    HBox.setHgrow(searchField, Priority.ALWAYS);
+    Button searchBtn = new Button("Search", new FontIcon(Feather.SEARCH));
+    searchBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);
+    searchBtn.setOnAction(
+        event -> {
+          searchLoan(searchField.getText());
+        });
+    Button addLoanBtn = new Button("Add loan", new FontIcon(Feather.PLUS));
+    addLoanBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);
+    addLoanBtn.setOnAction(event -> showAddLoanModal());
+    actionContainer.getChildren().addAll(searchField, searchBtn, addLoanBtn);
+    tile.setAction(actionContainer);
+    HBox.setHgrow(tile, Priority.ALWAYS);
+    loanViewHeadlineContainer.getChildren().add(tile);
   }
 
   private void setupLoanTable() throws SQLException {
@@ -67,6 +126,11 @@ public class LoanViewController {
           return new StackPane();
         });
     loanViewTableContainer.getChildren().add(pagination);
+  }
+
+  private void showAddLoanModal() {
+    LoanModalView view = new LoanModalView(this, modalPane, userManager, materialManager, loanManager);
+    view.show();
   }
 
   private TableView createLoansTable(List<Loan> loans, int pageSize) {
@@ -143,40 +207,6 @@ public class LoanViewController {
     tableView.getStyleClass().addAll(Tweaks.EDGE_TO_EDGE, Styles.STRIPED, Styles.BORDERED);
 
     return tableView;
-  }
-
-  private void setupTile() {
-    Tile tile = new Tile();
-    tile.setTitle("Loans");
-    tile.setDescription("Manage and view loan details");
-    HBox actionContainer = new HBox();
-    actionContainer.setSpacing(5);
-    CustomTextField searchField = new CustomTextField();
-    searchField.setPromptText("Search loan");
-    searchField.getStyleClass().add(Styles.ROUNDED);
-    FontIcon clearIcon = new FontIcon(Feather.X);
-    clearIcon.setCursor(Cursor.HAND);
-    clearIcon.setOnMouseClicked(
-        event -> {
-          searchField.clear();
-          refreshLoanTable();
-        });
-    searchField.setRight(clearIcon);
-    searchField.setOnAction(
-        event -> {
-          searchLoan(searchField.getText());
-        });
-    HBox.setHgrow(searchField, Priority.ALWAYS);
-    Button searchBtn = new Button("Search", new FontIcon(Feather.SEARCH));
-    searchBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);
-    searchBtn.setOnAction(
-        event -> {
-          searchLoan(searchField.getText());
-        });
-    actionContainer.getChildren().addAll(searchField, searchBtn);
-    tile.setAction(actionContainer);
-    HBox.setHgrow(tile, Priority.ALWAYS);
-    loanViewHeadlineContainer.getChildren().add(tile);
   }
 
   private void searchLoan(String text) {
@@ -284,7 +314,7 @@ public class LoanViewController {
             });
   }
 
-  private void refreshLoanTable() {
+  public void refreshLoanTable() {
     try {
       loanViewTableContainer.getChildren().clear();
       setupLoanTable();

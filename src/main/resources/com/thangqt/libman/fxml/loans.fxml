@@ -2,17 +2,19 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.LoanViewController">
-    <columnConstraints>
-        <ColumnConstraints percentWidth="100" hgrow="ALWAYS"/>
-    </columnConstraints>
-    <padding>
-        <Insets top="15" right="15" left="15" bottom="15"/>
-    </padding>
-    <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="loanViewHeadlineContainer">
+<?import atlantafx.base.controls.ModalPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.thangqt.libman.controller.LoanViewController">
+    <VBox>
+        <padding>
+            <Insets top="15" right="15" left="15" bottom="15"/>
+        </padding>
+        <HBox GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="loanViewHeadlineContainer">
 
-    </HBox>
-    <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="loanViewTableContainer">
+        </HBox>
+        <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" fx:id="loanViewTableContainer">
 
+        </VBox>
     </VBox>
-</GridPane>
+    <ModalPane fx:id="modalPane">
+    </ModalPane>
+</StackPane>
