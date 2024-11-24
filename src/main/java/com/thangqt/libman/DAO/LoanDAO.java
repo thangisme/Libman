@@ -7,6 +7,8 @@ import java.util.List;
 public interface LoanDAO {
   void add(Loan loan) throws SQLException;
 
+  Loan get(int userId, int materialId) throws SQLException;
+
   void update(Loan loan) throws SQLException;
 
   void delete(int id) throws SQLException;

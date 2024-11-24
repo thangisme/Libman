@@ -12,8 +12,8 @@ public class MaterialManager {
     this.materialDAO = materialDAO;
   }
 
-  public void addMaterial(Material material) throws SQLException {
-    materialDAO.add(material);
+  public Material addMaterial(Material material) throws SQLException {
+    return materialDAO.add(material);
   }
 
   public void updateMaterial(Material material) throws SQLException {

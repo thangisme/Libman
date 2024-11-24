@@ -24,6 +24,10 @@ public class LoanManager {
     materialManager.decreaseAvailableQuantity(loan.getMaterialId());
   }
 
+    public Loan getLoan(int userId, int materialId) throws SQLException {
+        return loanDAO.get(userId, materialId);
+    }
+
   public void updateLoan(Loan loan) throws SQLException {
     loanDAO.update(loan);
   }

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface MaterialDAO {
-  void add(Material material) throws SQLException;
+  Material add(Material material) throws SQLException;
 
   void update(Material material) throws SQLException;
 

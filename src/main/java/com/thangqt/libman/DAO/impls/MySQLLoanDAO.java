@@ -34,6 +34,23 @@ public class MySQLLoanDAO implements LoanDAO {
   }
 
   @Override
+  public Loan get(int userId, int materialId) throws SQLException {
+    String query = "SELECT * FROM loans WHERE user_id = ? AND material_id = ? AND (return_date IS NULL OR return_date > CURDATE())";
+    try (PreparedStatement stm = conn.prepareStatement(query)) {
+      stm.setInt(1, userId);
+      stm.setInt(2, materialId);
+      ResultSet rs = stm.executeQuery();
+      if (rs.next()) {
+        return createLoanFromResult(rs);
+      } else {
+        return null;
+      }
+    } catch (SQLException e) {
+      throw new SQLException("Error getting loan: " + e.getMessage());
+    }
+  }
+
+  @Override
   public void returnLoan(int id) throws SQLException {
     String query = "UPDATE loans SET return_date = CURDATE() WHERE id = ?";
     try (PreparedStatement stm = conn.prepareStatement(query)) {

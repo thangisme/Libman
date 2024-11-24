@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.thangqt.libman.view.GraphicalView.LoanModalView;
+import com.thangqt.libman.view.GraphicalView.ReturnLoanModalView;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -96,10 +97,13 @@ public class LoanViewController {
         event -> {
           searchLoan(searchField.getText());
         });
+    Button returnBtn = new Button("Return", new FontIcon(Feather.ARCHIVE));
+    returnBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);
+    returnBtn.setOnAction(event -> showReturnLoanModal());
     Button addLoanBtn = new Button("Add loan", new FontIcon(Feather.PLUS));
     addLoanBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.ROUNDED);
     addLoanBtn.setOnAction(event -> showAddLoanModal());
-    actionContainer.getChildren().addAll(searchField, searchBtn, addLoanBtn);
+    actionContainer.getChildren().addAll(searchField, searchBtn, returnBtn, addLoanBtn);
     tile.setAction(actionContainer);
     HBox.setHgrow(tile, Priority.ALWAYS);
     loanViewHeadlineContainer.getChildren().add(tile);
@@ -130,6 +134,11 @@ public class LoanViewController {
 
   private void showAddLoanModal() {
     LoanModalView view = new LoanModalView(this, modalPane, userManager, materialManager, loanManager);
+    view.show();
+  }
+
+  private void showReturnLoanModal() {
+    ReturnLoanModalView view = new ReturnLoanModalView(this, modalPane, userManager, materialManager, loanManager);
     view.show();
   }
 

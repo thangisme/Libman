@@ -6,19 +6,21 @@ import atlantafx.base.controls.Tile;
 import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import com.thangqt.libman.model.Material;
-import com.thangqt.libman.service.LoanManager;
-import com.thangqt.libman.service.MaterialManager;
-import com.thangqt.libman.service.ServiceFactory;
-import com.thangqt.libman.service.UserManager;
+import com.thangqt.libman.service.*;
 import com.thangqt.libman.view.GraphicalView.*;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -155,6 +157,22 @@ public class MaterialViewController {
     ModalBox modalBox = new ModalBox(modalPane);
     modalBox.addContent(addView);
     modalBox.setMaxSize(420, 650);
+    modalPane.show(modalBox);
+  }
+
+  public void showMaterialQrCode(Material material) {
+    ModalBox modalBox = new ModalBox(modalPane);
+    VBox qrCodeContainer = new VBox();
+    qrCodeContainer.setPadding(new Insets(20));
+    qrCodeContainer.setSpacing(10);
+    qrCodeContainer.setAlignment(Pos.CENTER);
+    QRHelper qrHelper = new QRHelper();
+    Image qrImage = qrHelper.generateQRCode(String.valueOf(material.getId()), 360, 360);
+    ImageView qrImageView = new ImageView(qrImage);
+    Button printBtn = new Button("Print QR code", new FontIcon(Feather.PRINTER));
+    qrCodeContainer.getChildren().addAll(qrImageView, printBtn);
+    modalBox.addContent(qrCodeContainer);
+    modalBox.setMaxSize(400, 400);
     modalPane.show(modalBox);
   }
 

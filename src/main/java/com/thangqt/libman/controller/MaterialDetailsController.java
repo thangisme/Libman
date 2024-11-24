@@ -40,8 +40,9 @@ public class MaterialDetailsController {
     Button issueBtn = createActionButton("Issue", Feather.ARCHIVE, e -> showIssueDialog());
     Button editBtn = createActionButton("Edit", Feather.EDIT, e -> showEditView(controller.getModalPane()));
     Button deleteBtn = createActionButton("Delete", Feather.TRASH_2, e -> showConfirmDeleteDialog());
+    Button showQrCodeBtn = createActionButton("Show QR code", Feather.IMAGE, e -> controller.showMaterialQrCode(material));
 
-    return new MaterialDetailsView(material, issueBtn, editBtn, deleteBtn);
+    return new MaterialDetailsView(material, issueBtn, editBtn, deleteBtn, showQrCodeBtn);
   }
 
   private Button createActionButton(

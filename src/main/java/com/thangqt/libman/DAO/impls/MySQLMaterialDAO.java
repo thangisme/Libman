@@ -5,6 +5,8 @@ import com.thangqt.libman.model.Book;
 import com.thangqt.libman.model.Magazine;
 import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.DatabaseConnection;
+import com.thangqt.libman.service.MaterialManager;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
   }
 
   @Override
-  public void add(Material material) throws SQLException {
+  public Material add(Material material) throws SQLException {
     String query =
         "INSERT INTO materials (title, author, publisher, description, cover_image_url, type, quantity, available_quantity, is_available, added_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     try (PreparedStatement stm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -48,6 +50,7 @@ public class MySQLMaterialDAO implements MaterialDAO {
     } catch (SQLException e) {
       throw new SQLException("Error adding material: " + e.getMessage());
     }
+    return material;
   }
 
   private void addBook(Book book) throws SQLException {

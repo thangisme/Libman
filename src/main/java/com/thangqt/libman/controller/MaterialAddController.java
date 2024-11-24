@@ -45,10 +45,11 @@ public class MaterialAddController {
               coverImageUrl,
               totalCopies,
               availableCopies);
-      materialManager.addMaterial(newMaterial);
+      newMaterial = materialManager.addMaterial(newMaterial);
       parentController.refreshMaterialsListing();
       parentController.getModalPane().hide();
       showSuccessAlert(newMaterial);
+      parentController.showMaterialQrCode(newMaterial);
     } catch (NumberFormatException ex) {
       showErrorAlert("Invalid number format in copies fields");
     } catch (Exception ex) {
