@@ -67,6 +67,7 @@ public class ReturnLoanModalView {
       modalBox.addContent(container);
       modalBox.setMaxSize(400, 300);
       modalPane.show(modalBox);
+      modalBox.setOnClose(event -> cleanup());
     } catch (SQLException e) {
       showErrorAlert(
           "Failed to load materials and users",
