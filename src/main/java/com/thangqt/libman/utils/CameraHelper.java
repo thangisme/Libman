@@ -1,7 +1,6 @@
-package com.thangqt.libman.service;
+package com.thangqt.libman.utils;
 
 import nu.pattern.OpenCV;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;

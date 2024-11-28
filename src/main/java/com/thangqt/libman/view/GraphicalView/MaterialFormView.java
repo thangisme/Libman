@@ -1,7 +1,11 @@
 package com.thangqt.libman.view.GraphicalView;
 
+import com.thangqt.libman.utils.ImageLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class MaterialFormView extends ScrollPane {
@@ -14,6 +18,8 @@ public class MaterialFormView extends ScrollPane {
   private VBox coverImageContainer;
   private VBox totalCopiesContainer;
   private VBox availableCopiesContainer;
+  private VBox coverImagePreviewContainer;
+  private ImageView coverImagePreview;
   // The actual input fields
   private TextField titleField;
   private TextField authorField;
@@ -24,6 +30,7 @@ public class MaterialFormView extends ScrollPane {
   private TextField totalCopiesField;
   private TextField availableCopiesField;
   private Button saveBtn;
+  private Image coverImage;
 
   public MaterialFormView() {
     setupForm();
@@ -55,7 +62,18 @@ public class MaterialFormView extends ScrollPane {
     identifierField = new TextField();
     identifierContainer = createFormField("Identifier", identifierField);
 
+    coverImage =
+        new Image(getClass().getResourceAsStream("/com/thangqt/libman/images/no_cover.png"));
+    coverImagePreview = new ImageView(coverImage);
+    coverImagePreview.setFitHeight(180);
+    coverImagePreview.setPreserveRatio(true);
+    coverImagePreviewContainer = new VBox(coverImagePreview);
+    coverImagePreviewContainer.setAlignment(Pos.CENTER);
+
     coverImageField = new TextField();
+    coverImageField.textProperty().addListener((obs, oldVal, newVal) -> {
+      ImageLoader.loadImageAsync(newVal, coverImagePreview);
+    });
     coverImageContainer = createFormField("Cover image URL", coverImageField);
 
     totalCopiesField = new TextField("0");
@@ -74,6 +92,7 @@ public class MaterialFormView extends ScrollPane {
             authorContainer,
             descriptionContainer,
             publisherContainer,
+            coverImagePreviewContainer,
             coverImageContainer,
             totalCopiesContainer,
             availableCopiesContainer,
@@ -122,6 +141,10 @@ public class MaterialFormView extends ScrollPane {
     return availableCopiesContainer;
   }
 
+  public VBox getCoverImagePreviewContainer() {
+    return coverImagePreviewContainer;
+  }
+
   // Getters for the actual input fields
   public TextField getTitleField() {
     return titleField;
@@ -141,6 +164,10 @@ public class MaterialFormView extends ScrollPane {
 
   public TextField getIdentifierField() {
     return identifierField;
+  }
+
+  public ImageView getCoverImagePreview() {
+    return coverImagePreview;
   }
 
   public TextField getCoverImageField() {

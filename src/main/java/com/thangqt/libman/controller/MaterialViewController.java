@@ -7,6 +7,7 @@ import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.*;
+import com.thangqt.libman.utils.QRHelper;
 import com.thangqt.libman.view.GraphicalView.*;
 
 import java.sql.SQLException;

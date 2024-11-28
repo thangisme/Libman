@@ -10,6 +10,9 @@ import com.thangqt.libman.model.User;
 import com.thangqt.libman.service.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
+
+import com.thangqt.libman.utils.CameraHelper;
+import com.thangqt.libman.utils.QRHelper;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;

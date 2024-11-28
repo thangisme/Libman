@@ -1,6 +1,7 @@
 package com.thangqt.libman.view.GraphicalView;
 
 import com.thangqt.libman.model.Material;
+import com.thangqt.libman.utils.ImageLoader;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
@@ -47,35 +48,6 @@ public class MaterialTile extends HBox {
     infoContainer.getChildren().addAll(title, author, description);
     getChildren().add(infoContainer);
 
-    loadImageAsync();
-  }
-
-  private void loadImageAsync() {
-    Task<Image> loadImageTask =
-        new Task<>() {
-          @Override
-          protected Image call() throws Exception {
-            if (material.getCoverImageUrl() == null || material.getCoverImageUrl().isEmpty()) {
-              return new Image(
-                  getClass().getResourceAsStream("/com/thangqt/libman/images/no_cover.png"));
-            } else {
-              return new Image(material.getCoverImageUrl());
-            }
-          }
-
-          @Override
-          protected void succeeded() {
-            Platform.runLater(() -> img.setImage(getValue()));
-          }
-
-          @Override
-          protected void failed() {
-            getException().printStackTrace();
-          }
-        };
-
-    Thread loadImageThread = new Thread(loadImageTask);
-    loadImageThread.setDaemon(true);
-    loadImageThread.start();
+    ImageLoader.loadImageAsync(material.getCoverImageUrl(), img);
   }
 }

@@ -2,6 +2,7 @@ package com.thangqt.libman.view.GraphicalView;
 
 import com.thangqt.libman.controller.UserHomeController;
 import com.thangqt.libman.model.Material;
+import com.thangqt.libman.utils.ImageLoader;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
@@ -26,6 +27,7 @@ public class VerticalMaterialTile extends VBox {
     img = new ImageView();
     img.setFitHeight(260);
     img.preserveRatioProperty().set(true);
+    img.getStyleClass().add("image-view");
     getChildren().add(img);
 
     VBox infoContainer = new VBox();
@@ -41,40 +43,11 @@ public class VerticalMaterialTile extends VBox {
     infoContainer.getChildren().addAll(title, author);
     getChildren().add(infoContainer);
 
-    loadImageAsync();
+    ImageLoader.loadImageAsync(material.getCoverImageUrl(), img);
 
     setOnMouseClicked(
         e -> {
           controller.showMaterialDetails(material);
         });
-  }
-
-  private void loadImageAsync() {
-    Task<Image> loadImageTask =
-        new Task<>() {
-          @Override
-          protected Image call() throws Exception {
-            if (material.getCoverImageUrl() == null || material.getCoverImageUrl().isEmpty()) {
-              return new Image(
-                  getClass().getResourceAsStream("/com/thangqt/libman/images/no_cover.png"));
-            } else {
-              return new Image(material.getCoverImageUrl());
-            }
-          }
-
-          @Override
-          protected void succeeded() {
-            Platform.runLater(() -> img.setImage(getValue()));
-          }
-
-          @Override
-          protected void failed() {
-            getException().printStackTrace();
-          }
-        };
-
-    Thread loadImageThread = new Thread(loadImageTask);
-    loadImageThread.setDaemon(true);
-    loadImageThread.start();
   }
 }

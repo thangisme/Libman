@@ -5,6 +5,8 @@ import com.thangqt.libman.controller.MaterialViewController;
 import com.thangqt.libman.model.*;
 import com.thangqt.libman.model.Material;
 import com.thangqt.libman.service.MaterialManager;
+import com.thangqt.libman.utils.ImageLoader;
+import javafx.scene.image.Image;
 
 public class MaterialEditView extends MaterialFormView {
   private Material material;
@@ -28,6 +30,7 @@ public class MaterialEditView extends MaterialFormView {
     } else {
       getIdentifierField().setText(((Magazine) material).getIssn());
     }
+    ImageLoader.loadImageAsync(material.getCoverImageUrl(), getCoverImagePreview());
     getCoverImageField().setText(material.getCoverImageUrl());
     getTotalCopiesField().setText(String.valueOf(material.getQuantity()));
     getAvailableCopiesField().setText(String.valueOf(material.getAvailableQuantity()));
@@ -45,16 +48,16 @@ public class MaterialEditView extends MaterialFormView {
               String coverImageUrl = getCoverImageField().getText();
               int totalCopies = Integer.parseInt(getTotalCopiesField().getText());
               int availableCopies = Integer.parseInt(getAvailableCopiesField().getText());
-                if (!controller.validateInputs(
-                    title,
-                    author,
-                    publisher,
-                    identifier,
-                    coverImageUrl,
-                    getTotalCopiesField().getText(),
-                    getAvailableCopiesField().getText())) {
-                    return;
-                }
+              if (!controller.validateInputs(
+                  title,
+                  author,
+                  publisher,
+                  identifier,
+                  coverImageUrl,
+                  getTotalCopiesField().getText(),
+                  getAvailableCopiesField().getText())) {
+                return;
+              }
               controller.saveMaterial(
                   material,
                   title,
@@ -67,5 +70,4 @@ public class MaterialEditView extends MaterialFormView {
                   availableCopies);
             });
   }
-
 }
