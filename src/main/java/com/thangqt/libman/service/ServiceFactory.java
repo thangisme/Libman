@@ -8,6 +8,7 @@ public class ServiceFactory {
   private UserManager userManager;
   private MaterialManager materialManager;
   private LoanManager loanManager;
+  private ReviewManager reviewManager;
 
   private ServiceFactory() throws SQLException {
     DAOFactory daoFactory = DAOFactory.getInstance();
@@ -15,6 +16,7 @@ public class ServiceFactory {
     userManager = new UserManager(daoFactory.getUserDAO());
     materialManager = new MaterialManager(daoFactory.getMaterialDAO());
     loanManager = new LoanManager(daoFactory.getLoanDAO(), userManager, materialManager);
+    reviewManager = new ReviewManager(daoFactory.getReviewDAO());
   }
 
   public static ServiceFactory getInstance() throws SQLException {
@@ -34,5 +36,9 @@ public class ServiceFactory {
 
   public LoanManager getLoanManager() {
     return loanManager;
+  }
+
+  public ReviewManager getReviewManager() {
+    return reviewManager;
   }
 }

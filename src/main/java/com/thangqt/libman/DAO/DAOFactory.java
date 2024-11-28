@@ -2,6 +2,7 @@ package com.thangqt.libman.DAO;
 
 import com.thangqt.libman.DAO.impls.MySQLLoanDAO;
 import com.thangqt.libman.DAO.impls.MySQLMaterialDAO;
+import com.thangqt.libman.DAO.impls.MySQLReviewDAO;
 import com.thangqt.libman.DAO.impls.MySQLUserDAO;
 import java.sql.SQLException;
 
@@ -10,11 +11,13 @@ public class DAOFactory {
   private MaterialDAO materialDAO;
   private UserDAO userDAO;
   private LoanDAO loanDAO;
+  private ReviewDAO reviewDAO;
 
   private DAOFactory() throws SQLException {
     materialDAO = new MySQLMaterialDAO();
     userDAO = new MySQLUserDAO();
     loanDAO = new MySQLLoanDAO();
+    reviewDAO = new MySQLReviewDAO();
   }
 
   public static DAOFactory getInstance() throws SQLException {
@@ -34,5 +37,9 @@ public class DAOFactory {
 
   public LoanDAO getLoanDAO() {
     return loanDAO;
+  }
+
+  public ReviewDAO getReviewDAO() {
+    return reviewDAO;
   }
 }
