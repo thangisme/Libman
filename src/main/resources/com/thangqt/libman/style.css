@@ -56,3 +56,8 @@
 .search-container {
     -fx-padding: 25 0 0 0;
 }
+
+.modal-box {
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
