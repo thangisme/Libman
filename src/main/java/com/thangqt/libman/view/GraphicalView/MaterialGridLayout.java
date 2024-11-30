@@ -8,7 +8,7 @@ import javafx.scene.layout.GridPane;
 
 public class MaterialGridLayout extends GridPane {
   private static final int DEFAULT_COLUMNS = 3;
-  private static final double DEFAULT_MIN_HEIGHT = 580;
+  private static final double DEFAULT_MIN_HEIGHT = 600;
   private static final double GRID_GAP = 10;
 
   private final int columns;
