@@ -73,7 +73,7 @@ public class UserHomeController {
       recentMaterials.forEach(
           material -> {
             VerticalMaterialTile tile = new VerticalMaterialTile(material, this);
-            tile.setOnMouseClicked(event -> showMaterialDetails(material));
+            tile.setOnMouseClicked(event -> showMaterialDetails(material, topModalPane));
             recentMaterialsContainer.getChildren().add(tile);
           });
     } catch (SQLException e) {
@@ -94,7 +94,7 @@ public class UserHomeController {
       popularMaterials.forEach(
           material -> {
             VerticalMaterialTile tile = new VerticalMaterialTile(material, this);
-            tile.setOnMouseClicked(event -> showMaterialDetails(material));
+            tile.setOnMouseClicked(event -> showMaterialDetails(material, topModalPane));
             popularMaterialsContainer.getChildren().add(tile);
           });
     } catch (SQLException e) {
@@ -120,7 +120,7 @@ public class UserHomeController {
     materialList.forEach(
         material -> {
           VerticalMaterialTile tile = new VerticalMaterialTile(material, this);
-          tile.setOnMouseClicked(event -> showMaterialDetails(material));
+          tile.setOnMouseClicked(event -> showMaterialDetails(material, topModalPane));
           curatedMaterialsContainer.getChildren().add(tile);
         });
   }
@@ -131,6 +131,7 @@ public class UserHomeController {
       return;
     }
     ModalBox dialog = new ModalBox(topModalPane);
+    dialog.getStyleClass().add("full-size-modal");
     VBox content = new VBox();
     content.setPadding(new Insets(30));
     content.setFillWidth(true);
@@ -182,7 +183,7 @@ public class UserHomeController {
             if (i + j < results.size()) {
               Material material = results.get(i + j);
               VerticalMaterialTile entry = new VerticalMaterialTile(material, this);
-              entry.setOnMouseClicked(event -> showMaterialDetails(material));
+              entry.setOnMouseClicked(event -> showMaterialDetails(material, innerModalPane));
               HBox.setHgrow(entry, Priority.ALWAYS);
               entry.setMaxWidth(Double.MAX_VALUE);
               row.getChildren().add(entry);
@@ -197,17 +198,21 @@ public class UserHomeController {
     }
   }
 
-  public void showMaterialDetails(Material material) {
-    ModalBox modalBox = new ModalBox(innerModalPane);
+  public void showMaterialDetails(Material material, ModalPane modalPane) {
+    ModalBox modalBox = new ModalBox(modalPane);
     UserMaterialDetailsController controller =
         new UserMaterialDetailsController(
-            material, loanManager, userManager, materialManager, this);
+            material, this);
     modalBox.addContent(controller.createMaterialDetailsView());
     modalBox.setMaxSize(420, 300);
-    innerModalPane.show(modalBox);
+    modalPane.show(modalBox);
   }
 
   public ModalPane getInnerModalPane() {
     return innerModalPane;
+  }
+
+  public ModalPane getTopModalPane() {
+    return topModalPane;
   }
 }

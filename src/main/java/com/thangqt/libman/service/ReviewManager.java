@@ -13,12 +13,14 @@ public class ReviewManager {
         this.reviewDAO = reviewDAO;
     }
 
-    public void addReview(Review review) {
+    public boolean addReview(Review review) {
         try {
             reviewDAO.add(review);
+            return true;
         } catch (SQLException e) {
             System.out.println("Error adding review: " + e.getMessage());
         }
+        return false;
     }
 
     public Review getReview(int id) {

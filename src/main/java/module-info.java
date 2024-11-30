@@ -15,8 +15,9 @@ module com.thangqt.libman {
   requires com.google.zxing;
   requires com.google.zxing.javase;
   requires opencv;
+    requires org.kordamp.ikonli.fluentui;
 
-  opens com.thangqt.libman to
+    opens com.thangqt.libman to
       javafx.fxml;
   opens com.thangqt.libman.controller to
       javafx.fxml;

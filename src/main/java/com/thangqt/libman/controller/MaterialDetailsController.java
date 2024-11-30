@@ -42,7 +42,7 @@ public class MaterialDetailsController {
     Button deleteBtn = createActionButton("Delete", Feather.TRASH_2, e -> showConfirmDeleteDialog());
     Button showQrCodeBtn = createActionButton("Show QR code", Feather.IMAGE, e -> controller.showMaterialQrCode(material));
 
-    return new MaterialDetailsView(material, issueBtn, editBtn, deleteBtn, showQrCodeBtn);
+    return new MaterialDetailsView(material, controller.getModalPane(), issueBtn, editBtn, deleteBtn, showQrCodeBtn);
   }
 
   private Button createActionButton(

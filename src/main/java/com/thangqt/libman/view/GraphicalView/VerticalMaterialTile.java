@@ -2,6 +2,8 @@ package com.thangqt.libman.view.GraphicalView;
 
 import com.thangqt.libman.controller.UserHomeController;
 import com.thangqt.libman.model.Material;
+import com.thangqt.libman.service.ReviewManager;
+import com.thangqt.libman.service.ServiceFactory;
 import com.thangqt.libman.utils.ImageLoader;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -10,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.sql.SQLException;
 
 public class VerticalMaterialTile extends VBox {
   private Material material;
@@ -44,10 +48,5 @@ public class VerticalMaterialTile extends VBox {
     getChildren().add(infoContainer);
 
     ImageLoader.loadImageAsync(material.getCoverImageUrl(), img);
-
-    setOnMouseClicked(
-        e -> {
-          controller.showMaterialDetails(material);
-        });
   }
 }

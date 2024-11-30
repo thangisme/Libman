@@ -2,10 +2,7 @@ package com.thangqt.libman.controller;
 
 import com.thangqt.libman.model.Loan;
 import com.thangqt.libman.model.Material;
-import com.thangqt.libman.service.LoanManager;
-import com.thangqt.libman.service.MaterialManager;
-import com.thangqt.libman.service.SessionManager;
-import com.thangqt.libman.service.UserManager;
+import com.thangqt.libman.service.*;
 import com.thangqt.libman.view.GraphicalView.MaterialDetailsView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,6 +11,7 @@ import javafx.scene.control.ChoiceDialog;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class UserMaterialDetailsController {
@@ -21,18 +19,18 @@ public class UserMaterialDetailsController {
   private LoanManager loanManager;
   private UserManager userManager;
   private MaterialManager materialManager;
+  private ReviewManager reviewManager;
   private UserHomeController controller;
 
-  public UserMaterialDetailsController(
-      Material material,
-      LoanManager loanManager,
-      UserManager userManager,
-      MaterialManager materialManager,
-      UserHomeController controller) {
+  public UserMaterialDetailsController(Material material, UserHomeController controller) {
     this.material = material;
-    this.loanManager = loanManager;
-    this.userManager = userManager;
-    this.materialManager = materialManager;
+    try {
+      this.loanManager = ServiceFactory.getInstance().getLoanManager();
+      this.userManager = ServiceFactory.getInstance().getUserManager();
+      this.materialManager = ServiceFactory.getInstance().getMaterialManager();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     this.controller = controller;
   }
 
@@ -40,15 +38,15 @@ public class UserMaterialDetailsController {
     try {
       if (loanManager.isDocumentIssued(SessionManager.getCurrentUser().getId(), material.getId())) {
         Button returnBtn = createActionButton("Return", Feather.CHECK, e -> showReturnDialog());
-        return new MaterialDetailsView(material, returnBtn);
+        return new MaterialDetailsView(material, controller.getInnerModalPane() ,returnBtn);
       } else {
         Button borrowBtn = createActionButton("Borrow", Feather.ARCHIVE, e -> showBorrowDialog());
-        return new MaterialDetailsView(material, borrowBtn);
+        return new MaterialDetailsView(material, controller.getInnerModalPane(), borrowBtn);
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return new MaterialDetailsView(material);
+    return new MaterialDetailsView(material, controller.getInnerModalPane());
   }
 
   private void showReturnDialog() {
@@ -132,7 +130,7 @@ public class UserMaterialDetailsController {
               "An error occurred while trying to borrow the document.")
           .show();
     }
-    controller.getInnerModalPane().hide();
+    controller.getTopModalPane().hide();
   }
 
   private Alert makeDialog(Alert.AlertType type, String title, String header, String content) {
