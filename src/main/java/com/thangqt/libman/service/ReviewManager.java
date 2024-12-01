@@ -49,4 +49,33 @@ public class ReviewManager {
         }
         return null;
     }
+
+    public boolean updateReview(int id, int rating, String content) {
+        try {
+            reviewDAO.update(id, rating, content);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error updating review: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean deleteReview(int id) {
+        try {
+            reviewDAO.delete(id);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error deleting review: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public double getAverageRating(int materialId) {
+        try {
+            return reviewDAO.getAverageRating(materialId);
+        } catch (SQLException e) {
+            System.out.println("Error getting average rating: " + e.getMessage());
+        }
+        return 0;
+    }
 }

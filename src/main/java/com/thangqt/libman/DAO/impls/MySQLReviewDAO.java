@@ -93,4 +93,44 @@ public class MySQLReviewDAO implements ReviewDAO {
         }
         return reviews;
     }
+
+    @Override
+    public void update(int id, int rating, String content) throws SQLException {
+        String query = "UPDATE reviews SET rating = ?, content = ? WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, rating);
+            stm.setString(2, content);
+            stm.setInt(3, id);
+            stm.executeUpdate();
+        } catch (Exception e) {
+            throw new SQLException("Error updating review: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void delete(int id) throws SQLException {
+        String query = "DELETE FROM reviews WHERE id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, id);
+            stm.executeUpdate();
+        } catch (Exception e) {
+            throw new SQLException("Error deleting review: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public double getAverageRating(int materialId) throws SQLException {
+        String query = "SELECT AVG(rating) FROM reviews WHERE material_id = ?";
+        try (PreparedStatement stm = conn.prepareStatement(query)) {
+            stm.setInt(1, materialId);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble(1);
+                }
+            }
+        } catch (Exception e) {
+            throw new SQLException("Error getting average rating: " + e.getMessage());
+        }
+        return 0;
+    }
 }

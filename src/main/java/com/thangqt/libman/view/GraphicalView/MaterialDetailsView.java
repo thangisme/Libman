@@ -27,9 +27,10 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MaterialDetailsView extends VBox {
+public class MaterialDetailsView extends HBox {
   private final Material material;
   private final ModalPane modalPane;
+  private List<Review> reviews;
 
   public MaterialDetailsView(Material material, ModalPane modalPane, Button... actionButtons) {
     this.material = material;
@@ -41,20 +42,29 @@ public class MaterialDetailsView extends VBox {
     setPadding(new Insets(15));
     setSpacing(10);
 
-    HBox topContainer = createTopContainer();
-    HBox actionContainer = createActionContainer(actionButtons);
+    try {
+      ReviewManager reviewManager = ServiceFactory.getInstance().getReviewManager();
+      reviews = reviewManager.getReviewsByMaterialId(material.getId());
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
 
-    getChildren().addAll(topContainer, actionContainer);
+    VBox topContainer = createMainContainer(actionButtons);
+    VBox sideContainer = createSideContainer();
+
+    getChildren().addAll(topContainer, sideContainer);
   }
 
-  private HBox createTopContainer() {
-    HBox topContainer = new HBox();
+  private VBox createMainContainer(Button... actionButtons) {
+    VBox topContainer = new VBox();
     topContainer.setSpacing(15);
 
     VBox infoContainer = createInfoContainer();
-    VBox sideContainer = createSideContainer();
+    VBox space = new VBox();
+    VBox.setVgrow(space, Priority.ALWAYS);
+    HBox actionContainer = createActionContainer(actionButtons);
 
-    topContainer.getChildren().addAll(infoContainer, sideContainer);
+    topContainer.getChildren().addAll(infoContainer, space, actionContainer);
     return topContainer;
   }
 
@@ -86,31 +96,40 @@ public class MaterialDetailsView extends VBox {
     header.setAlignment(Pos.CENTER);
 
     reviewContainer.getChildren().add(header);
-    try {
-      ReviewManager reviewManager = ServiceFactory.getInstance().getReviewManager();
-      List<Review> reviews = reviewManager.getReviewsByMaterialId(material.getId());
-      if (reviews == null || reviews.isEmpty()) {
-        Text noReviews = new Text("No reviews yet");
-        noReviews.setTextAlignment(TextAlignment.CENTER);
-        noReviews.getStyleClass().addAll(Styles.TEXT_SMALL, Styles.TEXT_MUTED);
-        reviewContainer.getChildren().add(noReviews);
 
-      } else {
-        Review review = reviews.get(0);
-        if (review != null) {
-          VBox individualReviewContainer = createIndividualReviewContainer(review);
-          reviewContainer.getChildren().add(individualReviewContainer);
-        }
-        Label viewAllReviews = new Label("Read more ...");
-        viewAllReviews.setUnderline(true);
-        viewAllReviews.setOnMouseClicked(e -> showReviewModal());
-        reviewContainer.getChildren().add(viewAllReviews);
+    if (reviews == null || reviews.isEmpty()) {
+      Text noReviews = new Text("No reviews yet");
+      noReviews.setTextAlignment(TextAlignment.CENTER);
+      noReviews.getStyleClass().addAll(Styles.TEXT_SMALL, Styles.TEXT_MUTED);
+      reviewContainer.getChildren().add(noReviews);
+
+    } else {
+      Review review = reviews.get(0);
+      if (review != null) {
+        VBox individualReviewContainer = createIndividualReviewContainer(review);
+        reviewContainer.getChildren().add(individualReviewContainer);
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
+      Label viewAllReviews = new Label("Read more ...");
+      viewAllReviews.setUnderline(true);
+      viewAllReviews.setOnMouseClicked(e -> showReviewModal());
+      reviewContainer.getChildren().add(viewAllReviews);
     }
 
     return reviewContainer;
+  }
+
+  private HBox createAverageRatingContainer() {
+    try {
+      ReviewManager reviewManager = ServiceFactory.getInstance().getReviewManager();
+      int averageRating = (int) reviewManager.getAverageRating(material.getId());
+      HBox ratingContainer = createRatingContainer(averageRating);
+      HBox averageRatingContainer = new HBox(new Label("Rating: "), ratingContainer);
+      averageRatingContainer.setAlignment(Pos.CENTER);
+      return averageRatingContainer;
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   private VBox createIndividualReviewContainer(Review review) {
@@ -120,7 +139,7 @@ public class MaterialDetailsView extends VBox {
       UserManager userManager = ServiceFactory.getInstance().getUserManager();
       Text name = new Text(userManager.getUserById(review.getUserId()).getName());
       name.getStyleClass().add(Styles.TEXT_MUTED);
-      HBox ratingContainer = createRatingContainer();
+      HBox ratingContainer = createRatingContainer(review.getRating());
       HBox.setMargin(ratingContainer, new Insets(0, 0, 10, 0));
       Text content =
           new Text(
@@ -138,10 +157,9 @@ public class MaterialDetailsView extends VBox {
     return individualReviewContainer;
   }
 
-  private HBox createRatingContainer() {
+  private HBox createRatingContainer(int rating) {
     HBox ratingContainer = new HBox();
 
-    int rating = 4;
     for (int i = 0; i < 5; i++) {
       FontIcon star = new FontIcon(FluentUiFilledMZ.STAR_12);
       star.getStyleClass().add("rating-star");
@@ -160,6 +178,7 @@ public class MaterialDetailsView extends VBox {
     sideContainer.setSpacing(10);
 
     sideContainer.getChildren().addAll(createCoverImage(), createReviewContainer());
+    if (reviews.size() > 0) sideContainer.getChildren().add(1, createAverageRatingContainer());
     return sideContainer;
   }
 

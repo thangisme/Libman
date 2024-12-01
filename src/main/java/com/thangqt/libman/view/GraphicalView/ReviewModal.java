@@ -11,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Priority;
 import org.kordamp.ikonli.fluentui.FluentUiFilledMZ;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -106,13 +105,7 @@ public class ReviewModal extends VBox {
     submitButton.getStyleClass().add(Styles.ACCENT);
     submitButton.setOnAction(
         e -> {
-          int rating = 0;
-          for (int i = 4; i >= 0; i--) {
-            if (ratingContainer.getChildren().get(i).getStyleClass().contains(Styles.WARNING)) {
-              rating = i + 1;
-              break;
-            }
-          }
+          int rating = getRatingCount(ratingContainer);
           addReview(rating, contentField.getText());
         });
     Button cancelButton = new Button("Cancel");
@@ -124,21 +117,116 @@ public class ReviewModal extends VBox {
 
   private VBox makeIndividualReviewContainer(Review review) {
     VBox individualReviewContainer = new VBox();
+    individualReviewContainer.setPadding(new Insets(0, 0, 10, 0));
     try {
       UserManager userManager = ServiceFactory.getInstance().getUserManager();
       Label name = new Label(userManager.getUserById(review.getUserId()).getName());
       name.getStyleClass().addAll(Styles.TITLE_4);
-      HBox ratingContainer = makeRatingContainer();
+      HBox ratingContainer = makeRatingContainer(review.getRating());
       Label content = new Label(review.getContent().strip());
       content.getStyleClass().addAll(Styles.TEXT_MUTED);
       content.setWrapText(true);
       content.setMaxWidth(700);
-      content.setPadding(new Insets(5, 0, 10, 0));
       individualReviewContainer.getChildren().addAll(name, ratingContainer, content);
+      boolean isEditable =
+          review.getUserId() == SessionManager.getCurrentUser().getId()
+              || SessionManager.getCurrentUser().isAdmin();
+      if (isEditable) {
+        HBox actionContainer = makeEditActions(review);
+        individualReviewContainer.getChildren().add(actionContainer);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
     return individualReviewContainer;
+  }
+
+  private HBox makeEditActions(Review review) {
+    Label edit = new Label("Edit");
+    edit.setUnderline(true);
+    edit.getStyleClass().addAll(Styles.TEXT_SUBTLE, Styles.TEXT_SMALL);
+    edit.setOnMouseClicked(e -> showEditReviewDialog(review));
+    Label delete = new Label("Delete");
+    delete.setUnderline(true);
+    delete.getStyleClass().addAll(Styles.TEXT_SUBTLE, Styles.TEXT_SMALL);
+    delete.setOnMouseClicked(e -> showDeleteReviewConfirmation(review));
+    HBox actionContainer = new HBox(edit, delete);
+    actionContainer.setSpacing(10);
+    return actionContainer;
+  }
+
+  private void showEditReviewDialog(Review review) {
+    Dialog<ButtonType> dialog = new Dialog<>();
+    dialog.setTitle("Edit Review");
+    VBox reviewForm = new VBox();
+    reviewForm.setPadding(new Insets(15));
+    Label title = new Label("Rating");
+    HBox ratingContainer = makeRatingableContainer();
+    for (int i = 0; i < review.getRating(); i++) {
+      ratingContainer.getChildren().get(i).getStyleClass().remove(Styles.TEXT_MUTED);
+      ratingContainer.getChildren().get(i).getStyleClass().add(Styles.WARNING);
+    }
+    Label content = new Label("Content");
+    TextArea contentField = new TextArea();
+    contentField.setText(review.getContent());
+    contentField.setWrapText(true);
+    reviewForm.getChildren().addAll(title, ratingContainer, content, contentField);
+    dialog.getDialogPane().setContent(reviewForm);
+    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+    dialog
+        .showAndWait()
+        .ifPresent(
+            result -> {
+              if (result == ButtonType.OK) {
+                int rating = getRatingCount(ratingContainer);
+                if (reviewManager.updateReview(review.getId(), rating, contentField.getText())) {
+                  showDialog(
+                      Alert.AlertType.INFORMATION,
+                      "Success",
+                      "Review updated successfully",
+                      "The review has been updated.");
+                  reviews = reviewManager.getReviewsByMaterialId(materialId);
+                  getChildren().remove(1);
+                  createBody();
+                } else {
+                  showDialog(
+                      Alert.AlertType.ERROR,
+                      "Error",
+                      "Failed to update review",
+                      "An error occurred while trying to update the review.");
+                }
+              }
+            });
+  }
+
+  private void showDeleteReviewConfirmation(Review review) {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Delete Review");
+    alert.setHeaderText("Are you sure you want to delete this review?");
+    alert.setContentText("This action cannot be undone.");
+    alert
+        .showAndWait()
+        .ifPresent(
+            result -> {
+              if (result == ButtonType.OK) {
+                if (reviewManager.deleteReview(review.getId())) {
+                  showDialog(
+                      Alert.AlertType.INFORMATION,
+                      "Success",
+                      "Review deleted successfully",
+                      "The review has been deleted.");
+                  reviews = reviewManager.getReviewsByMaterialId(materialId);
+                  getChildren().remove(1);
+                  createBody();
+                } else {
+                  showDialog(
+                      Alert.AlertType.ERROR,
+                      "Error",
+                      "Failed to delete review",
+                      "An error occurred while trying to delete the review.");
+                }
+              }
+            });
   }
 
   private HBox makeRatingableContainer() {
@@ -148,27 +236,28 @@ public class ReviewModal extends VBox {
       star.getStyleClass().add("rating-star-big");
       star.getStyleClass().add(Styles.TEXT_MUTED);
       int index = i;
-      star.setOnMouseClicked(e -> {
-        for (int j = 0; j < 5; j++) {
-          ObservableList<String> starClass = ratingableContainer.getChildren().get(j).getStyleClass();
-          if (j <= index) {
-            if (starClass.contains(Styles.TEXT_MUTED)) starClass.remove(Styles.TEXT_MUTED);
-            if (!starClass.contains(Styles.WARNING)) starClass.add(Styles.WARNING);
-          } else {
-            if (starClass.contains(Styles.WARNING)) starClass.remove(Styles.WARNING);
-            if (!starClass.contains(Styles.TEXT_MUTED)) starClass.add(Styles.TEXT_MUTED);
-          }
-        }
-      });
+      star.setOnMouseClicked(
+          e -> {
+            for (int j = 0; j < 5; j++) {
+              ObservableList<String> starClass =
+                  ratingableContainer.getChildren().get(j).getStyleClass();
+              if (j <= index) {
+                if (starClass.contains(Styles.TEXT_MUTED)) starClass.remove(Styles.TEXT_MUTED);
+                if (!starClass.contains(Styles.WARNING)) starClass.add(Styles.WARNING);
+              } else {
+                if (starClass.contains(Styles.WARNING)) starClass.remove(Styles.WARNING);
+                if (!starClass.contains(Styles.TEXT_MUTED)) starClass.add(Styles.TEXT_MUTED);
+              }
+            }
+          });
       ratingableContainer.getChildren().add(star);
     }
     return ratingableContainer;
   }
 
-  private HBox makeRatingContainer() {
+  private HBox makeRatingContainer(int rating) {
     HBox ratingContainer = new HBox();
 
-    int rating = 4;
     for (int i = 0; i < 5; i++) {
       FontIcon star = new FontIcon(FluentUiFilledMZ.STAR_16);
       star.getStyleClass().add("rating-star-medium");
@@ -189,11 +278,32 @@ public class ReviewModal extends VBox {
   }
 
   private void addReview(int rating, String content) {
-    Review review = new Review(SessionManager.getCurrentUser().getId(), materialId, rating, content, LocalDate.now());
+    Review review =
+        new Review(
+            SessionManager.getCurrentUser().getId(), materialId, rating, content, LocalDate.now());
     if (reviewManager.addReview(review)) {
       reviews.add(review);
       getChildren().remove(1);
       createBody();
     }
+  }
+
+  private void showDialog(Alert.AlertType type, String title, String header, String content) {
+    Alert alert = new Alert(type);
+    alert.setTitle(title);
+    alert.setHeaderText(header);
+    alert.setContentText(content);
+    alert.showAndWait();
+  }
+
+  private int getRatingCount(HBox ratingContainer) {
+    int rating = 0;
+    for (int i = 4; i >= 0; i--) {
+      if (ratingContainer.getChildren().get(i).getStyleClass().contains(Styles.WARNING)) {
+        rating = i + 1;
+        break;
+      }
+    }
+    return rating;
   }
 }

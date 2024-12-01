@@ -2,8 +2,12 @@ package com.thangqt.libman.model;
 
 import java.util.List;
 
+enum Role {
+  ADMIN,
+  USER
+}
+
 public class User {
-  List<Loan> loadHistory;
   private int id;
   private String name;
   private String email;
@@ -13,7 +17,7 @@ public class User {
   public User(String name, String email) {
     this.name = name;
     this.email = email;
-    this.role = "USER";
+    this.role = Role.USER.toString();
   }
 
   public User(String name, String email, String role, String passwordHash) {
@@ -27,7 +31,7 @@ public class User {
     this.id = id;
     this.name = name;
     this.email = email;
-    this.role = "USER";
+    this.role = Role.USER.toString();
   }
 
   public User(int id, String name, String email, String role, String passwordHash) {
@@ -76,5 +80,9 @@ public class User {
 
   public void setPasswordHash(String passwordHash) {
     this.passwordHash = passwordHash;
+  }
+
+  public boolean isAdmin() {
+    return role.equals(Role.ADMIN.toString());
   }
 }

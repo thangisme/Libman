@@ -12,6 +12,12 @@ public interface ReviewDAO {
 
     Review get(int userId, int materialId) throws SQLException;
 
+    void update(int id, int rating, String content) throws SQLException;
+
+    void delete(int id) throws SQLException;
+
     List<Review> getReviewsByMaterialId(int materialId) throws SQLException;
+
+    double getAverageRating(int materialId) throws SQLException;
 
 }
