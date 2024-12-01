@@ -106,6 +106,7 @@ public class ReviewModal extends VBox {
     submitButton.setOnAction(
         e -> {
           int rating = getRatingCount(ratingContainer);
+          if (!validateReview(rating, contentField.getText())) return;
           addReview(rating, contentField.getText());
         });
     Button cancelButton = new Button("Cancel");
@@ -305,5 +306,27 @@ public class ReviewModal extends VBox {
       }
     }
     return rating;
+  }
+
+  private boolean validateReview(int rating, String review) {
+    if (rating == 0) {
+      showDialog(
+          Alert.AlertType.ERROR,
+          "Error",
+          "Failed to add review",
+          "Please select a rating for the review.");
+      return false;
+    }
+
+    if (review.isEmpty()) {
+      showDialog(
+          Alert.AlertType.ERROR,
+          "Error",
+          "Failed to add review",
+          "Please write a review before submitting.");
+      return false;
+    }
+
+    return true;
   }
 }
