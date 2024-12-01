@@ -66,7 +66,7 @@ public class ReviewModal extends VBox {
     reviewScrollPane.setContent(reviewList);
     Review currentReview =
         reviewManager.getReview(SessionManager.getCurrentUser().getId(), materialId);
-    if (currentReview == null) {
+    if (currentReview == null && !SessionManager.getCurrentUser().isAdmin()) {
       makeReviewForm();
       addReviewButton = new Button("Add review");
       addReviewButton.setOnAction(e -> toggleReviewForm());
